@@ -1,0 +1,73 @@
+vertex [ GLSL"
+
+#version 330 core
+layout (location = 0) in vec2 pos;
+layout (location = 1) in vec2 size;
+
+uniform vec2 wallSize;
+
+out VS_OUT {
+    float width;
+    float height;
+} vs_out;
+
+void main()
+{
+    gl_Position = vec4(pos.x / wallSize.x * 2 - 1, -pos.y / wallSize.y * 2 + 1, 0, 1);
+    vs_out.width = size.x / wallSize.x;
+    vs_out.height = size.y / wallSize.y;
+}
+
+"GLSL ]
+
+
+geometry [ GLSL"
+
+#version 330 core
+layout (points) in;
+layout (triangle_strip, max_vertices = 4) out;
+
+in VS_OUT {
+    float width;
+    float height;
+} gs_in[];
+
+out vec2 TexCoords;
+
+void rect(vec4 position)
+{
+    TexCoords = vec2(0,1);
+    gl_Position = position + vec4(-gs_in[0].width, -gs_in[0].height, 0.0, 0.0); // 1:bottom-left
+    EmitVertex();
+    TexCoords = vec2(1,1);
+    gl_Position = position + vec4( gs_in[0].width, -gs_in[0].height, 0.0, 0.0); // 2:bottom-right
+    EmitVertex();
+    TexCoords = vec2(0,0);
+    gl_Position = position + vec4(-gs_in[0].width,  gs_in[0].height, 0.0, 0.0); // 3:top-left
+    EmitVertex();
+    TexCoords = vec2(1,0);
+    gl_Position = position + vec4( gs_in[0].width,  gs_in[0].height, 0.0, 0.0); // 4:top-right
+    EmitVertex();
+    EndPrimitive();
+}
+
+void main() {
+    rect(gl_in[0].gl_Position);
+}
+
+"GLSL ]
+
+
+fragment [ GLSL"
+
+#version 330 core
+in vec2 TexCoords;
+
+uniform sampler2D tex;
+out vec4 color;
+
+void main()
+{
+	color = texture(tex, TexCoords);
+}
+"GLSL ]

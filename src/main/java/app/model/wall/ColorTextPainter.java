@@ -1,0 +1,132 @@
+package app.model.wall;
+
+import app.model.Color;
+import app.model.graphic.ColorText;
+import app.model.Point;
+import app.model.font.BackedFont;
+import app.model.font.CharacterTexture;
+import app.model.font.FontManager;
+import app.model.graphic.Shader;
+import app.model.trade.Guest;
+import app.model.trade.Host;
+import brackettree.reader.BracketTree;
+import org.lwjgl.stb.STBTTAlignedQuad;
+import suite.suite.util.Cascade;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.stb.STBTruetype.*;
+
+public class ColorTextPainter extends Guest {
+
+    private final int vao;
+    private final int vbo;
+    private final Shader shader;
+
+    public ColorTextPainter(Host host, Shader shader) {
+        super(host);
+
+        this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().
+                getResourceAsStream("forest/textShader.tree")).as(Shader.class);
+
+        vbo = glGenBuffers();
+        vao = glGenVertexArrays();
+
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, 32, GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 32, 8);
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 16);
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 2, GL_FLOAT, false, 32, 24);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
+    }
+
+    public void setWallSize(int width, int height) {
+        shader.use();
+        shader.set("wallSize", width, height);
+    }
+
+    public void paint(ColorText text, int wallHeight) {
+
+        BackedFont font = order(FontManager.class).getFont(text.getFont(), text.getSize());
+
+        float fontSize = font.getSize();
+        int bitmapWidth = font.getLoadedFont().getBitmapWidth();
+        int bitmapHeight = font.getLoadedFont().getBitmapHeight();
+
+        String txt = text.getText();
+        Point position = text.getPosition();
+        Color color = text.getColor();
+
+        var hRef = text.getXOrigin();
+        var vRef = text.getYOrigin();
+        float textSize = text.getSize();
+
+        shader.use();
+        shader.set("textColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+
+        glActiveTexture(GL_TEXTURE0);
+
+        float scale = textSize / fontSize;
+        float[] X = new float[1];
+        float[] Y = new float[1];
+        X[0] = switch (hRef) {
+            case RIGHT -> position.getX() - text.getWidth();
+            case CENTER -> position.getX() - text.getWidth() / 2;
+            case LEFT -> position.getX();
+        };
+        Y[0] = switch (vRef) {
+            case TOP -> position.getY() + fontSize;
+            case CENTER -> position.getY() + fontSize / 2f;
+            case BOTTOM -> position.getY();
+        };
+
+        glBindVertexArray(vao);
+
+        STBTTAlignedQuad quad = STBTTAlignedQuad.create();
+
+        Cascade<Integer> codePoints = new Cascade<>(txt.codePoints().iterator());
+
+        for(int codePoint : codePoints) {
+            CharacterTexture charTex = font.getCharacterTexture(codePoint);
+            float xRef = X[0];
+            float yRef = Y[0];
+
+            stbtt_GetBakedQuad(charTex.getBuffer(), bitmapWidth, bitmapHeight, charTex.getBufferOffset(),
+                    X, Y, quad, true);
+
+            float x0 = scale(quad.x0(), xRef, scale);
+            float x1 = scale(quad.x1(), xRef, scale);
+            float y0 = wallHeight - scale(quad.y0(), yRef, scale);
+            float y1 = wallHeight - scale(quad.y1(), yRef, scale);
+            X[0] = scale(X[0], xRef, scale);
+
+            float[] vertices = new float[] {
+                    x0, y0, x1, y1,
+                    quad.s0(), quad.t0(), quad.s1(), quad.t1(),
+            };
+
+            glBindTexture(GL_TEXTURE_2D, charTex.getTextureGlid());
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+            glDrawArrays(GL_POINTS, 0, 1);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    private float scale(float rel, float ref, float scale) {
+        return (rel - ref) * scale + ref;
+    }
+}

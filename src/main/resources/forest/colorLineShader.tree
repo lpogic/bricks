@@ -1,0 +1,96 @@
+vertex [ GLSL"
+
+#version 330 core
+layout (location = 0) in vec2 pos0;
+layout (location = 1) in vec2 pos1;
+layout (location = 2) in float thick;
+layout (location = 3) in vec4 col;
+
+uniform vec2 wallSize;
+
+out VS_OUT {
+    mat2 rot;
+    float width;
+    float height;
+    vec4 color;
+    float sm;
+} vs_out;
+
+void main()
+{
+    float ar = wallSize.x / wallSize.y;
+    float x = (pos1.x + pos0.x) / wallSize.x - 1;
+    float y = -(pos1.y + pos0.y) / wallSize.y + 1;
+    float length = sqrt(pow(pos1.x - pos0.x, 2.0) + pow(pos1.y - pos0.y, 2.0));
+    float c = (pos1.x - pos0.x) / length;
+    float s = (pos1.y - pos0.y) / length;
+    gl_Position = vec4(x, y, 0, 1);
+    vs_out.rot = mat2(c, -s * ar, s / ar, c);
+    vs_out.width = (length + thick) / wallSize.x;
+    vs_out.height = thick / wallSize.y;
+    vs_out.color = col;
+    vs_out.sm = 2 / wallSize.y;
+}
+
+"GLSL ]
+
+
+geometry [ GLSL"
+
+#version 330 core
+layout (points) in;
+layout (triangle_strip, max_vertices = 8) out;
+
+in VS_OUT {
+    mat2 rot;
+    float width;
+    float height;
+    vec4 color;
+    float sm;
+} gs_in[];
+
+out vec4 c;
+
+void rect(vec4 position)
+{
+    c = vec4(gs_in[0].color.rgb, 0);
+    gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width, -gs_in[0].height), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width, -gs_in[0].height), 0 ,0);
+    EmitVertex();
+    c = gs_in[0].color;
+    gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width, -gs_in[0].height + gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width, -gs_in[0].height + gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width,  gs_in[0].height - gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width,  gs_in[0].height - gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    c = vec4(gs_in[0].color.rgb, 0);
+    gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width,  gs_in[0].height), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width,  gs_in[0].height), 0 ,0);
+    EmitVertex();
+    EndPrimitive();
+}
+
+void main() {
+    rect(gl_in[0].gl_Position);
+}
+
+"GLSL ]
+
+
+fragment [ GLSL"
+
+#version 330 core
+in vec4 c;
+out vec4 color;
+
+void main()
+{
+    color = c;
+}
+
+"GLSL ]

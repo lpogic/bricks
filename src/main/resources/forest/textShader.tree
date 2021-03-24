@@ -1,0 +1,85 @@
+vertex [ GLSL"
+
+#version 330 core
+layout (location = 0) in vec2 pos0;
+layout (location = 1) in vec2 pos1;
+layout (location = 2) in vec2 tpos0;
+layout (location = 3) in vec2 tpos1;
+
+uniform vec2 wallSize;
+uniform vec4 textColor;
+
+out VS_OUT {
+    vec4 color;
+    vec4 pos1;
+    vec2 tpos0;
+    vec2 tpos1;
+} vs_out;
+
+void main()
+{
+    gl_Position = vec4(pos0.x / wallSize.x * 2 - 1, pos0.y / wallSize.y * 2 - 1, 0, 1);
+    vs_out.color = textColor;
+    vs_out.pos1 = vec4(pos1.x / wallSize.x * 2 - 1, pos1.y / wallSize.y * 2 - 1, 0, 1);
+    vs_out.tpos0 = tpos0;
+    vs_out.tpos1 = tpos1;
+}
+
+"GLSL ]
+
+
+geometry [ GLSL"
+
+#version 330 core
+layout (points) in;
+layout (triangle_strip, max_vertices = 4) out;
+
+in VS_OUT {
+    vec4 color;
+    vec4 pos1;
+    vec2 tpos0;
+    vec2 tpos1;
+} gs_in[];
+
+out vec4 c;
+out vec2 TexCoords;
+
+void rect(vec4 pos0)
+{
+    c = gs_in[0].color;
+    TexCoords = gs_in[0].tpos0;
+    gl_Position = pos0;
+    EmitVertex();
+    TexCoords = vec2(gs_in[0].tpos0.x, gs_in[0].tpos1.y);
+    gl_Position = vec4(pos0.x, gs_in[0].pos1.yzw);
+    EmitVertex();
+    TexCoords = vec2(gs_in[0].tpos1.x, gs_in[0].tpos0.y);
+    gl_Position = vec4(gs_in[0].pos1.x, pos0.yzw);
+    EmitVertex();
+    TexCoords = gs_in[0].tpos1;
+    gl_Position = gs_in[0].pos1;
+    EmitVertex();
+    EndPrimitive();
+}
+
+void main() {
+    rect(gl_in[0].gl_Position);
+}
+
+"GLSL ]
+
+
+fragment [ GLSL"
+#version 330 core
+in vec2 TexCoords;
+in vec4 c;
+out vec4 color;
+
+uniform sampler2D text;
+
+void main()
+{
+//color = vec4(1,1,1,1);
+    color = vec4(c.rgb, texture(text, TexCoords).r * c.a);
+}
+"GLSL ]
