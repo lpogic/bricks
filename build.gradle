@@ -52,15 +52,6 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-par::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
 
-    implementation("lpo:suite") {
-        version {
-            branch = 'master'
-        }
-    }
-
-    implementation("lpo:brackettree") {
-        version {
-            branch = 'master'
-        }
-    }
+    compile project(":suite")
+    compile project(":brackettree")
 }

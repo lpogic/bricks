@@ -1,23 +1,6 @@
 rootProject.name = 'bricks'
 
-sourceControl {
-
-//    OFFLINE
-
-    gitRepository(new URI("C://Users/1/Desktop/PRO/PRO_Java/suite")) {
-        producesModule("lpo:suite")
-    }
-    gitRepository(new URI("C://Users/1/Desktop/PRO/PRO_Java/brackettree")) {
-        producesModule("lpo:brackettree")
-    }
-
-//    ONLINE
-
-//    gitRepository(new URI("https://github.com/lpogic/suite.git")) {
-//        producesModule("lpo:suite")
-//    }
-//
-//    gitRepository(new URI("https://github.com/lpogic/brackettree.git")) {
-//        producesModule("lpo:brackettree")
-//    }
-}
+include ':suite'
+project(':suite').projectDir = new File("C://Users/1/Desktop/PRO/PRO_Java/suite")
+include ':brackettree'
+project(':brackettree').projectDir = new File("C://Users/1/Desktop/PRO/PRO_Java/brackettree")

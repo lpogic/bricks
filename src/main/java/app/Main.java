@@ -18,13 +18,6 @@ public class Main extends Wall {
     }
 
     public void setup() {
-        var img = image()
-                .setImage(new Image("awesomeface.png"))
-                .setPosition(0,0)
-                .setOrigin(XOrigin.LEFT, YOrigin.TOP);
-        img.width().let(width());
-        img.height().let(height());
-        show(img);
 
         var line = line();//.setEndPosition(700, 400);
         line.endPosition().let(mouse.position().or(Point.zero()));
