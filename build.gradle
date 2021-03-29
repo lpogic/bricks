@@ -15,7 +15,7 @@ plugins.withType(JavaPlugin).configureEach {
 }
 
 application {
-    mainClassName = 'app.Main'
+    mainClassName = 'bricks.Main'
 }
 
 repositories {
