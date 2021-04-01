@@ -27,25 +27,11 @@ public class Vars {
         return v;
     }
 
-    public static<T, A> Var<T> let(Supplier<A> sup, Function<A, T> fun) {
-        var v = new Var<T>();
-        v.let(() -> fun.apply(sup.get()));
-        return v;
-    }
-
-    public static<T, A, B> Var<T> let(Supplier<A> sup1, Supplier<B> sup2, BiFunction<A, B, T> fun) {
-        var v = new Var<T>();
-        v.let(() -> fun.apply(sup1.get(), sup2.get()));
-        return v;
-    }
-
-
-
-    public static<T> PreservativeVar<T> preserve(Supplier<T> sup, Supplier<?> ... roots) {
+    public static<T> PreservativeVar<T> let(Supplier<T> sup, Supplier<?> ... roots) {
         return new PreservativeVar<>(sup, Suite.set((Object[]) roots));
     }
 
-    public static<T> PreservativeVar<T> preserve(Supplier<T> sup, Subject $roots) {
+    public static<T> PreservativeVar<T> let(Supplier<T> sup, Subject $roots) {
         return new PreservativeVar<>(sup, $roots);
     }
 }

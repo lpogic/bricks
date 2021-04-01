@@ -7,7 +7,7 @@ import bricks.trade.Host;
 import bricks.var.Var;
 import bricks.var.Vars;
 
-public class ColorLine extends Guest {
+public class ColorLine extends Guest<Host> {
 
     Var<Number> thick;
     Var<Point> beginPosition;
@@ -22,6 +22,10 @@ public class ColorLine extends Guest {
         color = Vars.set(Color.PURE_GREEN);
     }
 
+    public Var<Number> thick() {
+        return thick;
+    }
+
     public float getThick() {
         return thick.get().floatValue();
     }
@@ -31,14 +35,14 @@ public class ColorLine extends Guest {
         return this;
     }
 
-    public Var<Number> thick() {
-        return thick;
-    }
-
     public Point getBeginPosition() {
         return beginPosition.get();
     }
 
+
+    public Var<Point> beginPosition() {
+        return beginPosition;
+    }
 
     public ColorLine setBeginPosition(Point position) {
         this.beginPosition.set(position);
@@ -50,14 +54,13 @@ public class ColorLine extends Guest {
         return this;
     }
 
-    public Var<Point> beginPosition() {
-        return beginPosition;
+    public Var<Point> endPosition() {
+        return endPosition;
     }
 
     public Point getEndPosition() {
         return endPosition.get();
     }
-
 
     public ColorLine setEndPosition(Point position) {
         this.endPosition.set(position);
@@ -69,8 +72,8 @@ public class ColorLine extends Guest {
         return this;
     }
 
-    public Var<Point> endPosition() {
-        return endPosition;
+    public Var<Color> color() {
+        return color;
     }
 
     public Color getColor() {

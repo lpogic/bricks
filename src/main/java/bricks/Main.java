@@ -23,11 +23,11 @@ public class Main extends Wall {
                 .setXOrigin(XOrigin.RIGHT)
                 .setYOrigin(YOrigin.BOTTOM);
         txt.position().let(mouse.position().or(Point.zero()));
-        txt.text().let(mouse.position().per(Objects::toString));
+        txt.string().let(mouse.position().per(Objects::toString));
         show(txt);
 
         var txt1 = text().setPosition(100, 30);
-        txt1.text().let(txt.width().per(Objects::toString));
+        txt1.string().let(txt.width().per(Objects::toString));
         show(txt1);
 
         show(rect().setPosition(100, 100).setWidth(5).setHeight(5).setColor(Color.mix(.5, 0 , 0)));

@@ -1,8 +1,6 @@
 package bricks.graphic;
 
-import bricks.Point;
-import bricks.XOrigin;
-import bricks.YOrigin;
+import bricks.*;
 import bricks.image.Image;
 import bricks.image.ImageManager;
 import bricks.trade.Guest;
@@ -11,7 +9,7 @@ import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
 
-public class ImageRectangle extends Guest<Host> {
+public class ImageRectangle extends Guest<Host> implements Rectangular {
 
     Var<Number> width;
     Var<Number> height;
@@ -40,8 +38,8 @@ public class ImageRectangle extends Guest<Host> {
         yOrigin = Vars.set(YOrigin.CENTER);
     }
 
-    public float getWidth() {
-        return width.get().floatValue();
+    public Var<Number> width() {
+        return width;
     }
 
     public ImageRectangle setWidth(Number width) {
@@ -49,12 +47,8 @@ public class ImageRectangle extends Guest<Host> {
         return this;
     }
 
-    public Var<Number> width() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height.get().floatValue();
+    public Var<Number> height() {
+        return height;
     }
 
     public ImageRectangle setHeight(Number height) {
@@ -62,8 +56,8 @@ public class ImageRectangle extends Guest<Host> {
         return this;
     }
 
-    public Var<Number> height() {
-        return height;
+    public Var<Point> position() {
+        return position;
     }
 
     public ImageRectangle setPosition(Point position) {
@@ -71,25 +65,8 @@ public class ImageRectangle extends Guest<Host> {
         return this;
     }
 
-    public Point getPosition() {
-        return position.get();
-    }
-
     public ImageRectangle setPosition(Number x, Number y) {
         this.position.set(new Point(x, y));
-        return this;
-    }
-
-    public Var<Point> position() {
-        return position;
-    }
-
-    public XOrigin getXOrigin() {
-        return xOrigin.get();
-    }
-
-    public ImageRectangle setXOrigin(XOrigin xOrigin) {
-        this.xOrigin.set(xOrigin);
         return this;
     }
 
@@ -97,12 +74,8 @@ public class ImageRectangle extends Guest<Host> {
         return xOrigin;
     }
 
-    public YOrigin getYOrigin() {
-        return yOrigin.get();
-    }
-
-    public ImageRectangle setYOrigin(YOrigin yOrigin) {
-        this.yOrigin.set(yOrigin);
+    public ImageRectangle setXOrigin(XOrigin xOrigin) {
+        this.xOrigin.set(xOrigin);
         return this;
     }
 
@@ -110,8 +83,17 @@ public class ImageRectangle extends Guest<Host> {
         return yOrigin;
     }
 
+    public ImageRectangle setYOrigin(YOrigin yOrigin) {
+        this.yOrigin.set(yOrigin);
+        return this;
+    }
+
     public ImageRectangle setOrigin(XOrigin xOrigin, YOrigin yOrigin) {
         return setXOrigin(xOrigin).setYOrigin(yOrigin);
+    }
+
+    public Var<Image> image() {
+        return image;
     }
 
     public Image getImage() {
@@ -121,24 +103,5 @@ public class ImageRectangle extends Guest<Host> {
     public ImageRectangle setImage(Image image) {
         this.image.set(image);
         return this;
-    }
-
-    public Var<Image> image() {
-        return image;
-    }
-
-    public boolean contains(Source<Point> pointSource) {
-        Point p = pointSource.get();
-        return p != null && contains(pointSource.get());
-    }
-
-    public boolean contains(Point point) {
-        Point position = getPosition();
-        float width = getWidth();
-        float hd = point.getY() - position.getY();
-        if(Math.abs(hd) > width / 2) return false;
-        float height = getHeight();
-        float vd = point.getX() - position.getX();
-        return Math.abs(vd) <= height / 2;
     }
 }

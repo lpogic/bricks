@@ -39,17 +39,6 @@ public class PreservativeVar<T> implements Source<T> {
     }
 
     @Override
-    public T getOr(T reserve) {
-        update();
-        if(!cached) {
-            if(supplier == null) return reserve;
-            cache = supplier.get();
-            cached = true;
-        }
-        return cache != null ? cache : reserve;
-    }
-
-    @Override
     public T get() {
         update();
         if(!cached) {

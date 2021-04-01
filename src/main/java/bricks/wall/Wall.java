@@ -22,6 +22,7 @@ import suite.suite.Subject;
 import suite.suite.action.Statement;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Supplier;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -319,6 +320,10 @@ public abstract class Wall implements Composite {
 
     protected WallDirector.MonitorDeclaration when(Impulse impulse) {
         return wallDirector.when(impulse);
+    }
+
+    protected WallDirector.MonitorDeclaration when(Supplier<?> sup) {
+        return wallDirector.when(sup);
     }
 
     protected Monitor when(Source<Boolean> bool, Statement rising) {

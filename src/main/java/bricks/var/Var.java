@@ -43,10 +43,4 @@ public class Var<T> implements Source<T>, Target<T> {
     public T get() {
         return supplier != null ? supplier.get() : value;
     }
-
-    @Override
-    public T getOr(T reserve) {
-        T t = get();
-        return t != null ? t : reserve;
-    }
 }

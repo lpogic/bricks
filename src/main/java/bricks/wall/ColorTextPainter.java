@@ -59,7 +59,7 @@ public class ColorTextPainter extends Guest<Host> {
 
     public void paint(ColorText text, int wallHeight) {
 
-        BackedFont font = order(FontManager.class).getFont(text.getFont(), text.getSize());
+        BackedFont font = order(FontManager.class).getFont(text.getFont(), text.getHeight());
 
         float fontSize = font.getSize();
         int bitmapWidth = font.getLoadedFont().getBitmapWidth();
@@ -71,7 +71,7 @@ public class ColorTextPainter extends Guest<Host> {
 
         var hRef = text.getXOrigin();
         var vRef = text.getYOrigin();
-        float textSize = text.getSize();
+        float textSize = text.getHeight();
 
         shader.use();
         shader.set("textColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
@@ -131,7 +131,7 @@ public class ColorTextPainter extends Guest<Host> {
 
     public int getIndex(ColorText text, float testX) {
 
-        BackedFont font = order(FontManager.class).getFont(text.getFont(), text.getSize());
+        BackedFont font = order(FontManager.class).getFont(text.getFont(), text.getHeight());
 
         float fontSize = font.getSize();
         int bitmapWidth = font.getLoadedFont().getBitmapWidth();
@@ -141,7 +141,7 @@ public class ColorTextPainter extends Guest<Host> {
         Point position = text.getPosition();
 
         var hRef = text.getXOrigin();
-        float textSize = text.getSize();
+        float textSize = text.getHeight();
 
         float scale = textSize / fontSize;
 

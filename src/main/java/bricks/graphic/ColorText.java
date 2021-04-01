@@ -1,9 +1,6 @@
 package bricks.graphic;
 
-import bricks.Color;
-import bricks.Point;
-import bricks.XOrigin;
-import bricks.YOrigin;
+import bricks.*;
 import bricks.font.Font;
 import bricks.font.FontManager;
 import bricks.trade.Guest;
@@ -13,17 +10,17 @@ import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
 
-public class ColorText extends Guest<Host> {
+public class ColorText extends Guest<Host> implements Rectangular {
 
     Var<String> string;
     Var<Point> position;
     Var<XOrigin> xOrigin;
     Var<YOrigin> yOrigin;
     Var<Color> color;
-    Var<Number> size;
+    Var<Number> height;
     Var<Font> font;
 
-    PreservativeVar<Number> width;
+    Source<Number> width;
 
     public ColorText(Host host) {
         super(host);
@@ -31,12 +28,16 @@ public class ColorText extends Guest<Host> {
         position = Vars.set(new Point(0,0));
         xOrigin = Vars.set(XOrigin.CENTER);
         yOrigin = Vars.set(YOrigin.CENTER);
-        color = Vars.set(Color.mix(0,0,1));
-        size = Vars.set(24);
+        color = Vars.set(Color.mix(1,1,1));
+        height = Vars.set(24);
         font = Vars.set(Font.TREBUC);
 
-        width = Vars.preserve(() -> order(FontManager.class).getFont(font.get()).getStringWidth(string.get(), size.get().floatValue()),
-                string, size, font);
+        width = Vars.let(() -> order(FontManager.class).getFont(font.get())
+                        .getStringWidth(string.get(), height.get().floatValue()), string, height, font);
+    }
+
+    public Var<String> string() {
+        return string;
     }
 
     public String getString() {
@@ -48,12 +49,8 @@ public class ColorText extends Guest<Host> {
         return this;
     }
 
-    public Var<String> text() {
-        return string;
-    }
-
-    public Point getPosition() {
-        return position.get();
+    public Var<Point> position() {
+        return position;
     }
 
     public ColorText setPosition(Point position) {
@@ -66,12 +63,8 @@ public class ColorText extends Guest<Host> {
         return this;
     }
 
-    public Var<Point> position() {
-        return position;
-    }
-
-    public XOrigin getXOrigin() {
-        return xOrigin.get();
+    public Var<XOrigin> xOrigin() {
+        return xOrigin;
     }
 
     public ColorText setXOrigin(XOrigin origin) {
@@ -79,12 +72,8 @@ public class ColorText extends Guest<Host> {
         return this;
     }
 
-    public Var<XOrigin> xOrigin() {
-        return xOrigin;
-    }
-
-    public YOrigin getYOrigin() {
-        return yOrigin.get();
+    public Var<YOrigin> yOrigin() {
+        return yOrigin;
     }
 
     public ColorText setYOrigin(YOrigin origin) {
@@ -92,12 +81,12 @@ public class ColorText extends Guest<Host> {
         return this;
     }
 
-    public Var<YOrigin> yOrigin() {
-        return yOrigin;
-    }
-
     public ColorText setOrigin(XOrigin xOrigin, YOrigin yOrigin) {
         return setXOrigin(xOrigin).setYOrigin(yOrigin);
+    }
+
+    public Var<Color> color() {
+        return color;
     }
 
     public Color getColor() {
@@ -109,21 +98,21 @@ public class ColorText extends Guest<Host> {
         return this;
     }
 
-    public Var<Color> color() {
-        return color;
+    public Var<Number> height() {
+        return height;
     }
 
-    public float getSize() {
-        return size.get().floatValue();
-    }
-
-    public ColorText setSize(Number size) {
-        this.size.set(size);
+    public ColorText setHeight(Number height) {
+        this.height.set(height);
         return this;
     }
 
-    public Var<Number> size() {
-        return size;
+    public Source<Number> width() {
+        return width;
+    }
+
+    public Var<Font> font() {
+        return font;
     }
 
     public Font getFont() {
@@ -133,17 +122,5 @@ public class ColorText extends Guest<Host> {
     public ColorText setFont(Font font) {
         this.font.set(font);
         return this;
-    }
-
-    public Var<Font> font() {
-        return font;
-    }
-
-    public float getWidth() {
-        return width.get().floatValue();
-    }
-
-    public Source<Number> width() {
-        return width;
     }
 }

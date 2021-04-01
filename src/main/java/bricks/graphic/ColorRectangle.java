@@ -1,17 +1,14 @@
 package bricks.graphic;
 
 
-import bricks.Color;
-import bricks.Point;
-import bricks.XOrigin;
-import bricks.YOrigin;
+import bricks.*;
 import bricks.trade.Guest;
 import bricks.trade.Host;
 import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
 
-public class ColorRectangle extends Guest {
+public class ColorRectangle extends Guest<Host> implements Rectangular {
 
     Var<Number> width;
     Var<Number> height;
@@ -30,8 +27,8 @@ public class ColorRectangle extends Guest {
         yOrigin = Vars.set(YOrigin.CENTER);
     }
 
-    public float getWidth() {
-        return width.get().floatValue();
+    public Var<Number> width() {
+        return width;
     }
 
     public ColorRectangle setWidth(Number width) {
@@ -39,12 +36,8 @@ public class ColorRectangle extends Guest {
         return this;
     }
 
-    public Var<Number> width() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height.get().floatValue();
+    public Var<Number> height() {
+        return height;
     }
 
     public ColorRectangle setHeight(Number height) {
@@ -52,12 +45,12 @@ public class ColorRectangle extends Guest {
         return this;
     }
 
-    public Var<Number> height() {
-        return height;
-    }
-
     public ColorRectangle setSize(Number width, Number height) {
         return setWidth(width).setHeight(height);
+    }
+
+    public Var<Point> position() {
+        return position;
     }
 
     public ColorRectangle setPosition(Point position) {
@@ -70,12 +63,8 @@ public class ColorRectangle extends Guest {
         return this;
     }
 
-    public Var<Point> position() {
-        return position;
-    }
-
-    public Point getPosition() {
-        return position.get();
+    public Var<Color> color() {
+        return color;
     }
 
     public Color getColor() {
@@ -87,12 +76,8 @@ public class ColorRectangle extends Guest {
         return this;
     }
 
-    public Var<Color> color() {
-        return color;
-    }
-
-    public XOrigin getXOrigin() {
-        return xOrigin.get();
+    public Var<XOrigin> xOrigin() {
+        return xOrigin;
     }
 
     public ColorRectangle setXOrigin(XOrigin origin) {
@@ -100,12 +85,8 @@ public class ColorRectangle extends Guest {
         return this;
     }
 
-    public Var<XOrigin> xOrigin() {
-        return xOrigin;
-    }
-
-    public YOrigin getYOrigin() {
-        return yOrigin.get();
+    public Var<YOrigin> yOrigin() {
+        return yOrigin;
     }
 
     public ColorRectangle setYOrigin(YOrigin origin) {
@@ -113,26 +94,7 @@ public class ColorRectangle extends Guest {
         return this;
     }
 
-    public Var<YOrigin> yOrigin() {
-        return yOrigin;
-    }
-
     public ColorRectangle setOrigin(XOrigin xOrigin, YOrigin yOrigin) {
         return setXOrigin(xOrigin).setYOrigin(yOrigin);
-    }
-
-    public boolean contains(Source<Point> pointSource) {
-        Point p = pointSource.get();
-        return p != null && contains(pointSource.get());
-    }
-
-    public boolean contains(Point point) {
-        Point position = getPosition();
-        float width = getWidth();
-        float hd = point.getX() - position.getX();
-        if(Math.abs(hd) > width / 2) return false;
-        float height = getHeight();
-        float vd = point.getY() - position.getY();
-        return Math.abs(vd) <= height / 2;
     }
 }
