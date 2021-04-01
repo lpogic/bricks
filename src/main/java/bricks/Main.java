@@ -32,10 +32,10 @@ public class Main extends Wall {
 
         show(rect().setPosition(100, 100).setWidth(5).setHeight(5).setColor(Color.mix(.5, 0 , 0)));
 
-        when(mouse.leftButton().willGive(Mouse.Button::pressing))
-                .or(mouse.rightButton().willGive(Mouse.Button::pressing))
+        when(mouse.leftButton().willBe(Mouse.Button::pressed))
+                .or(mouse.rightButton().willBe(Mouse.Button::pressed))
                 .then(() -> System.out.print("Click!"));
-//      when mouse left button will give button pressing, then system out print "Click!"
+//      when mouse left button willBe give button pressing, then system out print "Click!"
     }
 
     @Override

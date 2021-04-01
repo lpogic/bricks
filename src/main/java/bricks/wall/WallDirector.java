@@ -1,25 +1,23 @@
 package bricks.wall;
 
-import bricks.trade.Agent;
-import bricks.trade.Host;
 import suite.suite.Subject;
 
 import static suite.suite.$uite.$;
 
-public class WallDirector extends Brick {
+public class WallDirector extends Brick<Wall> {
 
     private final Subject $directed;
 
-    public WallDirector(Host host) {
+    public WallDirector(Wall host) {
         super(host);
         this.$directed = $();
     }
 
-    public void set(Brick brick) {
+    public void set(Brick<?> brick) {
         $directed.set(brick);
     }
 
-    public void unset(Brick brick) {
+    public void unset(Brick<?> brick) {
         $directed.unset(brick);
     }
 

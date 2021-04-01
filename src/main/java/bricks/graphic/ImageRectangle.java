@@ -11,7 +11,7 @@ import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
 
-public class ImageRectangle extends Guest {
+public class ImageRectangle extends Guest<Host> {
 
     Var<Number> width;
     Var<Number> height;
@@ -24,13 +24,13 @@ public class ImageRectangle extends Guest {
         super(host);
         image = Vars.get();
         width = Vars.get(Number.class);
-        width.preserve(() -> {
+        width.let(() -> {
             Image img = image.get();
             if(img == null) return 0;
             return order(ImageManager.class).getImage(img).getWidth();
         }, image);
         height = Vars.get(Number.class);
-        height.preserve(() -> {
+        height.let(() -> {
             Image img = image.get();
             if(img == null) return 0;
             return order(ImageManager.class).getImage(img).getHeight();

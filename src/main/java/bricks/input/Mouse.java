@@ -19,11 +19,11 @@ public class Mouse {
             super(state);
         }
 
-        public static boolean pressing(int pastState, int newState) {
+        public static boolean pressed(int pastState, int newState) {
             return pastState == GLFW_RELEASE && newState == GLFW_PRESS;
         }
 
-        public static boolean releasing(int pastState, int newState) {
+        public static boolean released(int pastState, int newState) {
             return pastState == GLFW_PRESS && newState == GLFW_RELEASE;
         }
 

@@ -7,53 +7,58 @@ import bricks.trade.Composite;
 import bricks.trade.Guest;
 import bricks.trade.Host;
 import bricks.var.Source;
+import bricks.var.impulse.Edge;
 import bricks.var.impulse.Impulse;
+import bricks.var.impulse.InequalityImpulse;
 import suite.suite.Subject;
 import suite.suite.action.Statement;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 import static suite.suite.$uite.$;
 import static suite.suite.Suite.join;
 
-public abstract class Brick extends Guest implements Composite {
+public abstract class Brick<W extends Host> extends Guest<W> implements Composite {
 
     @Override
     public Subject order(Subject trade) {
-        return host.order(trade);
+        return getHost().order(trade);
     }
 
     public class MonitorDeclaration {
-        private final List<Impulse> impulses = new LinkedList<>();
+        private final Impulse[] impulses;
 
         MonitorDeclaration(Impulse impulse) {
-            impulses.add(impulse);
+            impulses = new Impulse[]{impulse};
+        }
+
+        MonitorDeclaration(Impulse impulse, Impulse ... impulses) {
+            this.impulses = Arrays.copyOf(impulses, impulses.length + 1);
+            this.impulses[impulses.length] = impulse;
         }
 
         public MonitorDeclaration or(Impulse impulse) {
-            impulses.add(impulse);
-            return this;
+            return new MonitorDeclaration(impulse, impulses);
         }
 
         public BrickMonitor then(Statement statement) {
             return then(statement, true);
         }
 
-        public BrickMonitor then(Statement statement, boolean set) {
+        public BrickMonitor then(Statement statement, boolean use) {
             BrickMonitor monitor = new BrickMonitor(impulses, statement);
-            if(set) monitor.use();
+            if(use) monitor.use();
             return monitor;
         }
     }
 
     public class BrickMonitor implements Monitor {
-        private final List<Impulse> impulses = new LinkedList<>();
+        private final Impulse[] impulses;
         private Statement statement;
 
-        BrickMonitor(Collection<Impulse> impulses, Statement statement) {
-            this.impulses.addAll(impulses);
+        BrickMonitor(Impulse[] impulses, Statement statement) {
+            this.impulses = impulses;
             this.statement = statement;
         }
 
@@ -81,7 +86,7 @@ public abstract class Brick extends Guest implements Composite {
 
     Subject $monitors = $();
 
-    public Brick(Host host) {
+    public Brick(W host) {
         super(host);
     }
 
@@ -142,14 +147,24 @@ public abstract class Brick extends Guest implements Composite {
         return new MonitorDeclaration(impulse);
     }
 
+    protected<S> MonitorDeclaration when(Supplier<S> sup) {
+        return new MonitorDeclaration(new InequalityImpulse<>(sup, sup.get()));
+    }
+
     protected Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
         return join(
-                $("rising", when(bool.willGive((p, n) -> !p && n)).then(rising)),
-                $("falling", when(bool.willGive((p, n) -> p && !n)).then(falling)));
+                $("rising", when(bool.willBe(Edge::rising)).then(rising)),
+                $("falling", when(bool.willBe(Edge::falling)).then(falling)));
+    }
+
+    protected Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
+        return join(
+                $("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
+                $("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
     }
 
     protected Monitor when(Source<Boolean> bool, Statement rising) {
-        return when(bool.willGive((p, n) -> !p && n)).then(rising);
+        return when(bool.willBe(Edge::rising)).then(rising);
     }
 
     public void setup() {}

@@ -13,9 +13,9 @@ import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
 
-public class ColorText extends Guest {
+public class ColorText extends Guest<Host> {
 
-    Var<String> text;
+    Var<String> string;
     Var<Point> position;
     Var<XOrigin> xOrigin;
     Var<YOrigin> yOrigin;
@@ -27,7 +27,7 @@ public class ColorText extends Guest {
 
     public ColorText(Host host) {
         super(host);
-        text = Vars.set("");
+        string = Vars.set("");
         position = Vars.set(new Point(0,0));
         xOrigin = Vars.set(XOrigin.CENTER);
         yOrigin = Vars.set(YOrigin.CENTER);
@@ -35,21 +35,21 @@ public class ColorText extends Guest {
         size = Vars.set(24);
         font = Vars.set(Font.TREBUC);
 
-        width = Vars.preserve(() -> order(FontManager.class).getFont(font.get()).getStringWidth(text.get(), size.get().floatValue()),
-                text, size, font);
+        width = Vars.preserve(() -> order(FontManager.class).getFont(font.get()).getStringWidth(string.get(), size.get().floatValue()),
+                string, size, font);
     }
 
-    public String getText() {
-        return text.get();
+    public String getString() {
+        return string.get();
     }
 
-    public ColorText setText(String text) {
-        this.text.set(text);
+    public ColorText setString(String string) {
+        this.string.set(string);
         return this;
     }
 
     public Var<String> text() {
-        return text;
+        return string;
     }
 
     public Point getPosition() {

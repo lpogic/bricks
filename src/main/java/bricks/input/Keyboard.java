@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 import suite.suite.Subject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -99,11 +100,11 @@ public class Keyboard {
         charEvents.add(new CharEvent(codepoint, modifiers));
     }
 
-    public Iterable<KeyEvent> getEvents() {
+    public Collection<KeyEvent> getEvents() {
         return events;
     }
 
-    public Iterable<CharEvent> getCharEvents() {
+    public Collection<CharEvent> getCharEvents() {
         return charEvents;
     }
 

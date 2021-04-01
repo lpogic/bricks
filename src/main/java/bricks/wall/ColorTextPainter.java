@@ -21,7 +21,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetBakedQuad;
 
-public class ColorTextPainter extends Guest {
+public class ColorTextPainter extends Guest<Host> {
 
     private final int vao;
     private final int vbo;
@@ -65,7 +65,7 @@ public class ColorTextPainter extends Guest {
         int bitmapWidth = font.getLoadedFont().getBitmapWidth();
         int bitmapHeight = font.getLoadedFont().getBitmapHeight();
 
-        String txt = text.getText();
+        String txt = text.getString();
         Point position = text.getPosition();
         Color color = text.getColor();
 
@@ -137,7 +137,7 @@ public class ColorTextPainter extends Guest {
         int bitmapWidth = font.getLoadedFont().getBitmapWidth();
         int bitmapHeight = font.getLoadedFont().getBitmapHeight();
 
-        String txt = text.getText();
+        String txt = text.getString();
         Point position = text.getPosition();
 
         var hRef = text.getXOrigin();

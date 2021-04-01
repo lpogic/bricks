@@ -9,42 +9,29 @@ import java.util.function.Supplier;
 import static suite.suite.$uite.$;
 
 public class SteepVar<T> implements SteepSource<T> {
-    Subject v;
 
-    public SteepVar() {
-        v = $();
-    }
+    protected T value;
+    protected Supplier<T> supplier;
+
+    public SteepVar() {}
 
     public SteepVar(T value) {
-        this.v = $(value);
+        this.value = value;
     }
 
     public void set(T value) {
-        this.v.reset(value);
+        supplier = null;
+        this.value = value;
     }
 
     public void let(Supplier<T> supplier) {
-        this.v.reset(supplier);
-    }
-
-    public<A> void let(Supplier<A> sup, Function<A, T> fun) {
-        let(() -> fun.apply(sup.get()));
-    }
-
-    public<A, B> void let(Supplier<A> sup1, Supplier<B> sup2, BiFunction<A, B, T> fun) {
-        let(() -> fun.apply(sup1.get(), sup2.get()));
+        this.value = null;
+        this.supplier = supplier;
     }
 
     @Override
     public T getOr(T reserve) {
-        if(v.is(Supplier.class)) {
-            Supplier<T> supplier = v.asExpected();
-            return supplier.get();
-        } else return v.orGiven(reserve);
-    }
-
-    @Override
-    public boolean present() {
-        return v.present();
+        T t = supplier != null ? supplier.get() : value;
+        return t != null ? t : reserve;
     }
 }

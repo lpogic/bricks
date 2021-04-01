@@ -121,8 +121,8 @@ public abstract class Wall implements Composite {
         glid = glfwCreateWindow(width, height, title, NULL, NULL);
         if (glid == NULL) throw new RuntimeException("Window based failed");
 
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window willBe stay hidden after creation
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window willBe be resizable
 
         glfwSetFramebufferSizeCallback(glid, (win, w, h) -> {
             glfwMakeContextCurrent(win);
@@ -257,7 +257,7 @@ public abstract class Wall implements Composite {
         } else if(object instanceof ImageRectangle) {
             wallPainter.set((ImageRectangle) object);
         } else if(object instanceof Brick) {
-            ((Brick) object).show();
+            ((Brick<?>) object).show();
         }
     }
 
@@ -271,13 +271,13 @@ public abstract class Wall implements Composite {
         } else if(object instanceof ImageRectangle) {
             wallPainter.set((ImageRectangle) object, sequent);
         } else if(object instanceof Brick) {
-            ((Brick) object).show();
+            ((Brick<?>) object).show();
         }
     }
 
     public void hide(Object object) {
         if(object instanceof Brick) {
-            ((Brick) object).hide();
+            ((Brick<?>) object).hide();
         } else {
             wallPainter.unset(object);
         }
@@ -285,7 +285,7 @@ public abstract class Wall implements Composite {
 
     public void move(Object o) {
         if(o instanceof Brick) {
-            Brick b = (Brick) o;
+            Brick<?> b = (Brick<?>) o;
             wallDirector.set(b);
             b.update();
         }
@@ -293,7 +293,7 @@ public abstract class Wall implements Composite {
 
     public void stop(Object o) {
         if(o instanceof Brick) {
-            wallDirector.unset((Brick) o);
+            wallDirector.unset((Brick<?>) o);
         }
     }
 
@@ -317,7 +317,7 @@ public abstract class Wall implements Composite {
         if(stop) stop(o);
     }
 
-    protected Brick.MonitorDeclaration when(Impulse impulse) {
+    protected WallDirector.MonitorDeclaration when(Impulse impulse) {
         return wallDirector.when(impulse);
     }
 

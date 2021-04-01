@@ -11,7 +11,7 @@ import bricks.trade.Host;
 
 import static org.lwjgl.opengl.GL30.*;
 
-public class ImageRectanglePainter extends Guest {
+public class ImageRectanglePainter extends Guest<Host> {
 
     int glid;
     Shader shader;

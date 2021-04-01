@@ -4,37 +4,30 @@ import bricks.var.impulse.Impulse;
 import bricks.var.impulse.InequalityImpulse;
 import suite.suite.Subject;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class PreservativeVar<T> implements Source<T> {
 
-    protected final List<Impulse> impulses = new LinkedList<>();
-    protected Supplier<T> sup;
     protected T cache;
+    protected Supplier<T> supplier;
+    protected final Impulse[] impulses;
     protected boolean cached;
 
-    public PreservativeVar() {
+    public PreservativeVar(Supplier<T> supplier, Subject $roots) {
+        this.supplier = supplier;
         this.cached = false;
-    }
-
-    public PreservativeVar(Supplier<T> sup) {
-        this.sup = sup;
-        this.cached = false;
-    }
-
-    public PreservativeVar(Supplier<T> sup, Subject $roots) {
-        this.sup = sup;
-        this.cached = false;
+        List<Impulse> impulses = new ArrayList<>();
         for (var $r : $roots) {
             if($r.is(Impulse.class)) {
-                this.impulses.add($r.asExpected());
+                impulses.add($r.asExpected());
             } else if($r.is(Supplier.class)) {
                 Supplier<Object> s = $r.asExpected();
-                this.impulses.add(new InequalityImpulse<>(s, s.get()));
+                impulses.add(new InequalityImpulse<>(s, s.get()));
             }
         }
+        this.impulses = impulses.toArray(new Impulse[0]);
     }
 
     protected void update() {
@@ -49,8 +42,8 @@ public class PreservativeVar<T> implements Source<T> {
     public T getOr(T reserve) {
         update();
         if(!cached) {
-            if(sup == null) return reserve;
-            cache = sup.get();
+            if(supplier == null) return reserve;
+            cache = supplier.get();
             cached = true;
         }
         return cache != null ? cache : reserve;
@@ -60,16 +53,10 @@ public class PreservativeVar<T> implements Source<T> {
     public T get() {
         update();
         if(!cached) {
-            if(sup == null) return null;
-            cache = sup.get();
+            if(supplier == null) return null;
+            cache = supplier.get();
             cached = true;
         }
         return cache;
-    }
-
-    public PreservativeVar<T> let(Supplier<T> sup) {
-        this.sup = sup;
-        this.cached = false;
-        return this;
     }
 }
