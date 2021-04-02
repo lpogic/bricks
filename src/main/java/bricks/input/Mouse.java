@@ -45,15 +45,10 @@ public class Mouse {
         }
     }
 
-    Wall wall;
     Var<Point> position = new Var<>();
     Scroll scroll = new Scroll();
     Button leftButton = new Button();
     Button rightButton = new Button();
-
-    public Mouse(Wall wall) {
-        this.wall = wall;
-    }
 
     public void reportPositionEvent(long w, double posX, double posY) {
         position.set(new Point(posX, posY));

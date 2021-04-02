@@ -91,7 +91,7 @@ public class LoadedFont {
         return width * stbtt_ScaleForPixelHeight(fontInfo, fontHeight);
     }
 
-    public int getCarriagePosition(String text, float fontHeight, float textX, float testX) {
+    public int getCursorPosition(String text, float fontHeight, float textX, float testX) {
         int[] advancedWidth = new int[1];
         int[] leftSideBearing = new int[1];
         Cascade<Integer> ci = new Cascade<>(text.chars().iterator());

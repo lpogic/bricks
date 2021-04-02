@@ -1,7 +1,9 @@
 package bricks.wall;
 
+import bricks.input.Clipboard;
 import bricks.input.Keyboard;
 import bricks.input.Mouse;
+import bricks.input.Story;
 import bricks.monitor.Monitor;
 import bricks.trade.Composite;
 import bricks.trade.Guest;
@@ -96,6 +98,14 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
 
     protected Keyboard keyboard() {
         return order(Keyboard.class);
+    }
+
+    protected Clipboard clipboard() {
+        return order(Clipboard.class);
+    }
+
+    protected Story story() {
+        return order(Story.class);
     }
 
     protected void show(Object o) {

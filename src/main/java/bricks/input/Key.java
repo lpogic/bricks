@@ -113,7 +113,7 @@ public class Key extends Var<Key.Event> {
         NUM_7_HOME(327, 0b1),
         NUM_8_UP(328, 0b1),
         NUM_9_PAGE_UP(329, 0b1),
-        NUM_DECIMAL(330, 0b1),
+        NUM_DECIMAL_DELETE(330, 0b1),
         NUM_DIVIDE(331),
         NUM_MULTIPLY(332),
         NUM_SUBTRACT(333),

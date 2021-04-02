@@ -7,8 +7,10 @@ import bricks.graphic.ColorRectangle;
 import bricks.graphic.ColorText;
 import bricks.graphic.ImageRectangle;
 import bricks.image.ImageManager;
+import bricks.input.Clipboard;
 import bricks.input.Keyboard;
 import bricks.input.Mouse;
+import bricks.input.Story;
 import bricks.monitor.Monitor;
 import bricks.trade.Composite;
 import bricks.var.Source;
@@ -105,6 +107,8 @@ public abstract class Wall implements Composite {
 
     protected Keyboard keyboard;
     protected Mouse mouse;
+    protected Clipboard clipboard;
+    protected Story story;
     protected WallPainter wallPainter;
     protected WallDirector wallDirector;
     protected FontManager fontManager = new FontManager();
@@ -137,7 +141,9 @@ public abstract class Wall implements Composite {
 
     protected void setupDependencies() {
         keyboard = new Keyboard();
-        mouse = new Mouse(this);
+        mouse = new Mouse();
+        clipboard = new Clipboard(this);
+        story = new Story(20);
         wallPainter = new WallPainter(this);
         wallDirector = new WallDirector(this);
         fontManager = new FontManager();
@@ -176,6 +182,10 @@ public abstract class Wall implements Composite {
                 return $(mouse);
             } else if(type.equals(Keyboard.class)) {
                 return $(keyboard);
+            } else if(type.equals(Clipboard.class)) {
+                return $(clipboard);
+            } else if(type.equals(Story.class)) {
+                return $(story);
             } else if(type.equals(FontManager.class)) {
                 return $(fontManager);
             } else if(type.equals(ImageManager.class)) {
@@ -246,6 +256,14 @@ public abstract class Wall implements Composite {
 
     public void setLockKeyModifiers(boolean lock) {
         glfwSetInputMode(glid, GLFW_LOCK_KEY_MODS, lock ? GLFW_TRUE : GLFW_FALSE);
+    }
+
+    public void setClipboardString(String str) {
+        glfwSetClipboardString(glid, str);
+    }
+
+    public String getClipboardString() {
+        return glfwGetClipboardString(glid);
     }
 
     public void show(Object object) {
