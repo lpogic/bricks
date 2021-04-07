@@ -162,7 +162,7 @@ public abstract class Wall implements Composite {
 
     public void update_() {
         Color c = getColor();
-        glClearColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+        glClearColor(c.red(), c.green(), c.blue(), c.alpha());
         wallDirector.update();
         update();
         wallPainter.paint();
@@ -308,16 +308,14 @@ public abstract class Wall implements Composite {
     }
 
     public void move(Object o) {
-        if(o instanceof Brick) {
-            Brick<?> b = (Brick<?>) o;
+        if(o instanceof Brick<?> b) {
             wallDirector.set(b);
             b.move();
         }
     }
 
     public void stop(Object o) {
-        if(o instanceof Brick) {
-            Brick<?> b = (Brick<?>) o;
+        if(o instanceof Brick<?> b) {
             b.stop();
             wallDirector.unset(b);
         }

@@ -2,9 +2,9 @@ package bricks.trade;
 
 import suite.suite.Subject;
 
-public abstract class Agent extends Guest implements Host {
+public abstract class Agent<T extends Host> extends Guest<T> implements Host {
 
-    public Agent(Host host) {
+    public Agent(T host) {
         super(host);
     }
 

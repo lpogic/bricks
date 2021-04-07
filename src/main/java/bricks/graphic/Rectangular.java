@@ -13,7 +13,7 @@ public interface Rectangular extends Sized, Positioned, Related {
     default boolean contains(Point point) {
         Point position = getPosition();
         float width = getWidth();
-        float hd = point.getX() - position.getX();
+        float hd = point.x() - position.x();
         if(switch (getXOrigin()) {
             case LEFT -> hd < 0 && hd > width;
             case CENTER -> Math.abs(hd) > width / 2;
@@ -21,7 +21,7 @@ public interface Rectangular extends Sized, Positioned, Related {
         }) return false;
 
         float height = getHeight();
-        float vd = point.getY() - position.getY();
+        float vd = point.y() - position.y();
         return switch (getYOrigin()) {
             case TOP -> vd >= 0 && vd >= height;
             case CENTER -> Math.abs(vd) <= height / 2;

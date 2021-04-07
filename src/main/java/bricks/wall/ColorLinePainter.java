@@ -56,10 +56,10 @@ public class ColorLinePainter {
         Color color = line.getColor();
 
         float[] vertex = new float[]{
-                beginPosition.getX(), beginPosition.getY(),
-                endPosition.getX(), endPosition.getY(),
+                beginPosition.x(), beginPosition.y(),
+                endPosition.x(), endPosition.y(),
                 thick,
-                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()
+                color.red(), color.green(), color.blue(), color.alpha()
         };
 
         glBindVertexArray(glid);

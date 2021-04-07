@@ -6,7 +6,7 @@ plugins {
 group 'lpogic'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_14
+sourceCompatibility = JavaVersion.VERSION_16
 
 plugins.withType(JavaPlugin).configureEach {
     java {
@@ -27,7 +27,7 @@ project.ext.lwjglNatives = "natives-windows"
 
 dependencies {
 
-    compile "org.joml:joml:1.9.19"
+    implementation "org.joml:joml:1.9.19"
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
     implementation "org.lwjgl:lwjgl"
@@ -52,6 +52,6 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-par::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
 
-    compile project(":suite")
-    compile project(":brackettree")
+    implementation(project(":suite"))
+    implementation(project(":brackettree"))
 }

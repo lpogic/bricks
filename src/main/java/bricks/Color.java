@@ -1,13 +1,8 @@
 package bricks;
 
-public class Color {
+public record Color(float red, float green, float blue, float alpha) {
 
     public static final Color PURE_GREEN = new Color(0, 1, 0);
-
-    float red;
-    float green;
-    float blue;
-    float alpha;
 
     public static Color mix(float red, float green, float blue, float alpha) {
         return new Color(red, green, blue, alpha);
@@ -15,13 +10,6 @@ public class Color {
 
     public static Color mix(float red, float green, float blue) {
         return mix(red, green, blue, 1f);
-    }
-
-    public Color(float red, float green, float blue, float alpha) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.alpha = alpha;
     }
 
     public Color(float red, float green, float blue) {
@@ -37,30 +25,11 @@ public class Color {
     }
 
     public Color(Number red, Number green, Number blue, Number alpha) {
-        this.red = red.floatValue();
-        this.green = green.floatValue();
-        this.blue = blue.floatValue();
-        this.alpha = alpha.floatValue();
+        this(red.floatValue(), green.floatValue(), blue.floatValue(), alpha.floatValue());
     }
 
     public Color(Number red, Number green, Number blue) {
         this(red, green, blue, 1f);
-    }
-
-    public float getRed() {
-        return red;
-    }
-
-    public float getGreen() {
-        return green;
-    }
-
-    public float getBlue() {
-        return blue;
-    }
-
-    public float getAlpha() {
-        return alpha;
     }
 
     @Override

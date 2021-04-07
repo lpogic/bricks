@@ -5,11 +5,12 @@ import bricks.graphic.ColorRectangle;
 import bricks.graphic.ColorText;
 import bricks.graphic.ImageRectangle;
 import bricks.trade.Agent;
+import bricks.trade.Host;
 import suite.suite.Subject;
 
 import static suite.suite.$uite.$;
 
-public class WallPainter extends Agent {
+public class WallPainter extends Agent<Host> {
 
     interface Drawable {
         void draw();

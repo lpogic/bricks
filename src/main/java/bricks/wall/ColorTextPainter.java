@@ -74,7 +74,7 @@ public class ColorTextPainter extends Guest<Host> {
         float textSize = text.getHeight();
 
         shader.use();
-        shader.set("textColor", color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        shader.set("textColor", color.red(), color.green(), color.blue(), color.alpha());
 
         glActiveTexture(GL_TEXTURE0);
 
@@ -84,14 +84,14 @@ public class ColorTextPainter extends Guest<Host> {
         float[] X = new float[1];
         float[] Y = new float[1];
         X[0] = switch (hRef) {
-            case RIGHT -> position.getX() - text.getWidth();
-            case CENTER -> position.getX() - text.getWidth() / 2;
-            case LEFT -> position.getX();
+            case RIGHT -> position.x() - text.getWidth();
+            case CENTER -> position.x() - text.getWidth() / 2;
+            case LEFT -> position.x();
         };
         Y[0] = switch (vRef) {
-            case TOP -> position.getY() + fontSize;
-            case CENTER -> position.getY() - descent;
-            case BOTTOM -> position.getY();
+            case TOP -> position.y() + fontSize;
+            case CENTER -> position.y() - descent;
+            case BOTTOM -> position.y();
         };
 
         glBindVertexArray(vao);
@@ -148,9 +148,9 @@ public class ColorTextPainter extends Guest<Host> {
         float[] X = new float[1];
         float[] Y = new float[1];
         X[0] = switch (hRef) {
-            case RIGHT -> position.getX() - text.getWidth();
-            case CENTER -> position.getX() - text.getWidth() / 2;
-            case LEFT -> position.getX();
+            case RIGHT -> position.x() - text.getWidth();
+            case CENTER -> position.x() - text.getWidth() / 2;
+            case LEFT -> position.x();
         };
 
         STBTTAlignedQuad quad = STBTTAlignedQuad.create();

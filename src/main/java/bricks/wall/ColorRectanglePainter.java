@@ -52,20 +52,20 @@ public class ColorRectanglePainter {
         Point position = rectangle.getPosition();
         Color color = rectangle.getColor();
         float x = switch (rectangle.getXOrigin()) {
-            case LEFT -> position.getX() + width / 2;
-            case CENTER -> position.getX();
-            case RIGHT -> position.getX() - width / 2;
+            case LEFT -> position.x() + width / 2;
+            case CENTER -> position.x();
+            case RIGHT -> position.x() - width / 2;
         };
 
         float y = switch (rectangle.getYOrigin()) {
-            case BOTTOM -> position.getY() - height / 2;
-            case CENTER -> position.getY();
-            case TOP -> position.getY() + height / 2;
+            case BOTTOM -> position.y() - height / 2;
+            case CENTER -> position.y();
+            case TOP -> position.y() + height / 2;
         };
 
         float[] vertex = new float[]{
                 x, y, width, height,
-                color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()
+                color.red(), color.green(), color.blue(), color.alpha()
         };
 
         glBindVertexArray(glid);
