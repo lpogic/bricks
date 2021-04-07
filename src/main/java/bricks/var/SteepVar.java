@@ -1,12 +1,6 @@
 package bricks.var;
 
-import suite.suite.Subject;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
-
-import static suite.suite.$uite.$;
 
 public class SteepVar<T> implements SteepSource<T> {
 

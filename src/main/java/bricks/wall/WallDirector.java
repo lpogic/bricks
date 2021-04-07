@@ -25,4 +25,24 @@ public class WallDirector extends Brick<Wall> {
         super.update();
         $directed.eachAs(Brick.class).forEach(Brick::update);
     }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void move() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
 }

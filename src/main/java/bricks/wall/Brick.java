@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 import static suite.suite.$uite.$;
+import static suite.suite.$uite.$$;
 import static suite.suite.Suite.join;
 
 public abstract class Brick<W extends Host> extends Guest<W> implements Composite {
@@ -162,13 +163,13 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
     }
 
     protected Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
-        return join(
+        return $$(
                 $("rising", when(bool.willBe(Edge::rising)).then(rising)),
                 $("falling", when(bool.willBe(Edge::falling)).then(falling)));
     }
 
     protected Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
-        return join(
+        return $$(
                 $("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
                 $("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
     }
@@ -177,9 +178,10 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         return when(bool.willBe(Edge::rising)).then(rising);
     }
 
-    public void setup() {}
-    public void show() {}
-    public void hide() {}
+    public abstract void show();
+    public abstract void hide();
+    public abstract void move();
+    public abstract void stop();
     public void update() {
         $monitors.eachAs(BrickMonitor.class).forEach(BrickMonitor::update);
     }

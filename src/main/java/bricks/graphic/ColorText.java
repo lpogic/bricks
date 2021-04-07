@@ -5,7 +5,6 @@ import bricks.font.Font;
 import bricks.font.FontManager;
 import bricks.trade.Guest;
 import bricks.trade.Host;
-import bricks.var.PreservativeVar;
 import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
@@ -29,7 +28,7 @@ public class ColorText extends Guest<Host> implements Rectangular {
         xOrigin = Vars.set(XOrigin.CENTER);
         yOrigin = Vars.set(YOrigin.CENTER);
         color = Vars.set(Color.mix(1,1,1));
-        height = Vars.set(24);
+        height = Vars.set(20);
         font = Vars.set(Font.TREBUC);
 
         width = Vars.let(() -> order(FontManager.class).getFont(font.get())

@@ -2,14 +2,16 @@ package bricks.input;
 
 import bricks.Point;
 import bricks.var.Source;
+import bricks.var.TwoWayVar;
 import bricks.var.Var;
+import bricks.var.Vars;
 import bricks.wall.Wall;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Mouse {
 
-    public static class Button extends Var<Integer> {
+    public static class Button extends TwoWayVar<Integer> {
 
         public Button() {
             super(GLFW_RELEASE);
@@ -33,8 +35,8 @@ public class Mouse {
     }
 
     public static class Scroll {
-        Var<Double> x = new Var<>();
-        Var<Double> y = new Var<>();
+        Var<Double> x = Vars.get();
+        Var<Double> y = Vars.get();
 
         public Var<Double> getX() {
             return x;
@@ -45,7 +47,7 @@ public class Mouse {
         }
     }
 
-    Var<Point> position = new Var<>();
+    Var<Point> position = Vars.get();
     Scroll scroll = new Scroll();
     Button leftButton = new Button();
     Button rightButton = new Button();

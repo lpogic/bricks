@@ -1,6 +1,7 @@
 package bricks.wall;
 
 import bricks.Color;
+import bricks.Point;
 import bricks.font.FontManager;
 import bricks.graphic.ColorLine;
 import bricks.graphic.ColorRectangle;
@@ -224,6 +225,10 @@ public abstract class Wall implements Composite {
         return height;
     }
 
+    public Source<Point> center() {
+        return Vars.let(() -> new Point(getWidth() / 2f, getHeight() / 2f), width, height);
+    }
+
     public String getTitle() {
         return title.get();
     }
@@ -306,13 +311,15 @@ public abstract class Wall implements Composite {
         if(o instanceof Brick) {
             Brick<?> b = (Brick<?>) o;
             wallDirector.set(b);
-            b.update();
+            b.move();
         }
     }
 
     public void stop(Object o) {
         if(o instanceof Brick) {
-            wallDirector.unset((Brick<?>) o);
+            Brick<?> b = (Brick<?>) o;
+            b.stop();
+            wallDirector.unset(b);
         }
     }
 

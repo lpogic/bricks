@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class PreservativeVar<T> implements Source<T> {
+public class Preserve<T> implements Source<T> {
 
     protected T cache;
     protected Supplier<T> supplier;
     protected final Impulse[] impulses;
     protected boolean cached;
 
-    public PreservativeVar(Supplier<T> supplier, Subject $roots) {
+    public Preserve(Supplier<T> supplier, Subject $roots) {
         this.supplier = supplier;
         this.cached = false;
         List<Impulse> impulses = new ArrayList<>();

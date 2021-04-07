@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+@FunctionalInterface
 public interface Source<T> extends Supplier<T> {
 
     default T getOr(T reserve) {
