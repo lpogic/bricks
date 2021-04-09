@@ -217,12 +217,20 @@ public abstract class Wall implements Composite {
         return width;
     }
 
+    public Source<Number> width(double multiplier) {
+        return width.per(w -> w.doubleValue() * multiplier);
+    }
+
     public int getHeight() {
         return height.get().intValue();
     }
 
     public Source<Number> height() {
         return height;
+    }
+
+    public Source<Number> height(double multiplier) {
+        return height.per(h -> h.doubleValue() * multiplier);
     }
 
     public Source<Point> center() {

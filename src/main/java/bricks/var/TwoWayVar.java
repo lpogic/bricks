@@ -30,8 +30,10 @@ public class TwoWayVar<T> implements Var<T> {
     }
 
     public void let(Supplier<T> supplier) {
-        this.supplier = supplier;
-        this.consumer = this::reset;
+        if(supplier != this) {
+            this.supplier = supplier;
+            this.consumer = this::reset;
+        }
     }
 
     public void let(Consumer<T> consumer, Supplier<T> supplier) {
