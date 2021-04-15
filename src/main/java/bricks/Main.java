@@ -16,21 +16,20 @@ public class Main extends Wall {
     public void setup() {
 
         var line = line();//.setEndPosition(700, 400);
-        line.endPosition().let(mouse.position().or(Point.zero()));
-        show(line.setThick(10));
+        line.end().aim(mouse.position());
+        line.thick().set(10);
+        show(line);
 
-        var txt = text()
-                .setXOrigin(XOrigin.RIGHT)
-                .setYOrigin(YOrigin.BOTTOM);
-        txt.position().let(mouse.position().or(Point.zero()));
-        txt.string().let(mouse.position().per(Objects::toString));
+        var txt = text();
+        txt.aim(mouse.position());
+        txt.string().let(() -> mouse.position().toString());
         show(txt);
 
-        var txt1 = text().setPosition(100, 30);
-        txt1.string().let(txt.width().per(Objects::toString));
+        var txt1 = text();
+        txt1.left().set(30);
+        txt1.top().set(30);
+        txt1.string().let(txt.width().per(String::valueOf));
         show(txt1);
-
-        show(rect().setPosition(100, 100).setWidth(5).setHeight(5).setColor(Color.mix(.5, 0 , 0)));
 
         when(mouse.leftButton().willBe(Mouse.Button::pressed))
                 .or(mouse.rightButton().willBe(Mouse.Button::pressed))

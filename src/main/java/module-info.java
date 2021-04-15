@@ -16,4 +16,5 @@ open module bricks {
     exports bricks.var.impulse;
     exports bricks.wall;
     exports bricks.monitor;
+    exports bricks.var.special;
 }

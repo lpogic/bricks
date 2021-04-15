@@ -1,27 +1,29 @@
 package bricks.var;
 
+import bricks.var.special.Num;
+import bricks.var.special.NumPreserve;
+import bricks.var.special.SupNum;
 import suite.suite.Subject;
 import suite.suite.Suite;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Vars {
 
     public static<T> Var<T> get() {
-        return new TwoWayVar<>();
+        return new SupVar<>();
     }
 
     public static<T> Var<T> get(Class<T> type) {
-        return new TwoWayVar<>();
+        return new SupVar<>();
     }
 
     public static<T> Var<T> set(T t) {
-        return new TwoWayVar<>(t);
+        return new SupVar<>(t);
     }
 
     public static<T> Var<T> let(Supplier<T> supplier) {
-        var v = new TwoWayVar<T>();
+        var v = new SupVar<T>();
         v.let(supplier);
         return v;
     }
@@ -34,7 +36,25 @@ public class Vars {
         return new Preserve<>(sup, $roots);
     }
 
-    public static<T> TwoWayVar<T> let(Consumer<T> consumer, Supplier<T> supplier) {
-        return new TwoWayVar<>(consumer, supplier);
+    public static Num num() {
+        return new SupNum();
+    }
+
+    public static Num num(Number n) {
+        return new SupNum(n);
+    }
+
+    public static Num num(Supplier<Number> supplier) {
+        var v = new SupNum();
+        v.let(supplier);
+        return v;
+    }
+
+    public static NumPreserve num(Supplier<Number> sup, Supplier<?> ... roots) {
+        return new NumPreserve(sup, Suite.set((Object[]) roots));
+    }
+
+    public static NumPreserve num(Supplier<Number> sup, Subject $roots) {
+        return new NumPreserve(sup, $roots);
     }
 }

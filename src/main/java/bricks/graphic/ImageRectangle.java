@@ -1,6 +1,5 @@
 package bricks.graphic;
 
-import bricks.*;
 import bricks.image.Image;
 import bricks.image.ImageManager;
 import bricks.trade.Guest;
@@ -8,100 +7,78 @@ import bricks.trade.Host;
 import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
+import bricks.var.special.Num;
 
-public class ImageRectangle extends Guest<Host> implements Rectangular {
+public class ImageRectangle extends Guest<Host> implements Rectangle {
 
-    Var<Number> width;
-    Var<Number> height;
-    Var<Point> position;
-    Var<XOrigin> xOrigin;
-    Var<YOrigin> yOrigin;
+    Centroid body;
     Var<Image> image;
 
     public ImageRectangle(Host host) {
         super(host);
         image = Vars.get();
-        width = Vars.get(Number.class);
-        width.let(() -> {
+        body = new Centroid();
+        body.width().let(Vars.let(() -> {
             Image img = image.get();
             if(img == null) return 0;
             return order(ImageManager.class).getImage(img).getWidth();
-        }, image);
-        height = Vars.get(Number.class);
-        height.let(() -> {
+        }, image));
+        body.height().let(Vars.let(() -> {
             Image img = image.get();
             if(img == null) return 0;
             return order(ImageManager.class).getImage(img).getHeight();
-        }, image);
-        position = Vars.set(new Point(400, 300));
-        xOrigin = Vars.set(XOrigin.CENTER);
-        yOrigin = Vars.set(YOrigin.CENTER);
+        }, image));
     }
 
-    public Var<Number> width() {
-        return width;
+    @Override
+    public Num width() {
+        return body.width();
     }
 
-    public ImageRectangle setWidth(Number width) {
-        this.width.set(width);
-        return this;
+    @Override
+    public Num height() {
+        return body.height();
     }
 
-    public Var<Number> height() {
-        return height;
+    @Override
+    public Num left() {
+        return body.left();
     }
 
-    public ImageRectangle setHeight(Number height) {
-        this.height.set(height);
-        return this;
+    @Override
+    public Num right() {
+        return body.right();
     }
 
-    public Var<Point> position() {
-        return position;
+    @Override
+    public Num top() {
+        return body.top();
     }
 
-    public ImageRectangle setPosition(Point position) {
-        this.position.set(position);
-        return this;
+    @Override
+    public Num bottom() {
+        return body.bottom();
     }
 
-    public ImageRectangle setPosition(Number x, Number y) {
-        this.position.set(new Point(x, y));
-        return this;
+    @Override
+    public Num x() {
+        return body.x();
     }
 
-    public Var<XOrigin> xOrigin() {
-        return xOrigin;
+    @Override
+    public Num y() {
+        return body.y();
     }
 
-    public ImageRectangle setXOrigin(XOrigin xOrigin) {
-        this.xOrigin.set(xOrigin);
-        return this;
+    public void image(Source<Image> i) {
+        image.let(i);
     }
 
-    public Var<YOrigin> yOrigin() {
-        return yOrigin;
-    }
-
-    public ImageRectangle setYOrigin(YOrigin yOrigin) {
-        this.yOrigin.set(yOrigin);
-        return this;
-    }
-
-    public ImageRectangle setOrigin(XOrigin xOrigin, YOrigin yOrigin) {
-        return setXOrigin(xOrigin).setYOrigin(yOrigin);
-    }
-
-    public Var<Image> image() {
-        return image;
+    public void setImage(Image i ) {
+        image(() -> i);
     }
 
     public Image getImage() {
         return image.get();
-    }
-
-    public ImageRectangle setImage(Image image) {
-        this.image.set(image);
-        return this;
     }
 }

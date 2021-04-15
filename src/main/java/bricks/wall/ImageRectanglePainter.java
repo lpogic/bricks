@@ -1,7 +1,6 @@
 package bricks.wall;
 
 import brackettree.reader.BracketTree;
-import bricks.Point;
 import bricks.graphic.ImageRectangle;
 import bricks.graphic.Shader;
 import bricks.image.ImageManager;
@@ -40,7 +39,7 @@ public class ImageRectanglePainter extends Guest<Host> {
 
     }
 
-    public void setWallSize(int width, int height) {
+    public void setWallSize(float width, float height) {
         shader.use();
         shader.set("wallSize", width, height);
     }
@@ -48,21 +47,13 @@ public class ImageRectanglePainter extends Guest<Host> {
     public void paint(ImageRectangle rectangle) {
         shader.use();
 
+        float width = rectangle.width().getFloat();
+        float height = rectangle.height().getFloat();
+        float x = rectangle.x().getFloat();
+        float y = rectangle.y().getFloat();
+
         LoadedImage image = order(ImageManager.class).getImage(rectangle.getImage());
         int texGlid = image.getGlid();
-        float width = rectangle.getWidth();
-        float height = rectangle.getHeight();
-        Point position = rectangle.getPosition();
-        float x = switch (rectangle.getXOrigin()) {
-            case LEFT -> position.x() + width / 2;
-            case CENTER -> position.x();
-            case RIGHT -> position.x() - width / 2;
-        };
-        float y = switch (rectangle.getYOrigin()) {
-            case BOTTOM -> position.y() - height / 2;
-            case CENTER -> position.y();
-            case TOP -> position.y() + height / 2;
-        };
 
         float[] vertex = new float[]{
                 x, y, width, height

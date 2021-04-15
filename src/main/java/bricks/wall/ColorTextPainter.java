@@ -2,7 +2,6 @@ package bricks.wall;
 
 import brackettree.reader.BracketTree;
 import bricks.Color;
-import bricks.Point;
 import bricks.font.BackedFont;
 import bricks.font.CharacterTexture;
 import bricks.font.FontManager;
@@ -52,26 +51,25 @@ public class ColorTextPainter extends Guest<Host> {
 
     }
 
-    public void setWallSize(int width, int height) {
+    public void setWallSize(float width, float height) {
         shader.use();
         shader.set("wallSize", width, height);
     }
 
-    public void paint(ColorText text, int wallHeight) {
+    public void paint(ColorText text, float wallHeight) {
 
-        BackedFont font = order(FontManager.class).getFont(text.getFont(), text.getHeight());
+        BackedFont font = order(FontManager.class).getFont(text.font().get(), text.height().getFloat());
 
         float fontSize = font.getSize();
         int bitmapWidth = font.getLoadedFont().getBitmapWidth();
         int bitmapHeight = font.getLoadedFont().getBitmapHeight();
 
-        String txt = text.getString();
-        Point position = text.getPosition();
-        Color color = text.getColor();
+        String txt = text.string().get();
+        float left = text.left().getFloat();
+        float bottom = text.bottom().getFloat() + font.getScaledDescent();
+        Color color = text.color().get();
 
-        var hRef = text.getXOrigin();
-        var vRef = text.getYOrigin();
-        float textSize = text.getHeight();
+        float textSize = text.height().getFloat();
 
         shader.use();
         shader.set("textColor", color.red(), color.green(), color.blue(), color.alpha());
@@ -80,19 +78,10 @@ public class ColorTextPainter extends Guest<Host> {
 
         float scale = textSize / fontSize;
 
-        float descent = font.getScaledDescent() * scale;
         float[] X = new float[1];
         float[] Y = new float[1];
-        X[0] = switch (hRef) {
-            case RIGHT -> position.x() - text.getWidth();
-            case CENTER -> position.x() - text.getWidth() / 2;
-            case LEFT -> position.x();
-        };
-        Y[0] = switch (vRef) {
-            case TOP -> position.y() + fontSize;
-            case CENTER -> position.y() - descent;
-            case BOTTOM -> position.y();
-        };
+        X[0] = left;
+        Y[0] = bottom;
 
         glBindVertexArray(vao);
 
@@ -131,27 +120,21 @@ public class ColorTextPainter extends Guest<Host> {
 
     public int getIndex(ColorText text, float testX) {
 
-        BackedFont font = order(FontManager.class).getFont(text.getFont(), text.getHeight());
+        BackedFont font = order(FontManager.class).getFont(text.font().get(), text.height().getFloat());
 
         float fontSize = font.getSize();
         int bitmapWidth = font.getLoadedFont().getBitmapWidth();
         int bitmapHeight = font.getLoadedFont().getBitmapHeight();
 
-        String txt = text.getString();
-        Point position = text.getPosition();
-
-        var hRef = text.getXOrigin();
-        float textSize = text.getHeight();
+        String txt = text.string().get();
+        float left = text.left().getFloat();
+        float textSize = text.height().getFloat();
 
         float scale = textSize / fontSize;
 
         float[] X = new float[1];
         float[] Y = new float[1];
-        X[0] = switch (hRef) {
-            case RIGHT -> position.x() - text.getWidth();
-            case CENTER -> position.x() - text.getWidth() / 2;
-            case LEFT -> position.x();
-        };
+        X[0] = left;
 
         STBTTAlignedQuad quad = STBTTAlignedQuad.create();
 

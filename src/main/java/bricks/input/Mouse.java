@@ -1,17 +1,16 @@
 package bricks.input;
 
-import bricks.Point;
-import bricks.var.Source;
-import bricks.var.TwoWayVar;
+import bricks.Coordinate;
+import bricks.Coordinated;
+import bricks.var.SupVar;
 import bricks.var.Var;
 import bricks.var.Vars;
-import bricks.wall.Wall;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Mouse {
 
-    public static class Button extends TwoWayVar<Integer> {
+    public static class Button extends SupVar<Integer> {
 
         public Button() {
             super(GLFW_RELEASE);
@@ -47,13 +46,14 @@ public class Mouse {
         }
     }
 
-    Var<Point> position = Vars.get();
+    Coordinate position = new Coordinate.Cartesian();
     Scroll scroll = new Scroll();
     Button leftButton = new Button();
     Button rightButton = new Button();
 
     public void reportPositionEvent(long w, double posX, double posY) {
-        position.set(new Point(posX, posY));
+        position.x().set(posX);
+        position.y().set(posY);
     }
 
     public void reportScrollEvent(long wglid, double offsetX, double offsetY) {
@@ -73,7 +73,7 @@ public class Mouse {
     }
 
 
-    public Source<Point> position() {
+    public Coordinated position() {
         return position;
     }
 

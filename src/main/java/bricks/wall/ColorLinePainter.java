@@ -2,7 +2,6 @@ package bricks.wall;
 
 import brackettree.reader.BracketTree;
 import bricks.Color;
-import bricks.Point;
 import bricks.graphic.ColorLine;
 import bricks.graphic.Shader;
 
@@ -42,7 +41,7 @@ public class ColorLinePainter {
 
     }
 
-    public void setWallSize(int width, int height) {
+    public void setWallSize(float width, float height) {
         shader.use();
         shader.set("wallSize", width, height);
     }
@@ -50,14 +49,14 @@ public class ColorLinePainter {
     public void paint(ColorLine line) {
         shader.use();
 
-        float thick = line.getThick();
-        Point beginPosition = line.getBeginPosition();
-        Point endPosition = line.getEndPosition();
-        Color color = line.getColor();
+        float thick = line.thick().getFloat();
+        var beginPosition = line.begin();
+        var endPosition = line.end();
+        Color color = line.color().get();
 
         float[] vertex = new float[]{
-                beginPosition.x(), beginPosition.y(),
-                endPosition.x(), endPosition.y(),
+                beginPosition.x().getFloat(), beginPosition.y().getFloat(),
+                endPosition.x().getFloat(), endPosition.y().getFloat(),
                 thick,
                 color.red(), color.green(), color.blue(), color.alpha()
         };

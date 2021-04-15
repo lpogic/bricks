@@ -1,7 +1,8 @@
 package bricks.wall;
 
 import bricks.Color;
-import bricks.Point;
+import bricks.Coordinated;
+import bricks.Sized;
 import bricks.font.FontManager;
 import bricks.graphic.ColorLine;
 import bricks.graphic.ColorRectangle;
@@ -18,6 +19,9 @@ import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
 import bricks.var.impulse.Impulse;
+import bricks.var.impulse.State;
+import bricks.var.special.Num;
+import bricks.var.special.NumSource;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
@@ -31,9 +35,8 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static suite.suite.$uite.$;
-import static suite.suite.Suite.join;
 
-public abstract class Wall implements Composite {
+public abstract class Wall implements Composite, Sized {
 
     static Subject $walls = $();
 
@@ -114,16 +117,16 @@ public abstract class Wall implements Composite {
     protected WallDirector wallDirector;
     protected FontManager fontManager = new FontManager();
     protected ImageManager imageManager = new ImageManager();
-    Var<Number> width;
-    Var<Number> height;
+    Num width;
+    Num height;
     Var<Color> color;
-    Var<String> title;
+    State<String> title;
 
     void setup0(int width, int height, Color color, String title) {
-        this.width = Vars.set(width);
-        this.height = Vars.set(height);
+        this.width = Vars.num(width);
+        this.height = Vars.num(height);
         this.color = Vars.set(color);
-        this.title = Vars.set(title);
+        this.title = new State<>(title);
         glid = glfwCreateWindow(width, height, title, NULL, NULL);
         if (glid == NULL) throw new RuntimeException("Window based failed");
 
@@ -158,10 +161,12 @@ public abstract class Wall implements Composite {
 
         glfwSetKeyCallback(glid, keyboard::reportKeyEvent);
         glfwSetCharModsCallback(glid, keyboard::reportCharEvent);
+
+        when(title).then(() -> setTitle(title.get()));
     }
 
     public void update_() {
-        Color c = getColor();
+        Color c = color.get();
         glClearColor(c.red(), c.green(), c.blue(), c.alpha());
         wallDirector.update();
         update();
@@ -196,58 +201,43 @@ public abstract class Wall implements Composite {
         return $();
     }
 
-    public Color getColor() {
-        return color.get();
-    }
-
-    public Wall setColor(Color color) {
-        this.color.set(color);
-        return this;
-    }
-
     public Var<Color> color() {
         return color;
     }
 
-    public int getWidth() {
-        return width.get().intValue();
-    }
-
-    public Source<Number> width() {
+    @Override
+    public NumSource width() {
         return width;
     }
 
-    public Source<Number> width(double multiplier) {
-        return width.per(w -> w.doubleValue() * multiplier);
-    }
-
-    public int getHeight() {
-        return height.get().intValue();
-    }
-
-    public Source<Number> height() {
+    @Override
+    public NumSource height() {
         return height;
     }
 
-    public Source<Number> height(double multiplier) {
-        return height.per(h -> h.doubleValue() * multiplier);
+    public Coordinated center() {
+        return new Coordinated() {
+
+            @Override
+            public NumSource x() {
+                return () -> width.getFloat() / 2;
+            }
+
+            @Override
+            public NumSource y() {
+                return () -> height.getFloat() / 2;
+            }
+        };
     }
 
-    public Source<Point> center() {
-        return Vars.let(() -> new Point(getWidth() / 2f, getHeight() / 2f), width, height);
+    public void setTitle(String t) {
+        if(!t.equals(title.getState())) {
+            glfwSetWindowTitle(glid, t);
+            title.setState(t);
+        }
     }
 
-    public String getTitle() {
-        return title.get();
-    }
-
-    public Wall setTitle(String title) {
-        glfwSetWindowTitle(glid, title);
-        this.title.set(title);
-        return this;
-    }
-
-    public Source<String> title() {
+    public Var<String> title() {
         return title;
     }
 

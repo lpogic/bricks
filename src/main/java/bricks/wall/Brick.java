@@ -178,6 +178,10 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         return when(bool.willBe(Edge::rising)).then(rising);
     }
 
+    protected Monitor when(Impulse impulse, Statement then) {
+        return when(impulse).then(then);
+    }
+
     public abstract void show();
     public abstract void hide();
     public abstract void move();

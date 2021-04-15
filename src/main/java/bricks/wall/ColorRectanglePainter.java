@@ -2,7 +2,6 @@ package bricks.wall;
 
 import brackettree.reader.BracketTree;
 import bricks.Color;
-import bricks.Point;
 import bricks.graphic.ColorRectangle;
 import bricks.graphic.Shader;
 
@@ -39,7 +38,7 @@ public class ColorRectanglePainter {
 
     }
 
-    public void setWallSize(int width, int height) {
+    public void setWallSize(float width, float height) {
         shader.use();
         shader.set("wallSize", width, height);
     }
@@ -47,21 +46,11 @@ public class ColorRectanglePainter {
     public void paint(ColorRectangle rectangle) {
         shader.use();
 
-        float width = rectangle.getWidth();
-        float height = rectangle.getHeight();
-        Point position = rectangle.getPosition();
-        Color color = rectangle.getColor();
-        float x = switch (rectangle.getXOrigin()) {
-            case LEFT -> position.x() + width / 2;
-            case CENTER -> position.x();
-            case RIGHT -> position.x() - width / 2;
-        };
-
-        float y = switch (rectangle.getYOrigin()) {
-            case BOTTOM -> position.y() - height / 2;
-            case CENTER -> position.y();
-            case TOP -> position.y() + height / 2;
-        };
+        float width = rectangle.width().getFloat();
+        float height = rectangle.height().getFloat();
+        float x = rectangle.x().getFloat();
+        float y = rectangle.y().getFloat();
+        Color color = rectangle.color().get();
 
         float[] vertex = new float[]{
                 x, y, width, height,

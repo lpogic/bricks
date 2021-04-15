@@ -1,13 +1,12 @@
 package bricks.input;
 
-import bricks.var.TwoWayVar;
-import bricks.var.Var;
+import bricks.var.SupVar;
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static suite.suite.$uite.$;
 
-public class Key extends TwoWayVar<Key.Event> {
+public class Key extends SupVar<Key.Event> {
 
     public enum Code {
         SPACE(32),

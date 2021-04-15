@@ -1,6 +1,5 @@
 package bricks.font;
 
-import bricks.Point;
 import bricks.graphic.IOUtil;
 import org.lwjgl.stb.STBTTFontinfo;
 import suite.suite.util.Cascade;

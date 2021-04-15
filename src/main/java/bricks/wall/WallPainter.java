@@ -34,10 +34,10 @@ public class WallPainter extends Agent<Host> {
     }
 
     public void paint() {
-        colorRectanglePainter.setWallSize(wall.getWidth(), wall.getHeight());
-        colorLinePainter. setWallSize(wall.getWidth(), wall.getHeight());
-        colorTextPainter.setWallSize(wall.getWidth(), wall.getHeight());
-        imageRectanglePainter.setWallSize(wall.getWidth(), wall.getHeight());
+        colorRectanglePainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
+        colorLinePainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
+        colorTextPainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
+        imageRectanglePainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
         for(var d : $drawables.eachIn().eachAs(Drawable.class)) {
             d.draw();
         }
@@ -52,7 +52,7 @@ public class WallPainter extends Agent<Host> {
     }
 
     public void set(ColorText colorText) {
-        $drawables.put(colorText, (Drawable) () -> colorTextPainter.paint(colorText, wall.getHeight()));
+        $drawables.put(colorText, (Drawable) () -> colorTextPainter.paint(colorText, wall.height().getFloat()));
     }
 
     public void set(ImageRectangle imageRectangle) {
@@ -68,7 +68,7 @@ public class WallPainter extends Agent<Host> {
     }
 
     public void set(ColorText colorText, Object sequent) {
-        $drawables.aimedPut(sequent, colorText, (Drawable) () -> colorTextPainter.paint(colorText, wall.getHeight()));
+        $drawables.aimedPut(sequent, colorText, (Drawable) () -> colorTextPainter.paint(colorText, wall.height().getFloat()));
     }
 
     public void set(ImageRectangle imageRectangle, Object sequent) {

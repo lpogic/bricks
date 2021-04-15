@@ -1,100 +1,71 @@
 package bricks.graphic;
 
-
 import bricks.*;
 import bricks.trade.Guest;
 import bricks.trade.Host;
-import bricks.var.Source;
 import bricks.var.Var;
 import bricks.var.Vars;
+import bricks.var.special.Num;
 
-public class ColorRectangle extends Guest<Host> implements Rectangular {
+public class ColorRectangle extends Guest<Host> implements Rectangle {
 
-    Var<Number> width;
-    Var<Number> height;
-    Var<Point> position;
-    Var<Color> color;
-    Var<XOrigin> xOrigin;
-    Var<YOrigin> yOrigin;
+    final Centroid body;
+    final Var<Color> color;
 
     public ColorRectangle(Host host) {
         super(host);
-        width = Vars.set(100);
-        height = Vars.set(100);
-        position = Vars.set(new Point(400, 300));
+        body = new Centroid();
         color = Vars.set(Color.PURE_GREEN);
-        xOrigin = Vars.set(XOrigin.CENTER);
-        yOrigin = Vars.set(YOrigin.CENTER);
     }
 
-    public Var<Number> width() {
-        return width;
+    @Override
+    public Num width() {
+        return body.width();
     }
 
-    public ColorRectangle setWidth(Number width) {
-        this.width.set(width);
-        return this;
+    @Override
+    public Num height() {
+        return body.height();
     }
 
-    public Var<Number> height() {
-        return height;
+    @Override
+    public Num left() {
+        return body.left();
     }
 
-    public ColorRectangle setHeight(Number height) {
-        this.height.set(height);
-        return this;
+    @Override
+    public Num right() {
+        return body.right();
     }
 
-    public ColorRectangle setSize(Number width, Number height) {
-        return setWidth(width).setHeight(height);
+    @Override
+    public Num top() {
+        return body.top();
     }
 
-    public Var<Point> position() {
-        return position;
+    @Override
+    public Num bottom() {
+        return body.bottom();
     }
 
-    public ColorRectangle setPosition(Point position) {
-        this.position.set(position);
-        return this;
+    @Override
+    public Num x() {
+        return body.x();
     }
 
-    public ColorRectangle setPosition(Number x, Number y) {
-        this.position.set(new Point(x, y));
-        return this;
+    @Override
+    public Num y() {
+        return body.y();
     }
 
     public Var<Color> color() {
         return color;
     }
 
-    public Color getColor() {
-        return color.get();
-    }
+    public static abstract class Sketch extends ColorRectangle implements AbstractSketch<ColorRectangle> {
 
-    public ColorRectangle setColor(Color color) {
-        this.color.set(color);
-        return this;
-    }
-
-    public Var<XOrigin> xOrigin() {
-        return xOrigin;
-    }
-
-    public ColorRectangle setXOrigin(XOrigin origin) {
-        this.xOrigin.set(origin);
-        return this;
-    }
-
-    public Var<YOrigin> yOrigin() {
-        return yOrigin;
-    }
-
-    public ColorRectangle setYOrigin(YOrigin origin) {
-        this.yOrigin.set(origin);
-        return this;
-    }
-
-    public ColorRectangle setOrigin(XOrigin xOrigin, YOrigin yOrigin) {
-        return setXOrigin(xOrigin).setYOrigin(yOrigin);
+        public Sketch() {
+            super(null);
+        }
     }
 }

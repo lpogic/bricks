@@ -10,14 +10,14 @@ import static suite.suite.$uite.$;
 
 public interface Var<T> extends Source<T>, Target<T> {
 
-    void let(Supplier<T> supplier);
-    void let(Consumer<T> consumer);
-    void let(Consumer<T> consumer, Supplier<T> supplier);
-    void reset(T value);
-    default void let(Supplier<T> sup, Supplier<?> ... roots) {
-        let(sup, Suite.set((Object[]) roots));
+    void let(Supplier<T> s);
+    default void let(Supplier<T> s, Supplier<?> ... roots) {
+        let(s, Suite.set((Object[]) roots));
     }
-    default void let(Supplier<T> sup, Subject $roots) {
-        let(new Preserve<>(sup, $roots));
+    default void let(Supplier<T> s, Subject $roots) {
+        let(new Preserve<>(s, $roots));
+    }
+    default void set(T t) {
+        let(() -> t);
     }
 }
