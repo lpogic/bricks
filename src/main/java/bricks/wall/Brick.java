@@ -18,9 +18,9 @@ import suite.suite.action.Statement;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-import static suite.suite.$uite.$;
-import static suite.suite.$uite.$$;
-import static suite.suite.Suite.join;
+import static suite.suite.$uite.arm$;
+import static suite.suite.$uite.set$;
+
 
 public abstract class Brick<W extends Host> extends Guest<W> implements Composite {
 
@@ -87,7 +87,7 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         }
     }
 
-    Subject $monitors = $();
+    Subject $monitors = set$();
 
     public Brick(W host) {
         super(host);
@@ -163,15 +163,15 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
     }
 
     protected Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
-        return $$(
-                $("rising", when(bool.willBe(Edge::rising)).then(rising)),
-                $("falling", when(bool.willBe(Edge::falling)).then(falling)));
+        return set$(
+                arm$("rising", when(bool.willBe(Edge::rising)).then(rising)),
+                arm$("falling", when(bool.willBe(Edge::falling)).then(falling)));
     }
 
     protected Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
-        return $$(
-                $("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
-                $("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
+        return set$(
+                arm$("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
+                arm$("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
     }
 
     protected Monitor when(Source<Boolean> bool, Statement rising) {

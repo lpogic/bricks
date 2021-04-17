@@ -25,6 +25,7 @@ import bricks.var.special.NumSource;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
+
 import suite.suite.Subject;
 import suite.suite.action.Statement;
 
@@ -34,11 +35,11 @@ import java.util.function.Supplier;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public abstract class Wall implements Composite, Sized {
 
-    static Subject $walls = $();
+    static Subject $walls = set$();
 
     public static void play(Subject $sub) {
         glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
@@ -183,22 +184,22 @@ public abstract class Wall implements Composite, Sized {
         if(trade.is(Class.class)) {
             Class<?> type = trade.asExpected();
             if(type.equals(Wall.class)) {
-                return $(this);
+                return set$(this);
             } else if(type.equals(Mouse.class)) {
-                return $(mouse);
+                return set$(mouse);
             } else if(type.equals(Keyboard.class)) {
-                return $(keyboard);
+                return set$(keyboard);
             } else if(type.equals(Clipboard.class)) {
-                return $(clipboard);
+                return set$(clipboard);
             } else if(type.equals(Story.class)) {
-                return $(story);
+                return set$(story);
             } else if(type.equals(FontManager.class)) {
-                return $(fontManager);
+                return set$(fontManager);
             } else if(type.equals(ImageManager.class)) {
-                return $(imageManager);
+                return set$(imageManager);
             }
         }
-        return $();
+        return set$();
     }
 
     public Var<Color> color() {

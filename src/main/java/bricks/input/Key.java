@@ -1,10 +1,11 @@
 package bricks.input;
 
 import bricks.var.SupVar;
+
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class Key extends SupVar<Key.Event> {
 
@@ -132,10 +133,10 @@ public class Key extends SupVar<Key.Event> {
         LAST(MENU),
         UNKNOWN(-1);
 
-        static Subject $scan = $();
+        static Subject $scan = set$();
         static {
             for(var c : Code.values()) {
-                $scan.sate(c.value, $(c));
+                $scan.sate(c.value, set$(c));
             }
         }
 

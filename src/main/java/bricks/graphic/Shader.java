@@ -7,7 +7,7 @@ import org.joml.Matrix4f;
 import suite.suite.Subject;
 
 import static org.lwjgl.opengl.GL45.*;
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class Shader implements Discovered {
 
@@ -15,11 +15,11 @@ public class Shader implements Discovered {
         String vertex = $.in("vertex").asString();
         String fragment = $.in("fragment").asString();
         if($.absent("geometry")) {
-            return $(new Shader(vertex, fragment));
+            return set$(new Shader(vertex, fragment));
         }
         String geometry = $.in("geometry").asString();
 
-        return $(new Shader(vertex, geometry, fragment));
+        return set$(new Shader(vertex, geometry, fragment));
     }
 
     int glid;

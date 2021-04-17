@@ -1,12 +1,13 @@
 package bricks.font;
 
+
 import suite.suite.Subject;
 
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class FontManager {
 
-    Subject $fonts = $();
+    Subject $fonts = set$();
 
     public LoadedFont getFont(Font font) {
         var $f = $fonts.in(font).set();

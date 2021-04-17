@@ -3,10 +3,7 @@ package bricks.var;
 import suite.suite.Subject;
 import suite.suite.Suite;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import static suite.suite.$uite.$;
 
 public interface Var<T> extends Source<T>, Target<T> {
 

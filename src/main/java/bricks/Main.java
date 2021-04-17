@@ -3,14 +3,12 @@ package bricks;
 import bricks.input.Mouse;
 import bricks.wall.Wall;
 
-import java.util.Objects;
-
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.arm$;
 
 public class Main extends Wall {
 
     public static void main(String[] args) {
-        Wall.play($(Wall.class, Main.class));
+        Wall.play(arm$(Wall.class, Main.class));
     }
 
     public void setup() {

@@ -2,7 +2,7 @@ package bricks.input;
 
 import suite.suite.Subject;
 
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class Story {
 
@@ -11,8 +11,8 @@ public class Story {
     private Subject $future;
 
     public Story(int limit) {
-        $past = $();
-        $future = $();
+        $past = set$();
+        $future = set$();
         this.limit = limit;
     }
 

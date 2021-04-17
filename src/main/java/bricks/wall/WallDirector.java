@@ -1,8 +1,9 @@
 package bricks.wall;
 
+
 import suite.suite.Subject;
 
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class WallDirector extends Brick<Wall> {
 
@@ -10,7 +11,7 @@ public class WallDirector extends Brick<Wall> {
 
     public WallDirector(Wall host) {
         super(host);
-        this.$directed = $();
+        this.$directed = set$();
     }
 
     public void set(Brick<?> brick) {

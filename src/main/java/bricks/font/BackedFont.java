@@ -2,6 +2,7 @@ package bricks.font;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBTTBakedChar;
+
 import suite.suite.Subject;
 
 import java.nio.ByteBuffer;
@@ -9,12 +10,12 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.stb.STBTruetype.*;
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class BackedFont {
 
     private final LoadedFont loadedFont;
-    private final Subject $chars = $();
+    private final Subject $chars = set$();
     private final int size;
     private final float scaledAscend;
     private final float scaledDescent;

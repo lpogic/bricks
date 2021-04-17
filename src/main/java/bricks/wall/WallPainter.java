@@ -8,7 +8,7 @@ import bricks.trade.Agent;
 import bricks.trade.Host;
 import suite.suite.Subject;
 
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class WallPainter extends Agent<Host> {
 
@@ -30,7 +30,7 @@ public class WallPainter extends Agent<Host> {
         this.colorLinePainter = new ColorLinePainter(null);
         this.colorTextPainter = new ColorTextPainter(this, null);
         this.imageRectanglePainter = new ImageRectanglePainter(this, null);
-        this.$drawables = $();
+        this.$drawables = set$();
     }
 
     public void paint() {
@@ -81,7 +81,7 @@ public class WallPainter extends Agent<Host> {
 
     public Subject unset() {
         Subject $ = $drawables;
-        $drawables = $();
+        $drawables = set$();
         return $;
     }
 }

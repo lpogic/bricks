@@ -1,6 +1,6 @@
 package bricks.input;
 
-import org.lwjgl.glfw.GLFW;
+
 import suite.suite.Subject;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public class Keyboard {
 
@@ -76,7 +76,7 @@ public class Keyboard {
         }
     }
 
-    private final Subject $keys = $();
+    private final Subject $keys = set$();
     private final List<KeyEvent> events = new ArrayList<>();
     private final List<CharEvent> charEvents = new ArrayList<>();
 
