@@ -1,6 +1,7 @@
 package bricks;
 
 import bricks.input.Mouse;
+import bricks.var.impulse.Edge;
 import bricks.wall.Wall;
 
 import static suite.suite.$uite.arm$;
@@ -29,8 +30,8 @@ public class Main extends Wall {
         txt1.string().let(txt.width().per(String::valueOf));
         show(txt1);
 
-        when(mouse.leftButton().willBe(Mouse.Button::pressed))
-                .or(mouse.rightButton().willBe(Mouse.Button::pressed))
+        when(mouse.leftButton().willBe(Edge::rising))
+                .or(mouse.rightButton().willBe(Edge::rising))
                 .then(() -> System.out.print("Click!"));
 //      when mouse left button willBe give button pressing, then system out print "Click!"
     }

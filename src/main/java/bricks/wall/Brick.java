@@ -66,11 +66,11 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         }
 
         public void use() {
-            $monitors.set(this);
+            monitor$.set(this);
         }
 
         public void cancel() {
-            $monitors.unset(this);
+            monitor$.unset(this);
         }
 
         public BrickMonitor correctThen(Statement statement) {
@@ -87,7 +87,7 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         }
     }
 
-    Subject $monitors = set$();
+    Subject monitor$ = set$();
 
     public Brick(W host) {
         super(host);
@@ -109,6 +109,10 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         return order(Story.class);
     }
 
+    protected Wall wall() {
+        return order(Wall.class);
+    }
+
     protected void show(Object o) {
         order(Wall.class).show(o);
     }
@@ -117,21 +121,41 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         order(Wall.class).show(o, sequent);
     }
 
+    protected void show(Subject $) {
+        $.eachRaw().forEach(this::show);
+    }
+
     protected void hide(Object o) {
         order(Wall.class).hide(o);
+    }
+
+    protected void hide(Subject $) {
+        $.eachRaw().forEach(this::hide);
     }
 
     protected void move(Object o) {
         order(Wall.class).move(o);
     }
 
+    protected void move(Subject $) {
+        $.eachRaw().forEach(this::move);
+    }
+
     protected void stop(Object o) {
         order(Wall.class).stop(o);
+    }
+
+    protected void stop(Subject $) {
+        $.eachRaw().forEach(this::stop);
     }
 
     protected void use(Object o) {
         show(o);
         move(o);
+    }
+
+    protected void use(Subject $) {
+        $.eachRaw().forEach(this::use);
     }
 
     protected void use(Object o, Object sequent) {
@@ -187,6 +211,6 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
     public abstract void move();
     public abstract void stop();
     public void update() {
-        $monitors.eachAs(BrickMonitor.class).forEach(BrickMonitor::update);
+        monitor$.eachAs(BrickMonitor.class).forEach(BrickMonitor::update);
     }
 }

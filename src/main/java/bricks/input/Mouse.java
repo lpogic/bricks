@@ -2,6 +2,7 @@ package bricks.input;
 
 import bricks.Coordinate;
 import bricks.Coordinated;
+import bricks.var.Source;
 import bricks.var.SupVar;
 import bricks.var.Var;
 import bricks.var.Vars;
@@ -10,39 +11,39 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Mouse {
 
-    public static class Button extends SupVar<Integer> {
+    public static class Button extends SupVar<Boolean> {
 
         public Button() {
-            super(GLFW_RELEASE);
+            super(false);
         }
 
-        public Button(int state) {
+        public Button(boolean state) {
             super(state);
-        }
-
-        public static boolean pressed(int pastState, int newState) {
-            return pastState == GLFW_RELEASE && newState == GLFW_PRESS;
-        }
-
-        public static boolean released(int pastState, int newState) {
-            return pastState == GLFW_PRESS && newState == GLFW_RELEASE;
-        }
-
-        public boolean isPressed() {
-            return get() == GLFW_PRESS;
         }
     }
 
     public static class Scroll {
-        Var<Double> x = Vars.get();
-        Var<Double> y = Vars.get();
+        Var<ScrollEvent> x = Vars.get();
+        Var<ScrollEvent> y = Vars.get();
 
-        public Var<Double> getX() {
+        public Source<ScrollEvent> x() {
             return x;
         }
 
-        public Var<Double> getY() {
+        public Source<ScrollEvent> y() {
             return y;
+        }
+    }
+
+    public static class ScrollEvent {
+        double offset;
+
+        public ScrollEvent(double offset) {
+            this.offset = offset;
+        }
+
+        public double getOffset() {
+            return offset;
         }
     }
 
@@ -57,14 +58,14 @@ public class Mouse {
     }
 
     public void reportScrollEvent(long wglid, double offsetX, double offsetY) {
-        if(offsetX != 0.0)scroll.x.set(offsetX);
-        if(offsetY != 0.0)scroll.y.set(offsetY);
+        if(offsetX != 0.0)scroll.x.set(new ScrollEvent(offsetX));
+        if(offsetY != 0.0)scroll.y.set(new ScrollEvent(offsetY));
     }
 
     public void reportMouseButtonEvent(long wglid, int button, int action, int modifiers) {
         switch (button) {
-            case GLFW_MOUSE_BUTTON_1 -> leftButton.set(action);
-            case GLFW_MOUSE_BUTTON_2 -> rightButton.set(action);
+            case GLFW_MOUSE_BUTTON_1 -> leftButton.set(action == GLFW_PRESS);
+            case GLFW_MOUSE_BUTTON_2 -> rightButton.set(action == GLFW_PRESS);
         }
     }
 

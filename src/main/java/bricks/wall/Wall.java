@@ -1,18 +1,10 @@
 package bricks.wall;
 
 import bricks.Color;
-import bricks.Coordinated;
-import bricks.Sized;
 import bricks.font.FontManager;
-import bricks.graphic.ColorLine;
-import bricks.graphic.ColorRectangle;
-import bricks.graphic.ColorText;
-import bricks.graphic.ImageRectangle;
+import bricks.graphic.*;
 import bricks.image.ImageManager;
-import bricks.input.Clipboard;
-import bricks.input.Keyboard;
-import bricks.input.Mouse;
-import bricks.input.Story;
+import bricks.input.*;
 import bricks.monitor.Monitor;
 import bricks.trade.Composite;
 import bricks.var.Source;
@@ -37,7 +29,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static suite.suite.$uite.set$;
 
-public abstract class Wall implements Composite, Sized {
+public abstract class Wall implements Composite, Rectangular {
 
     static Subject $walls = set$();
 
@@ -53,7 +45,7 @@ public abstract class Wall implements Composite, Sized {
                         $sub.get("green", "g").in().asFloat(.5f),
                         $sub.get("blue", "b").in().asFloat(.4f)
                 ),
-                $sub.get("title, t").in().asString("New Wall"));
+                $sub.get("title", "t").in().asString("New Wall"));
         glfwShowWindow(wall.getGlid());
 
         glfwSwapInterval(1);
@@ -76,34 +68,28 @@ public abstract class Wall implements Composite, Sized {
         glfwTerminate();
     }
 
-    public static Wall create(Class<? extends Wall> wallType, int width, int height, Color color, String title) {
-        Wall wall = null;
-        try {
-            wall = wallType.getConstructor().newInstance();
-            wall.setup0(width, height, color, title);
+    public static Wall create(Wall wall, int width, int height, Color color, String title) {
+        wall.setup0(width, height, color, title);
 
-            glfwMakeContextCurrent(wall.getGlid());
+        glfwMakeContextCurrent(wall.getGlid());
 
-            GL.createCapabilities();
-            GLUtil.setupDebugMessageCallback();
+        GL.createCapabilities();
+        GLUtil.setupDebugMessageCallback();
 
 //            glEnable(GL_ALPHA_TEST);
 //            glEnable(GL_DEPTH_TEST);
 //            glEnable(GL_CULL_FACE);
 
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            wall.setupDependencies();
-            wall.setup1();
-            wall.setup();
+        wall.setupDependencies();
+        wall.setup1();
+        wall.setup();
 
-            long glid = wall.getGlid();
+        long glid = wall.getGlid();
 
-            $walls.aimedPut($walls.first().raw(), glid, wall);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        $walls.aimedPut($walls.first().raw(), glid, wall);
 
         return wall;
     }
@@ -216,19 +202,34 @@ public abstract class Wall implements Composite, Sized {
         return height;
     }
 
-    public Coordinated center() {
-        return new Coordinated() {
+    @Override
+    public NumSource x() {
+        return () -> width.getFloat() / 2;
+    }
 
-            @Override
-            public NumSource x() {
-                return () -> width.getFloat() / 2;
-            }
+    @Override
+    public NumSource y() {
+        return () -> height.getFloat() / 2;
+    }
 
-            @Override
-            public NumSource y() {
-                return () -> height.getFloat() / 2;
-            }
-        };
+    @Override
+    public NumSource left() {
+        return () -> 0;
+    }
+
+    @Override
+    public NumSource right() {
+        return width;
+    }
+
+    @Override
+    public NumSource top() {
+        return () -> 0;
+    }
+
+    @Override
+    public NumSource bottom() {
+        return height;
     }
 
     public void setTitle(String t) {
@@ -254,12 +255,33 @@ public abstract class Wall implements Composite, Sized {
         return mouse;
     }
 
-    public void setCursor(int cursor) {
-        glfwSetInputMode(glid, GLFW_CURSOR, cursor);
+    public void setCursor(Cursor.Face face) {
+        var cursorGlid = glfwCreateStandardCursor(face.getGLFWCode());
+        glfwSetCursor(glid, cursorGlid);
+    }
+
+    public void setCursor(Cursor.Mode mode) {
+        glfwSetInputMode(glid, GLFW_CURSOR, mode.getGLFWCode());
     }
 
     public void setLockKeyModifiers(boolean lock) {
         glfwSetInputMode(glid, GLFW_LOCK_KEY_MODS, lock ? GLFW_TRUE : GLFW_FALSE);
+    }
+
+    public void setAttributes(boolean decorated, boolean resizable, boolean floating, boolean autoIconify, boolean focusOnShow) {
+        glfwSetWindowAttrib(glid, GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
+        glfwSetWindowAttrib(glid, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
+        glfwSetWindowAttrib(glid, GLFW_FLOATING, floating ? GLFW_TRUE : GLFW_FALSE);
+        glfwSetWindowAttrib(glid, GLFW_AUTO_ICONIFY, autoIconify ? GLFW_TRUE : GLFW_FALSE);
+        glfwSetWindowAttrib(glid, GLFW_FOCUS_ON_SHOW, focusOnShow ? GLFW_TRUE : GLFW_FALSE);
+    }
+
+    public void close() {
+        glfwSetWindowShouldClose(glid, true);
+    }
+
+    public void minimalize() {
+        glfwIconifyWindow(glid);
     }
 
     public void setClipboardString(String str) {
@@ -271,14 +293,16 @@ public abstract class Wall implements Composite, Sized {
     }
 
     public void show(Object object) {
-        if(object instanceof ColorRectangle) {
-            wallPainter.set((ColorRectangle) object);
-        } else if(object instanceof ColorText) {
-            wallPainter.set((ColorText) object);
-        } else if(object instanceof ColorLine) {
-            wallPainter.set((ColorLine) object);
-        } else if(object instanceof ImageRectangle) {
-            wallPainter.set((ImageRectangle) object);
+        if(object instanceof ColorRectangle colorRectangle) {
+            wallPainter.set(colorRectangle);
+        } else if(object instanceof ColorText colorText) {
+            wallPainter.set(colorText);
+        } else if(object instanceof ColorLine colorLine) {
+            wallPainter.set(colorLine);
+        } else if(object instanceof ImageRectangle imageRectangle) {
+            wallPainter.set(imageRectangle);
+        } else if(object instanceof ColorfulRectangle colorfulRectangle) {
+            wallPainter.set(colorfulRectangle);
         } else if(object instanceof Brick) {
             ((Brick<?>) object).show();
         }

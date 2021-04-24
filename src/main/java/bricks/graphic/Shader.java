@@ -1,6 +1,6 @@
 package bricks.graphic;
 
-import brackettree.Discovered;
+import brackettree.Interpreted;
 import bricks.image.LoadedImage;
 import org.joml.Matrix2f;
 import org.joml.Matrix4f;
@@ -9,7 +9,7 @@ import suite.suite.Subject;
 import static org.lwjgl.opengl.GL45.*;
 import static suite.suite.$uite.set$;
 
-public class Shader implements Discovered {
+public class Shader implements Interpreted {
 
     public static Subject compose(Subject $) {
         String vertex = $.in("vertex").asString();

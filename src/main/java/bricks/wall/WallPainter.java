@@ -1,9 +1,6 @@
 package bricks.wall;
 
-import bricks.graphic.ColorLine;
-import bricks.graphic.ColorRectangle;
-import bricks.graphic.ColorText;
-import bricks.graphic.ImageRectangle;
+import bricks.graphic.*;
 import bricks.trade.Agent;
 import bricks.trade.Host;
 import suite.suite.Subject;
@@ -21,6 +18,7 @@ public class WallPainter extends Agent<Host> {
     ColorLinePainter colorLinePainter;
     ColorTextPainter colorTextPainter;
     ImageRectanglePainter imageRectanglePainter;
+    ColorfulRectanglePainter colorfulRectanglePainter;
     Subject $drawables;
 
     public WallPainter(Wall wall) {
@@ -30,6 +28,7 @@ public class WallPainter extends Agent<Host> {
         this.colorLinePainter = new ColorLinePainter(null);
         this.colorTextPainter = new ColorTextPainter(this, null);
         this.imageRectanglePainter = new ImageRectanglePainter(this, null);
+        this.colorfulRectanglePainter = new ColorfulRectanglePainter(null);
         this.$drawables = set$();
     }
 
@@ -38,6 +37,7 @@ public class WallPainter extends Agent<Host> {
         colorLinePainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
         colorTextPainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
         imageRectanglePainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
+        colorfulRectanglePainter.setWallSize(wall.width().getFloat(), wall.height().getFloat());
         for(var d : $drawables.eachIn().eachAs(Drawable.class)) {
             d.draw();
         }
@@ -59,6 +59,10 @@ public class WallPainter extends Agent<Host> {
         $drawables.put(imageRectangle, (Drawable) () -> imageRectanglePainter.paint(imageRectangle));
     }
 
+    public void set(ColorfulRectangle colorfulRectangle) {
+        $drawables.put(colorfulRectangle, (Drawable) () -> colorfulRectanglePainter.paint(colorfulRectangle));
+    }
+
     public void set(ColorRectangle colorRectangle, Object sequent) {
         $drawables.aimedPut(sequent, colorRectangle, (Drawable) () -> colorRectanglePainter.paint(colorRectangle));
     }
@@ -73,6 +77,10 @@ public class WallPainter extends Agent<Host> {
 
     public void set(ImageRectangle imageRectangle, Object sequent) {
         $drawables.aimedPut(sequent, imageRectangle, (Drawable) () -> imageRectanglePainter.paint(imageRectangle));
+    }
+
+    public void set(ColorfulRectangle colorfulRectangle, Object sequent) {
+        $drawables.aimedPut(sequent, colorfulRectangle, (Drawable) () -> colorfulRectanglePainter.paint(colorfulRectangle));
     }
 
     public void unset(Object draw) {

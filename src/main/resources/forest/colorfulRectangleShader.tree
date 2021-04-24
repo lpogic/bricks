@@ -1,0 +1,89 @@
+vertex [ GLSL"
+
+#version 330 core
+layout (location = 0) in vec2 pos;
+layout (location = 1) in vec2 size;
+layout (location = 2) in vec4 colt;
+layout (location = 3) in vec4 colb;
+layout (location = 4) in vec4 cort;
+layout (location = 5) in vec4 corb;
+
+uniform vec2 wallSize;
+
+out VS_OUT {
+    vec4 clt;
+    vec4 clb;
+    vec4 crt;
+    vec4 crb;
+    float width;
+    float height;
+} vs_out;
+
+void main()
+{
+    gl_Position = vec4(pos.x / wallSize.x * 2 - 1, -pos.y / wallSize.y * 2 + 1, 0, 1);
+    vs_out.clt = colt;
+    vs_out.clb = colb;
+    vs_out.crt = cort;
+    vs_out.crb = corb;
+
+    vs_out.width = size.x / wallSize.x;
+    vs_out.height = size.y / wallSize.y;
+}
+
+"GLSL ]
+
+
+geometry [ GLSL"
+
+#version 330 core
+layout (points) in;
+layout (triangle_strip, max_vertices = 4) out;
+
+in VS_OUT {
+    vec4 clt;
+    vec4 clb;
+    vec4 crt;
+    vec4 crb;
+    float width;
+    float height;
+} gs_in[];
+
+out vec4 c;
+
+void rect(vec4 position)
+{
+    c = gs_in[0].clb;
+    gl_Position = position + vec4(-gs_in[0].width, -gs_in[0].height, 0.0, 0.0); // 1:bottom-left
+    EmitVertex();
+    c = gs_in[0].crb;
+    gl_Position = position + vec4( gs_in[0].width, -gs_in[0].height, 0.0, 0.0); // 2:bottom-right
+    EmitVertex();
+    c = gs_in[0].clt;
+    gl_Position = position + vec4(-gs_in[0].width,  gs_in[0].height, 0.0, 0.0); // 3:top-left
+    EmitVertex();
+    c = gs_in[0].crt;
+    gl_Position = position + vec4( gs_in[0].width,  gs_in[0].height, 0.0, 0.0); // 4:top-right
+    EmitVertex();
+    EndPrimitive();
+}
+
+void main() {
+    rect(gl_in[0].gl_Position);
+}
+
+"GLSL ]
+
+
+fragment [ GLSL"
+
+#version 330 core
+in vec4 c;
+out vec4 color;
+
+void main()
+{
+    color = c;
+}
+
+"GLSL ]

@@ -8,12 +8,6 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = JavaVersion.VERSION_16
 
-plugins.withType(JavaPlugin).configureEach {
-    java {
-        modularity.inferModulePath = true
-    }
-}
-
 application {
     mainClassName = 'bricks.Main'
 }
