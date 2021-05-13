@@ -4,7 +4,7 @@ package bricks.trade;
 import suite.suite.Subject;
 import suite.suite.action.Impression;
 
-import static suite.suite.$uite.set$;
+import static suite.suite.$.set$;
 
 public abstract class Guest<H extends Host> {
 

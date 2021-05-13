@@ -12,7 +12,7 @@ import bricks.var.special.NumSource;
 
 import java.util.function.Supplier;
 
-public class ColorText extends Guest<Host> implements Rectangular {
+public class ColorText extends Guest<Host> implements Rectangular, Printable {
 
     Var<String> string;
     Var<Color> color;
@@ -124,12 +124,5 @@ public class ColorText extends Guest<Host> implements Rectangular {
     public void aim(Coordinated p) {
         x().let(p.x());
         y().let(p.y());
-    }
-
-    public static abstract class Sketch extends ColorText implements AbstractSketch<ColorText> {
-
-        public Sketch() {
-            super(null);
-        }
     }
 }

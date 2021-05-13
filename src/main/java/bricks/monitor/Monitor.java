@@ -1,14 +1,14 @@
 package bricks.monitor;
 
 public interface Monitor {
-    void use();
+    boolean use();
     void cancel();
 
-    static void useAll(Monitor ... m) {
+    static void use(Monitor ... m) {
         for(var monitor : m) monitor.use();
     }
 
-    static void cancelAll(Monitor ... m) {
+    static void cancel(Monitor ... m) {
         for(var monitor : m) monitor.cancel();
     }
 }

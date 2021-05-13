@@ -8,7 +8,7 @@ import bricks.var.Var;
 import bricks.var.Vars;
 import bricks.var.special.Num;
 
-public class ColorLine extends Guest<Host> {
+public class ColorLine extends Guest<Host> implements Printable {
 
     Num thick;
     Coordinate beginPosition;

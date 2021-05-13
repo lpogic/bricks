@@ -7,7 +7,7 @@ import org.joml.Matrix4f;
 import suite.suite.Subject;
 
 import static org.lwjgl.opengl.GL45.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$.set$;
 
 public class Shader implements Interpreted {
 

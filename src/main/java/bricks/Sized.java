@@ -8,58 +8,58 @@ public interface Sized {
     NumSource width();
     NumSource height();
 
-    default Sized margin(float margin) {
+    static Sized relative(Sized sized, float offset) {
         return new Sized() {
             @Override
             public NumSource width() {
-                return Sized.this.width().perFloat(w -> w + margin);
+                return sized.width().perFloat(w -> w + offset);
             }
 
             @Override
             public NumSource height() {
-                return Sized.this.height().perFloat(h -> h + margin);
+                return sized.height().perFloat(h -> h + offset);
             }
         };
     }
 
-    default Sized margin(Supplier<Number> margin) {
+    static Sized relative(Sized sized, Supplier<Number> offset) {
         return new Sized() {
             @Override
             public NumSource width() {
-                return () -> Sized.this.width().getFloat() + margin.get().floatValue();
+                return () -> sized.width().getFloat() + offset.get().floatValue();
             }
 
             @Override
             public NumSource height() {
-                return () -> Sized.this.height().getFloat() + margin.get().floatValue();
+                return () -> sized.height().getFloat() + offset.get().floatValue();
             }
         };
     }
 
-    default Sized margin(float widthMargin, float heightMargin) {
+    static Sized relative(Sized sized, float widthOffset, float heightOffset) {
         return new Sized() {
             @Override
             public NumSource width() {
-                return Sized.this.width().perFloat(w -> w + widthMargin);
+                return sized.width().perFloat(w -> w + widthOffset);
             }
 
             @Override
             public NumSource height() {
-                return Sized.this.height().perFloat(h -> h + heightMargin);
+                return sized.height().perFloat(h -> h + heightOffset);
             }
         };
     }
 
-    default Sized margin(Supplier<Number> widthMargin, Supplier<Number> heightMargin) {
+    static Sized relative(Sized sized, Supplier<Number> widthOffset, Supplier<Number> heightOffset) {
         return new Sized() {
             @Override
             public NumSource width() {
-                return () -> Sized.this.width().getFloat() + widthMargin.get().floatValue();
+                return () -> sized.width().getFloat() + widthOffset.get().floatValue();
             }
 
             @Override
             public NumSource height() {
-                return () -> Sized.this.height().getFloat() + heightMargin.get().floatValue();
+                return () -> sized.height().getFloat() + heightOffset.get().floatValue();
             }
         };
     }

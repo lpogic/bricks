@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.stb.STBTruetype.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$.set$;
 
 public class BackedFont {
 

@@ -2,15 +2,12 @@ package bricks.wall;
 
 import bricks.Color;
 import bricks.font.FontManager;
-import bricks.graphic.*;
 import bricks.image.ImageManager;
 import bricks.input.*;
-import bricks.monitor.Monitor;
 import bricks.trade.Composite;
-import bricks.var.Source;
+import bricks.trade.Host;
 import bricks.var.Var;
 import bricks.var.Vars;
-import bricks.var.impulse.Impulse;
 import bricks.var.impulse.State;
 import bricks.var.special.Num;
 import bricks.var.special.NumSource;
@@ -19,17 +16,13 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 
 import suite.suite.Subject;
-import suite.suite.action.Statement;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Supplier;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
-import static suite.suite.$uite.set$;
+import static suite.suite.$.set$;
 
-public abstract class Wall implements Composite, Rectangular {
+public abstract class Wall extends Brick<Host> implements Composite {
 
     static Subject $walls = set$();
 
@@ -68,6 +61,10 @@ public abstract class Wall implements Composite, Rectangular {
         glfwTerminate();
     }
 
+    public Wall() {
+        super(null);
+    }
+
     public static Wall create(Wall wall, int width, int height, Color color, String title) {
         wall.setup0(width, height, color, title);
 
@@ -75,10 +72,6 @@ public abstract class Wall implements Composite, Rectangular {
 
         GL.createCapabilities();
         GLUtil.setupDebugMessageCallback();
-
-//            glEnable(GL_ALPHA_TEST);
-//            glEnable(GL_DEPTH_TEST);
-//            glEnable(GL_CULL_FACE);
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -100,20 +93,21 @@ public abstract class Wall implements Composite, Rectangular {
     protected Mouse mouse;
     protected Clipboard clipboard;
     protected Story story;
-    protected WallPainter wallPainter;
-    protected WallDirector wallDirector;
+    protected WallPrinter printer;
     protected FontManager fontManager = new FontManager();
     protected ImageManager imageManager = new ImageManager();
     Num width;
     Num height;
     Var<Color> color;
     State<String> title;
+    boolean mouseLocked;
 
     void setup0(int width, int height, Color color, String title) {
         this.width = Vars.num(width);
         this.height = Vars.num(height);
         this.color = Vars.set(color);
-        this.title = new State<>(title);
+        this.title = state(title, this::setTitle);
+        this.mouseLocked = false;
         glid = glfwCreateWindow(width, height, title, NULL, NULL);
         if (glid == NULL) throw new RuntimeException("Window based failed");
 
@@ -135,8 +129,7 @@ public abstract class Wall implements Composite, Rectangular {
         mouse = new Mouse();
         clipboard = new Clipboard(this);
         story = new Story(20);
-        wallPainter = new WallPainter(this);
-        wallDirector = new WallDirector(this);
+        printer = new WallPrinter(this);
         fontManager = new FontManager();
         imageManager = new ImageManager();
     }
@@ -155,15 +148,15 @@ public abstract class Wall implements Composite, Rectangular {
     public void update_() {
         Color c = color.get();
         glClearColor(c.red(), c.green(), c.blue(), c.alpha());
-        wallDirector.update();
+        printer.preparePrinters();
+        if(!mouseLocked)acceptMouse(mouse.position());
         update();
-        wallPainter.paint();
+        mouse.update();
         keyboard.update();
         processInput(getGlid());
     }
 
     protected abstract void setup();
-    public abstract void update();
 
     @Override
     public Subject order(Subject trade) {
@@ -171,6 +164,8 @@ public abstract class Wall implements Composite, Rectangular {
             Class<?> type = trade.asExpected();
             if(type.equals(Wall.class)) {
                 return set$(this);
+            } else if(type.equals(Printer.class)) {
+                return set$(printer);
             } else if(type.equals(Mouse.class)) {
                 return set$(mouse);
             } else if(type.equals(Keyboard.class)) {
@@ -247,12 +242,30 @@ public abstract class Wall implements Composite, Rectangular {
         return glid;
     }
 
-    public Keyboard getKeyboard() {
+    @Override
+    public Keyboard keyboard() {
         return keyboard;
     }
 
-    public Mouse getMouse() {
+    @Override
+    public Mouse mouse() {
         return mouse;
+    }
+
+    public void lockMouse(boolean lock) {
+        mouseLocked = lock;
+    }
+
+    public void lockMouse() {
+        lockMouse(true);
+    }
+
+    public void unlockMouse() {
+        lockMouse(false);
+    }
+
+    public boolean isMouseLocked() {
+        return mouseLocked;
     }
 
     public void setCursor(Cursor.Face face) {
@@ -280,7 +293,7 @@ public abstract class Wall implements Composite, Rectangular {
         glfwSetWindowShouldClose(glid, true);
     }
 
-    public void minimalize() {
+    public void minimize() {
         glfwIconifyWindow(glid);
     }
 
@@ -292,96 +305,8 @@ public abstract class Wall implements Composite, Rectangular {
         return glfwGetClipboardString(glid);
     }
 
-    public void show(Object object) {
-        if(object instanceof ColorRectangle colorRectangle) {
-            wallPainter.set(colorRectangle);
-        } else if(object instanceof ColorText colorText) {
-            wallPainter.set(colorText);
-        } else if(object instanceof ColorLine colorLine) {
-            wallPainter.set(colorLine);
-        } else if(object instanceof ImageRectangle imageRectangle) {
-            wallPainter.set(imageRectangle);
-        } else if(object instanceof ColorfulRectangle colorfulRectangle) {
-            wallPainter.set(colorfulRectangle);
-        } else if(object instanceof Brick) {
-            ((Brick<?>) object).show();
-        }
-    }
-
-    public void show(Object object, Object sequent) {
-        if(object instanceof ColorRectangle) {
-            wallPainter.set((ColorRectangle) object, sequent);
-        } else if(object instanceof ColorText) {
-            wallPainter.set((ColorText) object, sequent);
-        } else if(object instanceof ColorLine) {
-            wallPainter.set((ColorLine) object, sequent);
-        } else if(object instanceof ImageRectangle) {
-            wallPainter.set((ImageRectangle) object, sequent);
-        } else if(object instanceof Brick) {
-            ((Brick<?>) object).show();
-        }
-    }
-
-    public void hide(Object object) {
-        if(object instanceof Brick) {
-            ((Brick<?>) object).hide();
-        } else {
-            wallPainter.unset(object);
-        }
-    }
-
-    public void move(Object o) {
-        if(o instanceof Brick<?> b) {
-            wallDirector.set(b);
-            b.move();
-        }
-    }
-
-    public void stop(Object o) {
-        if(o instanceof Brick<?> b) {
-            b.stop();
-            wallDirector.unset(b);
-        }
-    }
-
-    public void use(Object o) {
-        show(o);
-        move(o);
-    }
-
-    public void use(Object o, boolean show, boolean move) {
-        if(show) show(o);
-        if(move) move(o);
-    }
-
-    public void cancel(Object o) {
-        hide(o);
-        stop(o);
-    }
-
-    public void cancel(Object o, boolean hide, boolean stop) {
-        if(hide) hide(o);
-        if(stop) stop(o);
-    }
-
-    protected WallDirector.MonitorDeclaration when(Impulse impulse) {
-        return wallDirector.when(impulse);
-    }
-
-    protected WallDirector.MonitorDeclaration when(Supplier<?> sup) {
-        return wallDirector.when(sup);
-    }
-
-    protected Monitor when(Source<Boolean> bool, Statement rising) {
-        return wallDirector.when(bool, rising);
-    }
-
-    protected Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
-        return wallDirector.when(bool, rising, falling);
-    }
-
     void processInput(long wglid) {
         if(glfwGetKey(wglid, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(wglid, true);
+            close();
     }
 }

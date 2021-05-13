@@ -11,16 +11,8 @@ public interface Composite extends Host {
         return new ColorText(this);
     }
 
-    default ColorText release(ColorText.Sketch sketch) {
-        return sketch.release(text());
-    }
-
     default ColorRectangle rect() {
         return new ColorRectangle(this);
-    }
-
-    default ColorRectangle release(ColorRectangle.Sketch sketch) {
-        return sketch.release(new ColorRectangle(this));
     }
 
     default ImageRectangle image() {

@@ -3,7 +3,7 @@ package bricks.image;
 
 import suite.suite.Subject;
 
-import static suite.suite.$uite.set$;
+import static suite.suite.$.set$;
 
 public class ImageManager {
 

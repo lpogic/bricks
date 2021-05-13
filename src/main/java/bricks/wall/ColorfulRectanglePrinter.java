@@ -8,14 +8,14 @@ import bricks.graphic.Shader;
 
 import static org.lwjgl.opengl.GL30.*;
 
-public class ColorfulRectanglePainter {
+public class ColorfulRectanglePrinter {
 
     int glid;
     Shader shader;
 
     private final int vertexGlid;
 
-    public ColorfulRectanglePainter(Shader shader) {
+    public ColorfulRectanglePrinter(Shader shader) {
         glid = glGenVertexArrays();
 
         this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().
@@ -53,7 +53,7 @@ public class ColorfulRectanglePainter {
         shader.set("wallSize", width, height);
     }
 
-    public void paint(ColorfulRectangle rectangle) {
+    public void print(ColorfulRectangle rectangle) {
         shader.use();
 
         float width = rectangle.width().getFloat();

@@ -7,7 +7,7 @@ import bricks.var.Var;
 import bricks.var.Vars;
 import bricks.var.special.Num;
 
-public class ColorfulRectangle extends Guest<Host> implements Rectangle {
+public class ColorfulRectangle extends Guest<Host> implements Rectangle, Printable {
 
     final Centroid body;
     final Var<Color> colorLeftTop;

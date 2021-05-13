@@ -5,7 +5,7 @@ import bricks.var.SupVar;
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$.set$;
 
 public class Key extends SupVar<Key.Event> {
 
@@ -230,7 +230,7 @@ public class Key extends SupVar<Key.Event> {
 
     public boolean isPressed() {
         Event value = get();
-        return value.getType() == GLFW_PRESS || value.getType() == GLFW_REPEAT;
+        return value != null && (value.getType() == GLFW_PRESS || value.getType() == GLFW_REPEAT);
     }
 
     public static boolean pressing(Event pastState, Event newState) {

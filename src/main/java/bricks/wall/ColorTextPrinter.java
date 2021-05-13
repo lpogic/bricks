@@ -20,13 +20,13 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.stb.STBTruetype.stbtt_GetBakedQuad;
 
-public class ColorTextPainter extends Guest<Host> {
+public class ColorTextPrinter extends Guest<Host> {
 
     private final int vao;
     private final int vbo;
     private final Shader shader;
 
-    public ColorTextPainter(Host host, Shader shader) {
+    public ColorTextPrinter(Host host, Shader shader) {
         super(host);
 
         this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().
@@ -56,7 +56,7 @@ public class ColorTextPainter extends Guest<Host> {
         shader.set("wallSize", width, height);
     }
 
-    public void paint(ColorText text, float wallHeight) {
+    public void print(ColorText text, float wallHeight) {
 
         BackedFont font = order(FontManager.class).getFont(text.font().get(), text.height().getFloat());
 

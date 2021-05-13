@@ -9,7 +9,7 @@ import bricks.var.Var;
 import bricks.var.Vars;
 import bricks.var.special.Num;
 
-public class ImageRectangle extends Guest<Host> implements Rectangle {
+public class ImageRectangle extends Guest<Host> implements Rectangle, Printable {
 
     Centroid body;
     Var<Image> image;

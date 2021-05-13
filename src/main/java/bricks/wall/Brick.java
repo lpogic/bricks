@@ -1,5 +1,8 @@
 package bricks.wall;
 
+import bricks.Coordinated;
+import bricks.graphic.Printable;
+import bricks.graphic.Rectangular;
 import bricks.input.Clipboard;
 import bricks.input.Keyboard;
 import bricks.input.Mouse;
@@ -9,23 +12,42 @@ import bricks.trade.Composite;
 import bricks.trade.Guest;
 import bricks.trade.Host;
 import bricks.var.Source;
+import bricks.var.Var;
+import bricks.var.Vars;
 import bricks.var.impulse.Edge;
 import bricks.var.impulse.Impulse;
 import bricks.var.impulse.InequalityImpulse;
+import bricks.var.impulse.State;
 import suite.suite.Subject;
 import suite.suite.action.Statement;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static suite.suite.$uite.arm$;
-import static suite.suite.$uite.set$;
+import static suite.suite.$.arm$;
+import static suite.suite.$.set$;
 
 
-public abstract class Brick<W extends Host> extends Guest<W> implements Composite {
+public abstract class Brick<W extends Host> extends Guest<W> implements
+        Composite, Updatable, MouseObserver, Rectangular {
 
     @Override
     public Subject order(Subject trade) {
+        if(trade.is(Class.class)) {
+            Class<?> type = trade.asExpected();
+            if(Director.class.equals(type)) {
+                return set$(new Director() {
+                    @Override
+                    public void moveTop(Object o) {
+                        var $ = $bricks.take(o);
+                        if($.present()) {
+                            $bricks.alter($);
+                        }
+                    }
+                });
+            }
+        }
         return getHost().order(trade);
     }
 
@@ -56,7 +78,7 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         }
     }
 
-    public class BrickMonitor implements Monitor {
+    public class BrickMonitor implements Monitor, Updatable {
         private final Impulse[] impulses;
         private Statement statement;
 
@@ -65,12 +87,17 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
             this.statement = statement;
         }
 
-        public void use() {
-            monitor$.set(this);
+        public boolean use() {
+            $bricks.set(this);
+            boolean detection = false;
+            for (var i : impulses) {
+                if(i.occur()) detection = true;
+            }
+            return detection;
         }
 
         public void cancel() {
-            monitor$.unset(this);
+            $bricks.unset(this);
         }
 
         public BrickMonitor correctThen(Statement statement) {
@@ -78,7 +105,8 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
             return this;
         }
 
-        void update() {
+        @Override
+        public void update() {
             boolean detection = false;
             for (var i : impulses) {
                 if(i.occur()) detection = true;
@@ -87,10 +115,15 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         }
     }
 
-    Subject monitor$ = set$();
+    protected Subject $bricks = set$();
 
     public Brick(W host) {
         super(host);
+        hasMouse = Vars.set(false);
+    }
+
+    protected Printer printer() {
+        return order(Printer.class);
     }
 
     protected Mouse mouse() {
@@ -111,71 +144,6 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
 
     protected Wall wall() {
         return order(Wall.class);
-    }
-
-    protected void show(Object o) {
-        order(Wall.class).show(o);
-    }
-
-    protected void show(Object o, Object sequent) {
-        order(Wall.class).show(o, sequent);
-    }
-
-    protected void show(Subject $) {
-        $.eachRaw().forEach(this::show);
-    }
-
-    protected void hide(Object o) {
-        order(Wall.class).hide(o);
-    }
-
-    protected void hide(Subject $) {
-        $.eachRaw().forEach(this::hide);
-    }
-
-    protected void move(Object o) {
-        order(Wall.class).move(o);
-    }
-
-    protected void move(Subject $) {
-        $.eachRaw().forEach(this::move);
-    }
-
-    protected void stop(Object o) {
-        order(Wall.class).stop(o);
-    }
-
-    protected void stop(Subject $) {
-        $.eachRaw().forEach(this::stop);
-    }
-
-    protected void use(Object o) {
-        show(o);
-        move(o);
-    }
-
-    protected void use(Subject $) {
-        $.eachRaw().forEach(this::use);
-    }
-
-    protected void use(Object o, Object sequent) {
-        show(o, sequent);
-        move(o);
-    }
-
-    protected void use(Object o, boolean show, boolean move) {
-        if(show) show(o);
-        if(move) move(o);
-    }
-
-    protected void cancel(Object o) {
-        hide(o);
-        stop(o);
-    }
-
-    protected void cancel(Object o, boolean hide, boolean stop) {
-        if(hide) hide(o);
-        if(stop) stop(o);
     }
 
     protected MonitorDeclaration when(Impulse impulse) {
@@ -206,11 +174,70 @@ public abstract class Brick<W extends Host> extends Guest<W> implements Composit
         return when(impulse).then(then);
     }
 
-    public abstract void show();
-    public abstract void hide();
-    public abstract void move();
-    public abstract void stop();
-    public void update() {
-        monitor$.eachAs(BrickMonitor.class).forEach(BrickMonitor::update);
+    protected Monitor when(Impulse impulse, Statement then, boolean use) {
+        return when(impulse).then(then, use);
     }
+
+    protected Monitor when(Supplier<?> sup, Statement then) {
+        return when(sup).then(then);
+    }
+
+    protected Monitor when(Supplier<?> sup, Statement then, boolean use) {
+        return when(sup).then(then, use);
+    }
+
+    protected<T> State<T> state(T init, Consumer<T> manual) {
+        State<T> state = new State<>(init);
+        when(state.signal(), () -> manual.accept(state.getInput()));
+        return state;
+    }
+
+    @Override
+    public void update() {
+        Printer printer = null;
+        for(var $ : $bricks) {
+            if($.is(Printable.class)) {
+                Printable printable = $.asExpected();
+                if(printer == null) printer = printer();
+                printer.print(printable);
+            }
+            if($.is(Updatable.class)) {
+                Updatable updatable = $.asExpected();
+                updatable.update();
+            }
+        }
+    }
+
+
+    protected Var<Boolean> hasMouse;
+    @Override
+    public boolean acceptMouse(Coordinated crd) {
+        boolean mouseAccepted = false;
+        for(var $ : $bricks.reverse()) {
+            if($.is(MouseObserver.class)) {
+                MouseObserver mouseObserver = $.asExpected();
+                if(mouseAccepted) mouseObserver.resetMouse();
+                else mouseAccepted = mouseObserver.acceptMouse(crd);
+            }
+        }
+        hasMouse.set(contains(crd));
+        return mouseAccepted || hasMouse.get();
+    }
+
+    @Override
+    public void resetMouse() {
+        for(var $ : $bricks) {
+            if($.is(MouseObserver.class)) {
+                MouseObserver mouseObserver = $.asExpected();
+                mouseObserver.resetMouse();
+            }
+        }
+        hasMouse.set(false);
+    }
+
+    @Override
+    public Source<Boolean> hasMouse() {
+        return hasMouse;
+    }
+
 }

@@ -10,14 +10,14 @@ import bricks.trade.Host;
 
 import static org.lwjgl.opengl.GL30.*;
 
-public class ImageRectanglePainter extends Guest<Host> {
+public class ImageRectanglePrinter extends Guest<Host> {
 
     int glid;
     Shader shader;
 
     private final int vertexGlid;
 
-    public ImageRectanglePainter(Host host, Shader shader) {
+    public ImageRectanglePrinter(Host host, Shader shader) {
         super(host);
         glid = glGenVertexArrays();
 
@@ -44,7 +44,7 @@ public class ImageRectanglePainter extends Guest<Host> {
         shader.set("wallSize", width, height);
     }
 
-    public void paint(ImageRectangle rectangle) {
+    public void print(ImageRectangle rectangle) {
         shader.use();
 
         float width = rectangle.width().getFloat();

@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$.set$;
 
 public class Keyboard {
 
@@ -77,11 +77,11 @@ public class Keyboard {
     }
 
     private final Subject $keys = set$();
-    private final List<KeyEvent> events = new ArrayList<>();
+    private final Subject $events = set$();
     private final List<CharEvent> charEvents = new ArrayList<>();
 
     public void update() {
-        events.clear();
+        $events.unset();
         charEvents.clear();
     }
 
@@ -89,19 +89,15 @@ public class Keyboard {
         Key.Event keyEvent = new Key.Event(eventType, modifiers);
         Key.Code code = Key.Code.valueOf(keyCode);
         key(code).set(keyEvent);
-        events.add(new KeyEvent(code, keyEvent));
+        $events.set(new KeyEvent(code, keyEvent));
     }
-
-//    public Var<KeyEvent> getKeyEvent() {
-//        return keyEvent;
-//    }
 
     public void reportCharEvent(long glid, int codepoint, int modifiers) {
         charEvents.add(new CharEvent(codepoint, modifiers));
     }
 
-    public Collection<KeyEvent> getEvents() {
-        return events;
+    public Subject getEvents() {
+        return $events;
     }
 
     public Collection<CharEvent> getCharEvents() {
@@ -115,7 +111,7 @@ public class Keyboard {
     public Key key(Key.Code scancode) {
         var $ = $keys.in(scancode).set();
         if($.absent()) {
-            $.set(new Key());
+            $.set(new Key(new Key.Event(GLFW_RELEASE, 0)));
         }
         return $.asExpected();
     }

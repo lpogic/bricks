@@ -7,7 +7,7 @@ import bricks.var.Var;
 import bricks.var.Vars;
 import bricks.var.special.Num;
 
-public class ColorRectangle extends Guest<Host> implements Rectangle {
+public class ColorRectangle extends Guest<Host> implements Rectangle, Printable {
 
     final Centroid body;
     final Var<Color> color;
@@ -60,12 +60,5 @@ public class ColorRectangle extends Guest<Host> implements Rectangle {
 
     public Var<Color> color() {
         return color;
-    }
-
-    public static abstract class Sketch extends ColorRectangle implements AbstractSketch<ColorRectangle> {
-
-        public Sketch() {
-            super(null);
-        }
     }
 }
