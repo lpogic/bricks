@@ -31,7 +31,8 @@ public class ColorText extends Guest<Host> implements Rectangular, Printable {
 
         height = Vars.num(20);
         width = Vars.num(() -> order(FontManager.class).getFont(font.get())
-                        .getStringWidth(string.get(), height.get().floatValue()), string, height, font);
+                        .getStringWidth(string.get(), height.get().floatValue()),
+                string, height, font);
 
         left = Vars.num(400);
         bottom = Vars.num(300);

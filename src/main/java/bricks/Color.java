@@ -51,6 +51,14 @@ public record Color(float red, float green, float blue, float alpha) {
         }
     }
 
+    public static Color hex(int h) {
+        int a = h & 0xff;
+        int b = (h >> 8) & 0xff;
+        int g = (h >> 16) & 0xff;
+        int r = (h >> 24) & 0xff;
+        return new Color(r / 256f, g / 256f, b / 256f, a / 256f);
+    }
+
     public Color(Number red, Number green, Number blue, Number alpha) {
         this(red.floatValue(), green.floatValue(), blue.floatValue(), alpha.floatValue());
     }

@@ -15,7 +15,7 @@ public abstract class Guest<H extends Host> {
     }
 
     protected<T> T order(Class<T> trade) {
-        return host.order(set$(trade)).as(trade);
+        return order(set$(trade)).as(trade);
     }
 
     protected Subject order(Subject trade) {
@@ -23,7 +23,7 @@ public abstract class Guest<H extends Host> {
     }
 
     protected Thread order(Subject trade, Impression callback) {
-        Thread thread = new Thread(() -> callback.play(host.order(trade)));
+        Thread thread = new Thread(() -> callback.play(order(trade)));
         thread.start();
         return thread;
     }

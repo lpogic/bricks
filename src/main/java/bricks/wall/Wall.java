@@ -4,7 +4,6 @@ import bricks.Color;
 import bricks.font.FontManager;
 import bricks.image.ImageManager;
 import bricks.input.*;
-import bricks.trade.Composite;
 import bricks.trade.Host;
 import bricks.var.Var;
 import bricks.var.Vars;
@@ -22,7 +21,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static suite.suite.$.set$;
 
-public abstract class Wall extends Brick<Host> implements Composite {
+public abstract class Wall extends Brick<Host> {
 
     static Subject $walls = set$();
 
@@ -76,7 +75,7 @@ public abstract class Wall extends Brick<Host> implements Composite {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        wall.setupDependencies();
+        wall.setupResources();
         wall.setup1();
         wall.setup();
 
@@ -89,13 +88,7 @@ public abstract class Wall extends Brick<Host> implements Composite {
 
     long glid;
 
-    protected Keyboard keyboard;
-    protected Mouse mouse;
-    protected Clipboard clipboard;
-    protected Story story;
     protected WallPrinter printer;
-    protected FontManager fontManager = new FontManager();
-    protected ImageManager imageManager = new ImageManager();
     Num width;
     Num height;
     Var<Color> color;
@@ -124,21 +117,26 @@ public abstract class Wall extends Brick<Host> implements Composite {
         setLockKeyModifiers(true);
     }
 
-    protected void setupDependencies() {
-        keyboard = new Keyboard();
-        mouse = new Mouse();
-        clipboard = new Clipboard(this);
-        story = new Story(20);
-        printer = new WallPrinter(this);
-        fontManager = new FontManager();
-        imageManager = new ImageManager();
+    protected void setupResources() {
+        $resources
+                .put(Wall.class, this)
+                .put(Keyboard.class, new Keyboard())
+                .put(Mouse.class, new Mouse())
+                .put(Clipboard.class, new Clipboard(this))
+                .put(Story.class, new Story(20))
+                .put(FontManager.class, new FontManager())
+                .put(ImageManager.class, new ImageManager())
+                .put(Printer.class, printer = new WallPrinter(this))
+                ;
     }
 
     void setup1() {
+        var mouse = mouse();
         glfwSetCursorPosCallback(glid, mouse::reportPositionEvent);
         glfwSetMouseButtonCallback(glid, mouse::reportMouseButtonEvent);
         glfwSetScrollCallback(glid, mouse::reportScrollEvent);
 
+        var keyboard = keyboard();
         glfwSetKeyCallback(glid, keyboard::reportKeyEvent);
         glfwSetCharModsCallback(glid, keyboard::reportCharEvent);
 
@@ -149,6 +147,8 @@ public abstract class Wall extends Brick<Host> implements Composite {
         Color c = color.get();
         glClearColor(c.red(), c.green(), c.blue(), c.alpha());
         printer.preparePrinters();
+        var mouse = mouse();
+        var keyboard = keyboard();
         if(!mouseLocked)acceptMouse(mouse.position());
         update();
         mouse.update();
@@ -158,27 +158,12 @@ public abstract class Wall extends Brick<Host> implements Composite {
 
     protected abstract void setup();
 
+    Subject $resources = set$();
+
     @Override
     public Subject order(Subject trade) {
         if(trade.is(Class.class)) {
-            Class<?> type = trade.asExpected();
-            if(type.equals(Wall.class)) {
-                return set$(this);
-            } else if(type.equals(Printer.class)) {
-                return set$(printer);
-            } else if(type.equals(Mouse.class)) {
-                return set$(mouse);
-            } else if(type.equals(Keyboard.class)) {
-                return set$(keyboard);
-            } else if(type.equals(Clipboard.class)) {
-                return set$(clipboard);
-            } else if(type.equals(Story.class)) {
-                return set$(story);
-            } else if(type.equals(FontManager.class)) {
-                return set$(fontManager);
-            } else if(type.equals(ImageManager.class)) {
-                return set$(imageManager);
-            }
+            return $resources.in(trade.raw()).get();
         }
         return set$();
     }
@@ -244,12 +229,17 @@ public abstract class Wall extends Brick<Host> implements Composite {
 
     @Override
     public Keyboard keyboard() {
-        return keyboard;
+        return order(Keyboard.class);
     }
 
     @Override
     public Mouse mouse() {
-        return mouse;
+        return order(Mouse.class);
+    }
+
+    @Override
+    protected Printer printer() {
+        return printer;
     }
 
     public void lockMouse(boolean lock) {

@@ -1,15 +1,14 @@
 package bricks.wall;
 
 import bricks.Coordinated;
-import bricks.graphic.Printable;
-import bricks.graphic.Rectangular;
+import bricks.graphic.*;
 import bricks.input.Clipboard;
 import bricks.input.Keyboard;
 import bricks.input.Mouse;
 import bricks.input.Story;
 import bricks.monitor.Monitor;
-import bricks.trade.Composite;
-import bricks.trade.Guest;
+import bricks.trade.Agent;
+import bricks.trade.Bricklayer;
 import bricks.trade.Host;
 import bricks.var.Source;
 import bricks.var.Var;
@@ -29,8 +28,8 @@ import static suite.suite.$.arm$;
 import static suite.suite.$.set$;
 
 
-public abstract class Brick<W extends Host> extends Guest<W> implements
-        Composite, Updatable, MouseObserver, Rectangular {
+public abstract class Brick<W extends Host> extends Agent<W> implements
+        Bricklayer, Updatable, MouseObserver, Rectangular {
 
     @Override
     public Subject order(Subject trade) {
