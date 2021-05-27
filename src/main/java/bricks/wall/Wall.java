@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 
 import suite.suite.Subject;
+import suite.suite.Suite;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -93,14 +94,14 @@ public abstract class Wall extends Brick<Host> {
     Num height;
     Var<Color> color;
     State<String> title;
-    boolean mouseLocked;
+    Brick<?> mouseRoot;
 
-    void setup0(int width, int height, Color color, String title) {
+    protected void setup0(int width, int height, Color color, String title) {
         this.width = Vars.num(width);
         this.height = Vars.num(height);
         this.color = Vars.set(color);
         this.title = state(title, this::setTitle);
-        this.mouseLocked = false;
+        this.mouseRoot = this;
         glid = glfwCreateWindow(width, height, title, NULL, NULL);
         if (glid == NULL) throw new RuntimeException("Window based failed");
 
@@ -122,7 +123,17 @@ public abstract class Wall extends Brick<Host> {
                 .put(Wall.class, this)
                 .put(Keyboard.class, new Keyboard())
                 .put(Mouse.class, new Mouse())
-                .put(Clipboard.class, new Clipboard(this))
+                .put(Clipboard.class, new Clipboard() {
+                    @Override
+                    public void set(String str) {
+                        setClipboardString(str);
+                    }
+
+                    @Override
+                    public String get() {
+                        return getClipboardString();
+                    }
+                })
                 .put(Story.class, new Story(20))
                 .put(FontManager.class, new FontManager())
                 .put(ImageManager.class, new ImageManager())
@@ -130,7 +141,7 @@ public abstract class Wall extends Brick<Host> {
                 ;
     }
 
-    void setup1() {
+    protected void setup1() {
         var mouse = mouse();
         glfwSetCursorPosCallback(glid, mouse::reportPositionEvent);
         glfwSetMouseButtonCallback(glid, mouse::reportMouseButtonEvent);
@@ -143,13 +154,13 @@ public abstract class Wall extends Brick<Host> {
         when(title).then(() -> setTitle(title.get()));
     }
 
-    public void update_() {
+    protected void update_() {
         Color c = color.get();
         glClearColor(c.red(), c.green(), c.blue(), c.alpha());
         printer.preparePrinters();
         var mouse = mouse();
         var keyboard = keyboard();
-        if(!mouseLocked)acceptMouse(mouse.position());
+        mouseRoot.acceptMouse(mouse.position());
         update();
         mouse.update();
         keyboard.update();
@@ -158,7 +169,7 @@ public abstract class Wall extends Brick<Host> {
 
     protected abstract void setup();
 
-    Subject $resources = set$();
+    protected final Subject $resources = set$();
 
     @Override
     public Subject order(Subject trade) {
@@ -242,20 +253,16 @@ public abstract class Wall extends Brick<Host> {
         return printer;
     }
 
-    public void lockMouse(boolean lock) {
-        mouseLocked = lock;
-    }
-
-    public void lockMouse() {
-        lockMouse(true);
+    public void lockMouse(Brick<?> brick) {
+        mouseRoot = brick;
     }
 
     public void unlockMouse() {
-        lockMouse(false);
+        mouseRoot = this;
     }
 
-    public boolean isMouseLocked() {
-        return mouseLocked;
+    public boolean mouseLocked() {
+        return mouseRoot != this;
     }
 
     public void setCursor(Cursor.Face face) {
@@ -298,5 +305,13 @@ public abstract class Wall extends Brick<Host> {
     void processInput(long wglid) {
         if(glfwGetKey(wglid, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             close();
+    }
+
+    public void push(Brick<?> brick) {
+        $bricks.aimedSet(new Suite.Auto(), brick);
+    }
+
+    public void pop(Brick<?> brick) {
+        $bricks.unset(brick);
     }
 }

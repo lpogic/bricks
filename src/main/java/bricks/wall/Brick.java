@@ -145,43 +145,43 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         return order(Wall.class);
     }
 
-    protected MonitorDeclaration when(Impulse impulse) {
+    public MonitorDeclaration when(Impulse impulse) {
         return new MonitorDeclaration(impulse);
     }
 
-    protected<S> MonitorDeclaration when(Supplier<S> sup) {
+    public<S> MonitorDeclaration when(Supplier<S> sup) {
         return new MonitorDeclaration(new InequalityImpulse<>(sup, sup.get()));
     }
 
-    protected Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
+    public Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
         return set$(
                 arm$("rising", when(bool.willBe(Edge::rising)).then(rising)),
                 arm$("falling", when(bool.willBe(Edge::falling)).then(falling)));
     }
 
-    protected Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
+    public Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
         return set$(
                 arm$("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
                 arm$("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
     }
 
-    protected Monitor when(Source<Boolean> bool, Statement rising) {
+    public Monitor when(Source<Boolean> bool, Statement rising) {
         return when(bool.willBe(Edge::rising)).then(rising);
     }
 
-    protected Monitor when(Impulse impulse, Statement then) {
+    public Monitor when(Impulse impulse, Statement then) {
         return when(impulse).then(then);
     }
 
-    protected Monitor when(Impulse impulse, Statement then, boolean use) {
+    public Monitor when(Impulse impulse, Statement then, boolean use) {
         return when(impulse).then(then, use);
     }
 
-    protected Monitor when(Supplier<?> sup, Statement then) {
+    public Monitor when(Supplier<?> sup, Statement then) {
         return when(sup).then(then);
     }
 
-    protected Monitor when(Supplier<?> sup, Statement then, boolean use) {
+    public Monitor when(Supplier<?> sup, Statement then, boolean use) {
         return when(sup).then(then, use);
     }
 

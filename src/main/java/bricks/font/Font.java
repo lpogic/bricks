@@ -1,15 +1,9 @@
 package bricks.font;
 
-public class Font {
+public record Font(String location) {
 
     public static final Font TREBUC = new Font("ttf/trebuc.ttf");
-
-
-    private final String location;
-
-    public Font(String location) {
-        this.location = location;
-    }
+    public static final Font HACK_REGULAR = new Font("ttf/Hack-Regular.ttf");
 
     public String getLocation() {
         return location;

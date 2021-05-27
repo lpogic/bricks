@@ -6,7 +6,7 @@ import suite.suite.Subject;
 
 import static suite.suite.$.set$;
 
-public class WallPrinter extends Agent<Wall> implements Printer {
+public class WallPrinter extends Agent<Brick<?>> implements Printer {
 
     ColorRectanglePrinter colorRectanglePrinter;
     ColorLinePrinter colorLinePrinter;
@@ -15,8 +15,8 @@ public class WallPrinter extends Agent<Wall> implements Printer {
     ColorfulRectanglePrinter colorfulRectanglePrinter;
     Subject $drawables;
 
-    public WallPrinter(Wall wall) {
-        super(wall);
+    public WallPrinter(Brick<?> host) {
+        super(host);
         this.colorRectanglePrinter = new ColorRectanglePrinter(null);
         this.colorLinePrinter = new ColorLinePrinter(null);
         this.colorTextPrinter = new ColorTextPrinter(this, null);
@@ -26,9 +26,9 @@ public class WallPrinter extends Agent<Wall> implements Printer {
     }
 
     public void preparePrinters() {
-        var wall = getHost();
-        var width = wall.width().getFloat();
-        var height = wall.height().getFloat();
+        var host = getHost();
+        var width = host.width().getFloat();
+        var height = host.height().getFloat();
         colorRectanglePrinter.setWallSize(width, height);
         colorLinePrinter.setWallSize(width, height);
         colorTextPrinter.setWallSize(width, height);
