@@ -118,7 +118,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
 
     public Brick(W host) {
         super(host);
-        hasMouse = Vars.set(false);
+        hasMouse = Vars.set(HasMouse.NO);
     }
 
     protected Printer printer() {
@@ -207,20 +207,30 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         }
     }
 
-
-    protected Var<Boolean> hasMouse;
+    protected Var<HasMouse> hasMouse;
     @Override
-    public boolean acceptMouse(Coordinated crd) {
-        boolean mouseAccepted = false;
-        for(var $ : $bricks.reverse()) {
-            if($.is(MouseObserver.class)) {
-                MouseObserver mouseObserver = $.asExpected();
-                if(mouseAccepted) mouseObserver.resetMouse();
-                else mouseAccepted = mouseObserver.acceptMouse(crd);
-            }
+    public HasMouse acceptMouse(Coordinated crd) {
+        HasMouse brickHasMouse = HasMouse.NO;
+        for(var mo : $bricks.reverse().selectAs(MouseObserver.class)) {
+            if(brickHasMouse != HasMouse.NO) mo.resetMouse();
+            else brickHasMouse = mo.acceptMouse(crd);
         }
-        hasMouse.set(contains(crd));
-        return mouseAccepted || hasMouse.get();
+        switch (brickHasMouse) {
+            case NO -> {
+                if(contains(crd)) {
+                    hasMouse.set(HasMouse.DIRECT);
+                    return HasMouse.DIRECT;
+                } else {
+                    hasMouse.set(HasMouse.NO);
+                    return HasMouse.NO;
+                }
+            }
+            default -> {
+                hasMouse.set(HasMouse.INDIRECT);
+                return HasMouse.INDIRECT;
+            }
+            // case DIRECT / INDIRECT but contains() == false ?
+        }
     }
 
     @Override
@@ -231,11 +241,11 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
                 mouseObserver.resetMouse();
             }
         }
-        hasMouse.set(false);
+        hasMouse.set(HasMouse.NO);
     }
 
     @Override
-    public Source<Boolean> hasMouse() {
+    public Source<HasMouse> hasMouse() {
         return hasMouse;
     }
 

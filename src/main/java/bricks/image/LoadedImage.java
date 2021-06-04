@@ -14,11 +14,11 @@ public class LoadedImage {
     private final int height;
 
     public LoadedImage(Image image) {
-        this(image.getFilePath(), false, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_NEAREST, GL_LINEAR, GL_RGBA);
+        this(image.filePath(), false, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_NEAREST, GL_LINEAR, GL_RGBA);
     }
 
     public LoadedImage(Image image, boolean flip) {
-        this(image.getFilePath(), flip, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_NEAREST, GL_LINEAR, GL_RGBA);
+        this(image.filePath(), flip, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_NEAREST, GL_LINEAR, GL_RGBA);
     }
 
     public LoadedImage(String file, boolean flipImage, int textureWrapS, int textureWrapT, int textureMinFilter, int textureMaxFilter,
