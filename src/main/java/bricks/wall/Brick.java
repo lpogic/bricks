@@ -1,14 +1,11 @@
 package bricks.wall;
 
+import bricks.Color;
 import bricks.Coordinated;
 import bricks.graphic.*;
-import bricks.input.Clipboard;
-import bricks.input.Keyboard;
-import bricks.input.Mouse;
-import bricks.input.Story;
+import bricks.input.*;
 import bricks.monitor.Monitor;
 import bricks.trade.Agent;
-import bricks.trade.Bricklayer;
 import bricks.trade.Host;
 import bricks.var.Source;
 import bricks.var.Var;
@@ -29,7 +26,7 @@ import static suite.suite.$.set$;
 
 
 public abstract class Brick<W extends Host> extends Agent<W> implements
-        Bricklayer, Updatable, MouseObserver, Rectangular {
+        Updatable, MouseObserver, Rectangular {
 
     @Override
     public Subject order(Subject trade) {
@@ -125,12 +122,8 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         return order(Printer.class);
     }
 
-    protected Mouse mouse() {
-        return order(Mouse.class);
-    }
-
-    protected Keyboard keyboard() {
-        return order(Keyboard.class);
+    protected Input input() {
+        return order(Input.class);
     }
 
     protected Clipboard clipboard() {
@@ -143,6 +136,32 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
 
     protected Wall wall() {
         return order(Wall.class);
+    }
+
+    protected ColorRectangle rect() {
+        return new ColorRectangle(this);
+    }
+
+    protected ColorRectangle rect(Color color) {
+        var cr = new ColorRectangle(this);
+        cr.color().set(color);
+        return cr;
+    }
+
+    protected ColorLine line() {
+        return new ColorLine(this);
+    }
+
+    protected ColorText text() {
+        return new ColorText(this);
+    }
+
+    protected ImageRectangle image() {
+        return new ImageRectangle(this);
+    }
+
+    protected ColorfulRectangle gradient() {
+        return new ColorfulRectangle(this);
     }
 
     public MonitorDeclaration when(Impulse impulse) {
@@ -207,7 +226,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         }
     }
 
-    protected Var<HasMouse> hasMouse;
+    protected final Var<HasMouse> hasMouse;
     @Override
     public HasMouse acceptMouse(Coordinated crd) {
         HasMouse brickHasMouse = HasMouse.NO;

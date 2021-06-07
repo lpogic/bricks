@@ -18,6 +18,10 @@ public abstract class Guest<H extends Host> {
         return order(set$(trade)).as(trade);
     }
 
+    protected<T> T order(Contract<T> trade) {
+        return order(set$(trade)).asExpected();
+    }
+
     protected Subject order(Subject trade) {
         return host.order(trade);
     }

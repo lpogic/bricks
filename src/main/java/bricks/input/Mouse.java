@@ -1,11 +1,5 @@
 package bricks.input;
 
-import bricks.Coordinate;
-import bricks.Coordinated;
-import bricks.var.Source;
-import bricks.var.SupVar;
-import bricks.var.Var;
-import bricks.var.Vars;
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -13,13 +7,39 @@ import static suite.suite.$.set$;
 
 public class Mouse {
 
-    public static class ButtonEvent {
+    public static class PositionEvent extends ConsumableEvent {
+        public double x;
+        public double y;
+        public InputState state;
+
+        public PositionEvent(double x, double y, InputState state) {
+            this.x = x;
+            this.y = y;
+            this.state = state;
+        }
+    }
+
+    public static class ScrollEvent extends ConsumableEvent {
+        public double x;
+        public double y;
+        public InputState state;
+
+        public ScrollEvent(double x, double y, InputState state) {
+            this.x = x;
+            this.y = y;
+            this.state = state;
+        }
+    }
+
+    public static class ButtonEvent extends ConsumableEvent {
         public final Button.Code button;
         private final Button.Event event;
+        public InputState state;
 
-        public ButtonEvent(Button.Code code, Button.Event event) {
+        public ButtonEvent(Button.Code code, Button.Event event, InputState state) {
             this.button = code;
             this.event = event;
+            this.state = state;
         }
 
         public boolean isPress() {
@@ -55,40 +75,49 @@ public class Mouse {
         }
     }
 
-    public static class Button extends SupVar<Button.Event> {
-
-        public Button() {
-            super(new Button.Event(GLFW_RELEASE, 0));
-        }
-
-        public Button(Event state) {
-            super(state);
-        }
+    public static class Button {
 
         public enum Code {
-            LEFT(GLFW_MOUSE_BUTTON_LEFT),
-            RIGHT(GLFW_MOUSE_BUTTON_RIGHT),
-            CENTER(GLFW_MOUSE_BUTTON_MIDDLE);
+            LEFT(GLFW_MOUSE_BUTTON_LEFT, 121),
+            RIGHT(GLFW_MOUSE_BUTTON_RIGHT, 122),
+            CENTER(GLFW_MOUSE_BUTTON_MIDDLE, 123),
+            LAST(GLFW_MOUSE_BUTTON_LAST, 124),
+            BUTTON1(GLFW_MOUSE_BUTTON_1, 125),
+            BUTTON2(GLFW_MOUSE_BUTTON_2, 126),
+            BUTTON3(GLFW_MOUSE_BUTTON_3, 127),
+            BUTTON4(GLFW_MOUSE_BUTTON_4, 128),
+            BUTTON5(GLFW_MOUSE_BUTTON_5, 129),
+            BUTTON6(GLFW_MOUSE_BUTTON_6, 130),
+            BUTTON7(GLFW_MOUSE_BUTTON_7, 131),
+            BUTTON8(GLFW_MOUSE_BUTTON_8, 132),
+            ;
 
             static Subject $scan = set$();
             static {
                 for(var c : Code.values()) {
-                    $scan.sate(c.value, set$(c));
+                    if($scan.absent(c.value)) $scan.put(c.value, c);
                 }
             }
 
             private final int value;
+            private final int keybit;
 
-            Code(int value) {
+            Code(int value, int keybit) {
                 this.value = value;
+                this.keybit = keybit;
             }
 
             Code(Code that) {
                 this.value = that.value;
+                this.keybit = that.keybit;
             }
 
             public static Code valueOf(int code) {
                 return $scan.in(code).asExpected();
+            }
+
+            public int getKeybit() {
+                return keybit;
             }
         }
 
@@ -145,94 +174,5 @@ public class Mouse {
                 return (modifiers & GLFW_MOD_SUPER) != 0;
             }
         }
-
-        public boolean isPressed() {
-            Event value = get();
-            return value != null && value.getAction() == GLFW_PRESS;
-        }
-
-        public static boolean pressing(Event pastState, Event newState) {
-            return pastState.getAction() != GLFW_PRESS && newState.getAction() == GLFW_PRESS;
-        }
-    }
-
-    public static class Scroll {
-        Var<ScrollEvent> x = Vars.get();
-        Var<ScrollEvent> y = Vars.get();
-
-        public Source<ScrollEvent> x() {
-            return x;
-        }
-
-        public Source<ScrollEvent> y() {
-            return y;
-        }
-    }
-
-    public static class ScrollEvent {
-        double offset;
-
-        public ScrollEvent(double offset) {
-            this.offset = offset;
-        }
-
-        public double getOffset() {
-            return offset;
-        }
-    }
-
-    Coordinate position = new Coordinate.Cartesian();
-    Scroll scroll = new Scroll();
-    Subject $events = set$();
-    Subject $buttons = set$();
-
-    public void update() {
-        $events.unset();
-    }
-
-    public void reportPositionEvent(long w, double posX, double posY) {
-        position.x().set(posX);
-        position.y().set(posY);
-    }
-
-    public void reportScrollEvent(long wglid, double offsetX, double offsetY) {
-        if(offsetX != 0.0)scroll.x.set(new ScrollEvent(offsetX));
-        if(offsetY != 0.0)scroll.y.set(new ScrollEvent(offsetY));
-    }
-
-    public void reportMouseButtonEvent(long wglid, int button, int action, int modifiers) {
-        Button.Event event = new Button.Event(action, modifiers);
-        Button.Code code = Button.Code.valueOf(button);
-        button(code).set(event);
-        $events.set(new ButtonEvent(code, event));
-    }
-
-    public Scroll getScroll() {
-        return scroll;
-    }
-
-
-    public Coordinated position() {
-        return position;
-    }
-
-    public Button leftButton() {
-        return button(Button.Code.LEFT);
-    }
-
-    public Button rightButton() {
-        return button(Button.Code.RIGHT);
-    }
-
-    public Button button(Button.Code code) {
-        var $ = $buttons.in(code).set();
-        if($.absent()) {
-            $.set(new Button());
-        }
-        return $.asExpected();
-    }
-
-    public Subject getEvents() {
-        return $events;
     }
 }

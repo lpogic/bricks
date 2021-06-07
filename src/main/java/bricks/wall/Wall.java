@@ -1,9 +1,11 @@
 package bricks.wall;
 
 import bricks.Color;
+import bricks.Coordinate;
 import bricks.font.FontManager;
 import bricks.image.ImageManager;
 import bricks.input.*;
+import bricks.trade.Contract;
 import bricks.trade.Host;
 import bricks.var.Var;
 import bricks.var.Vars;
@@ -20,6 +22,7 @@ import suite.suite.Suite;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
+import static suite.suite.$.arm$;
 import static suite.suite.$.set$;
 
 public abstract class Wall extends Brick<Host> {
@@ -90,6 +93,7 @@ public abstract class Wall extends Brick<Host> {
     long glid;
 
     protected WallPrinter printer;
+    protected Input input;
     Num width;
     Num height;
     Var<Color> color;
@@ -121,8 +125,7 @@ public abstract class Wall extends Brick<Host> {
     protected void setupResources() {
         $resources
                 .put(Wall.class, this)
-                .put(Keyboard.class, new Keyboard())
-                .put(Mouse.class, new Mouse())
+                .put(Input.class, input = new Input())
                 .put(Clipboard.class, new Clipboard() {
                     @Override
                     public void set(String str) {
@@ -138,18 +141,15 @@ public abstract class Wall extends Brick<Host> {
                 .put(FontManager.class, new FontManager())
                 .put(ImageManager.class, new ImageManager())
                 .put(Printer.class, printer = new WallPrinter(this))
-                ;
+        ;
     }
 
     protected void setup1() {
-        var mouse = mouse();
-        glfwSetCursorPosCallback(glid, mouse::reportPositionEvent);
-        glfwSetMouseButtonCallback(glid, mouse::reportMouseButtonEvent);
-        glfwSetScrollCallback(glid, mouse::reportScrollEvent);
-
-        var keyboard = keyboard();
-        glfwSetKeyCallback(glid, keyboard::reportKeyEvent);
-        glfwSetCharModsCallback(glid, keyboard::reportCharEvent);
+        glfwSetCursorPosCallback(glid, input::reportMousePositionEvent);
+        glfwSetMouseButtonCallback(glid, input::reportMouseButtonEvent);
+        glfwSetScrollCallback(glid, input::reportMouseScrollEvent);
+        glfwSetKeyCallback(glid, input::reportKeyEvent);
+        glfwSetCharModsCallback(glid, input::reportCharEvent);
 
         when(title).then(() -> setTitle(title.get()));
     }
@@ -158,12 +158,12 @@ public abstract class Wall extends Brick<Host> {
         Color c = color.get();
         glClearColor(c.red(), c.green(), c.blue(), c.alpha());
         printer.preparePrinters();
-        var mouse = mouse();
-        var keyboard = keyboard();
-        mouseRoot.acceptMouse(mouse.position());
+        var crd = new Coordinate.Cartesian();
+        crd.x().set(input.state.mouseCursorX());
+        crd.y().set(input.state.mouseCursorY());
+        mouseRoot.acceptMouse(crd);
         update();
-        mouse.update();
-        keyboard.update();
+        input.update();
         processInput(getGlid());
     }
 
@@ -173,7 +173,7 @@ public abstract class Wall extends Brick<Host> {
 
     @Override
     public Subject order(Subject trade) {
-        if(trade.is(Class.class)) {
+        if(trade.is(Class.class) || trade.is(Contract.class)) {
             return $resources.in(trade.raw()).get();
         }
         return set$();
@@ -236,16 +236,6 @@ public abstract class Wall extends Brick<Host> {
 
     public long getGlid() {
         return glid;
-    }
-
-    @Override
-    public Keyboard keyboard() {
-        return order(Keyboard.class);
-    }
-
-    @Override
-    public Mouse mouse() {
-        return order(Mouse.class);
     }
 
     @Override

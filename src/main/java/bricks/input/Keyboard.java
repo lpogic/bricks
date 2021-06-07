@@ -1,24 +1,18 @@
 package bricks.input;
 
-
-import suite.suite.Subject;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$.set$;
 
 public class Keyboard {
 
-    public static class KeyEvent {
+    public static class KeyEvent extends ConsumableEvent {
         public final Key.Code key;
         private final Key.Event event;
+        public InputState state;
 
-        public KeyEvent(Key.Code code, Key.Event event) {
+        public KeyEvent(Key.Code code, Key.Event event, InputState state) {
             this.key = code;
             this.event = event;
+            this.state = state;
         }
 
         public boolean isPress() {
@@ -58,13 +52,15 @@ public class Keyboard {
         }
     }
 
-    public static class CharEvent {
-        int codepoint;
-        int modifiers;
+    public static class CharEvent extends ConsumableEvent {
+        final int codepoint;
+        final int modifiers;
+        final InputState state;
 
-        public CharEvent(int codepoint, int modifiers) {
+        public CharEvent(int codepoint, int modifiers, InputState state) {
             this.codepoint = codepoint;
             this.modifiers = modifiers;
+            this.state = state;
         }
 
         public int getCodepoint() {
@@ -74,45 +70,9 @@ public class Keyboard {
         public int getModifiers() {
             return modifiers;
         }
-    }
 
-    private final Subject $keys = set$();
-    private final Subject $events = set$();
-    private final List<CharEvent> charEvents = new ArrayList<>();
-
-    public void update() {
-        $events.unset();
-        charEvents.clear();
-    }
-
-    public void reportKeyEvent(long glid, int keyCode, int scanCode, int eventType, int modifiers) {
-        Key.Event keyEvent = new Key.Event(eventType, modifiers);
-        Key.Code code = Key.Code.valueOf(keyCode);
-        key(code).set(keyEvent);
-        $events.set(new KeyEvent(code, keyEvent));
-    }
-
-    public void reportCharEvent(long glid, int codepoint, int modifiers) {
-        charEvents.add(new CharEvent(codepoint, modifiers));
-    }
-
-    public Subject getEvents() {
-        return $events;
-    }
-
-    public Collection<CharEvent> getCharEvents() {
-        return charEvents;
-    }
-
-    public Key key(int keyCode) {
-        return key(Key.Code.valueOf(keyCode));
-    }
-
-    public Key key(Key.Code scancode) {
-        var $ = $keys.in(scancode).set();
-        if($.absent()) {
-            $.set(new Key(new Key.Event(GLFW_RELEASE, 0)));
+        public InputState getState() {
+            return state;
         }
-        return $.asExpected();
     }
 }
