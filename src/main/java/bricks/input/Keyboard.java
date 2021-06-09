@@ -4,7 +4,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Keyboard {
 
-    public static class KeyEvent extends ConsumableEvent {
+    public static class KeyEvent extends InputEvent {
         public final Key.Code key;
         private final Key.Event event;
         public InputState state;
@@ -52,7 +52,7 @@ public class Keyboard {
         }
     }
 
-    public static class CharEvent extends ConsumableEvent {
+    public static class CharEvent extends InputEvent {
         final int codepoint;
         final int modifiers;
         final InputState state;

@@ -17,6 +17,11 @@ public class FantomBrick extends Brick<Host> {
     }
 
     @Override
+    protected void frontUpdate() {
+
+    }
+
+    @Override
     public HasMouse acceptMouse(Coordinated crd) {
         HasMouse brickHasMouse = HasMouse.NO;
         for(var mo : $bricks.reverse().selectAs(MouseObserver.class)) {

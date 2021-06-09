@@ -211,7 +211,8 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
     }
 
     @Override
-    public void update() {
+    final public void update() {
+        frontUpdate();
         Printer printer = null;
         for(var $ : $bricks) {
             if($.is(Printable.class)) {
@@ -224,7 +225,10 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
                 updatable.update();
             }
         }
+        releaseEvents();
     }
+
+    protected abstract void frontUpdate();
 
     protected final Var<HasMouse> hasMouse;
     @Override
@@ -266,6 +270,17 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
     @Override
     public Source<HasMouse> hasMouse() {
         return hasMouse;
+    }
+
+    Subject $suppressedEvents = set$();
+
+    protected void suppressEvent(InputEvent event) {
+        if(event.suppress());// $suppressedEvents.set(event);
+    }
+
+    protected void releaseEvents() {
+//        $suppressedEvents.eachAs(InputEvent.class).forEach(InputEvent::release);
+//        $suppressedEvents.unset();
     }
 
 }

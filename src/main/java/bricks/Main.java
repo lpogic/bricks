@@ -39,7 +39,7 @@ public class Main extends Wall {
     }
 
     @Override
-    public void update() {
+    public void frontUpdate() {
 
     }
 }

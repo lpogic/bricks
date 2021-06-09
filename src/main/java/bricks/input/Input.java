@@ -2,6 +2,7 @@ package bricks.input;
 
 import bricks.wall.Updatable;
 import suite.suite.Subject;
+import suite.suite.util.Sequence;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
@@ -54,7 +55,11 @@ public class Input implements Updatable {
         $events.set(new Keyboard.CharEvent(codepoint, modifiers, state));
     }
 
-    public Subject getEvents() {
-        return $events;
+    public Sequence<InputEvent> getEvents(boolean includeSuppressed) {
+        return includeSuppressed ? $events.eachAs(InputEvent.class) : getEvents();
+    }
+
+    public Sequence<InputEvent> getEvents() {
+        return $events.eachAs(InputEvent.class).filter(InputEvent::released);
     }
 }

@@ -2,6 +2,7 @@ package bricks;
 
 import suite.suite.Subject;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import static suite.suite.$.set$;
@@ -31,7 +32,7 @@ public class Debug {
     public static void log(Object threadId, String str) {
         log(threadId, str, 1000);
     }
-    public static void log(Object str) {
-        log(Debug.class, Objects.toString(str), 1000);
+    public static void log(Object ... str) {
+        log(Debug.class, Arrays.toString(str), 1000);
     }
 }

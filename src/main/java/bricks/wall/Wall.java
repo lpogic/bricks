@@ -243,16 +243,16 @@ public abstract class Wall extends Brick<Host> {
         return printer;
     }
 
-    public void lockMouse(Brick<?> brick) {
+    public void trapMouse(Brick<?> brick) {
         mouseRoot = brick;
     }
 
-    public void unlockMouse() {
+    public void freeMouse() {
         mouseRoot = this;
     }
 
-    public boolean mouseLocked() {
-        return mouseRoot != this;
+    public boolean mouseTrappedBy(Brick<?> brick) {
+        return mouseRoot == brick;
     }
 
     public void setCursor(Cursor.Face face) {

@@ -7,7 +7,7 @@ import static suite.suite.$.set$;
 
 public class Mouse {
 
-    public static class PositionEvent extends ConsumableEvent {
+    public static class PositionEvent extends InputEvent {
         public double x;
         public double y;
         public InputState state;
@@ -19,7 +19,7 @@ public class Mouse {
         }
     }
 
-    public static class ScrollEvent extends ConsumableEvent {
+    public static class ScrollEvent extends InputEvent {
         public double x;
         public double y;
         public InputState state;
@@ -31,7 +31,7 @@ public class Mouse {
         }
     }
 
-    public static class ButtonEvent extends ConsumableEvent {
+    public static class ButtonEvent extends InputEvent {
         public final Button.Code button;
         private final Button.Event event;
         public InputState state;
