@@ -164,7 +164,13 @@ public abstract class Wall extends Brick<Host> {
         mouseRoot.acceptMouse(crd);
         update();
         input.update();
-        processInput(getGlid());
+    }
+
+    @Override
+    protected void frontUpdateAfter() {
+        if(input.getEvents(Key.Code.ESCAPE).anyTrue(Keyboard.KeyEvent::isPress)) {
+            close();
+        }
     }
 
     protected abstract void setup();
@@ -290,11 +296,6 @@ public abstract class Wall extends Brick<Host> {
 
     public String getClipboardString() {
         return glfwGetClipboardString(glid);
-    }
-
-    void processInput(long wglid) {
-        if(glfwGetKey(wglid, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            close();
     }
 
     public void push(Brick<?> brick) {

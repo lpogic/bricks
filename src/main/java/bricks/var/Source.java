@@ -2,6 +2,7 @@ package bricks.var;
 
 import bricks.var.impulse.DifferentialImpulse;
 import bricks.var.impulse.Impulse;
+import bricks.var.impulse.InequalityImpulse;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -27,6 +28,10 @@ public interface Source<T> extends Supplier<T> {
 
     default<F, V extends Source<F>> Source<F> at(Function<T, V> fun) {
         return () -> fun.apply(get()).get();
+    }
+
+    default Impulse willChange() {
+        return new InequalityImpulse<>(this, get());
     }
 
     default Impulse willBe(BiPredicate<T, T> will) {
@@ -105,7 +110,7 @@ public interface Source<T> extends Supplier<T> {
         return supplier::get;
     }
 
-    static<E> Source<E> of(Supplier<E> supplier) {
+    static<E> Source<E> wrap(Supplier<E> supplier) {
         return supplier::get;
     }
 }

@@ -62,4 +62,12 @@ public class Input implements Updatable {
     public Sequence<InputEvent> getEvents() {
         return $events.eachAs(InputEvent.class).filter(InputEvent::released);
     }
+
+    public Sequence<Keyboard.KeyEvent> getEvents(Key.Code code) {
+        return getEvents().filter(Keyboard.KeyEvent.class, e -> e.key == code);
+    }
+
+    public Sequence<Mouse.ButtonEvent> getEvents(Mouse.Button.Code code) {
+        return getEvents().filter(Mouse.ButtonEvent.class, e -> e.button == code);
+    }
 }
