@@ -3,9 +3,8 @@ package bricks;
 import suite.suite.Subject;
 
 import java.util.Arrays;
-import java.util.Objects;
 
-import static suite.suite.$.set$;
+import static suite.suite.$uite.set$;
 
 public class Debug {
     static final Subject $threads = set$();

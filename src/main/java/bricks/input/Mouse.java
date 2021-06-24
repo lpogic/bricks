@@ -3,7 +3,7 @@ package bricks.input;
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$.set$;
+import static suite.suite.$uite.set$;
 
 public class Mouse {
 

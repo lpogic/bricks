@@ -4,7 +4,7 @@ import bricks.graphic.*;
 import bricks.trade.Agent;
 import suite.suite.Subject;
 
-import static suite.suite.$.set$;
+import static suite.suite.$uite.set$;
 
 public class WallPrinter extends Agent<Brick<?>> implements Printer {
 

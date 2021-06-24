@@ -6,7 +6,7 @@ import suite.suite.util.Sequence;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static suite.suite.$.set$;
+import static suite.suite.$uite.set$;
 
 public class Input implements Updatable {
 

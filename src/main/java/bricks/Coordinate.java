@@ -21,6 +21,11 @@ public interface Coordinate extends Coordinated {
             y = Vars.num();
         }
 
+        public Cartesian(Number x, Number y) {
+            this.x = Vars.num(x);
+            this.y = Vars.num(y);
+        }
+
         @Override
         public Num x() {
             return x;

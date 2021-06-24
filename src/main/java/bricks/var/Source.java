@@ -106,11 +106,8 @@ public interface Source<T> extends Supplier<T> {
         };
     }
 
-    static<E> Source<E> $(Supplier<E> supplier) {
-        return supplier::get;
-    }
-
     static<E> Source<E> wrap(Supplier<E> supplier) {
         return supplier::get;
     }
+
 }

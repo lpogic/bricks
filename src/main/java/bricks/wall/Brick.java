@@ -15,14 +15,15 @@ import bricks.var.impulse.Impulse;
 import bricks.var.impulse.InequalityImpulse;
 import bricks.var.impulse.State;
 import suite.suite.Subject;
+import suite.suite.action.Action;
 import suite.suite.action.Statement;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static suite.suite.$.arm$;
-import static suite.suite.$.set$;
+import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 
 public abstract class Brick<W extends Host> extends Agent<W> implements
@@ -67,8 +68,18 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
             return then(statement, true);
         }
 
+        public BrickMonitor then(Action action) {
+            return then(action, true);
+        }
+
         public BrickMonitor then(Statement statement, boolean use) {
             BrickMonitor monitor = new BrickMonitor(impulses, statement);
+            if(use) monitor.use();
+            return monitor;
+        }
+
+        public BrickMonitor then(Action action, boolean use) {
+            BrickMonitor monitor = new BrickMonitor(impulses, action);
             if(use) monitor.use();
             return monitor;
         }
@@ -76,11 +87,11 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
 
     public class BrickMonitor implements Monitor, Updatable {
         private final Impulse[] impulses;
-        private Statement statement;
+        private Action action;
 
-        BrickMonitor(Impulse[] impulses, Statement statement) {
+        BrickMonitor(Impulse[] impulses, Action action) {
             this.impulses = impulses;
-            this.statement = statement;
+            this.action = action;
         }
 
         public boolean use() {
@@ -96,18 +107,13 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
             $bricks.unset(this);
         }
 
-        public BrickMonitor correctThen(Statement statement) {
-            this.statement = statement;
-            return this;
-        }
-
         @Override
         public void update() {
             boolean detection = false;
             for (var i : impulses) {
                 if(i.occur()) detection = true;
             }
-            if(detection) statement.play();
+            if(detection) action.play();
         }
     }
 
@@ -174,14 +180,14 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
 
     public Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
         return set$(
-                arm$("rising", when(bool.willBe(Edge::rising)).then(rising)),
-                arm$("falling", when(bool.willBe(Edge::falling)).then(falling)));
+                $("rising", when(bool.willBe(Edge::rising)).then(rising)),
+                $("falling", when(bool.willBe(Edge::falling)).then(falling)));
     }
 
     public Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
         return set$(
-                arm$("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
-                arm$("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
+                $("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
+                $("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
     }
 
     public Monitor when(Source<Boolean> bool, Statement rising) {

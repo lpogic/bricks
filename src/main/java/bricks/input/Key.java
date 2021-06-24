@@ -5,7 +5,7 @@ import bricks.var.SupVar;
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$.set$;
+import static suite.suite.$uite.set$;
 
 public class Key extends SupVar<Key.Event> {
 

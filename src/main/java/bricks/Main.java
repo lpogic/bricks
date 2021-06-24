@@ -1,15 +1,13 @@
 package bricks;
 
-import bricks.graphic.Rectangular;
-import bricks.input.Mouse;
 import bricks.wall.Wall;
 
-import static suite.suite.$.arm$;
+import static suite.suite.$uite.$;
 
 public class Main extends Wall {
 
     public static void main(String[] args) {
-        Wall.play(arm$(Wall.class, Main.class));
+        Wall.play($(Wall.class, Main.class));
     }
 
     public void setup() {

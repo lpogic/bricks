@@ -1,10 +1,9 @@
 package bricks;
 
-import java.util.regex.Pattern;
-
 public record Color(float red, float green, float blue, float alpha) {
 
     public static final Color PURE_GREEN = new Color(0, 1, 0);
+    public static final Color BLACK = new Color(0, 0, 0);
 
     public static Color mix(float red, float green, float blue, float alpha) {
         return new Color(red, green, blue, alpha);

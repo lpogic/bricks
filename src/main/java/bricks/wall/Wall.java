@@ -22,8 +22,8 @@ import suite.suite.Suite;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
-import static suite.suite.$.arm$;
-import static suite.suite.$.set$;
+import static suite.suite.$uite.$;
+import static suite.suite.$uite.set$;
 
 public abstract class Wall extends Brick<Host> {
 
@@ -150,6 +150,7 @@ public abstract class Wall extends Brick<Host> {
         glfwSetScrollCallback(glid, input::reportMouseScrollEvent);
         glfwSetKeyCallback(glid, input::reportKeyEvent);
         glfwSetCharModsCallback(glid, input::reportCharEvent);
+        glfwSetWindowCloseCallback(glid, glid -> close());
 
         when(title).then(() -> setTitle(title.get()));
     }
@@ -168,7 +169,7 @@ public abstract class Wall extends Brick<Host> {
 
     @Override
     protected void frontUpdateAfter() {
-        if(input.getEvents(Key.Code.ESCAPE).anyTrue(Keyboard.KeyEvent::isPress)) {
+        if(input.getEvents(Key.Code.ESCAPE).anyTrue(Keyboard.KeyEvent::isRelease)) {
             close();
         }
     }
@@ -304,5 +305,11 @@ public abstract class Wall extends Brick<Host> {
 
     public void pop(Brick<?> brick) {
         $bricks.unset(brick);
+    }
+
+    public Subject setBricks(Subject $bricks) {
+        var $old = this.$bricks;
+        this.$bricks = $bricks;
+        return $old;
     }
 }

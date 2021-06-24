@@ -3,7 +3,7 @@ package bricks.font;
 
 import suite.suite.Subject;
 
-import static suite.suite.$.set$;
+import static suite.suite.$uite.set$;
 
 public class FontManager {
 
