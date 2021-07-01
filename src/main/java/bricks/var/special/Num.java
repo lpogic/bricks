@@ -1,6 +1,7 @@
 package bricks.var.special;
 
 import bricks.var.Preserve;
+import bricks.var.Source;
 import bricks.var.Target;
 import bricks.var.Var;
 import suite.suite.Subject;
@@ -39,5 +40,9 @@ public interface Num extends NumSource, Var<Number> {
             if(f[i] > max) max = f[i];
         }
         return max;
+    }
+
+    static NumSource add(Source<Number> n1, Source<Number> n2) {
+        return () -> n1.get().floatValue() + n2.get().floatValue();
     }
 }

@@ -7,8 +7,8 @@ import static suite.suite.$uite.set$;
 public class Story {
 
     private int limit;
-    private Subject $past;
-    private Subject $future;
+    private final Subject $past;
+    private final Subject $future;
 
     public Story(int limit) {
         $past = set$();
@@ -52,5 +52,9 @@ public class Story {
 
     public boolean hasFuture() {
         return $future.present();
+    }
+
+    public void setLimit(int newLimit) {
+        limit = newLimit;
     }
 }
