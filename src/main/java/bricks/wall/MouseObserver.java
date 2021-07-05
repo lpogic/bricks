@@ -1,11 +1,11 @@
 package bricks.wall;
 
-import bricks.Coordinated;
+import bricks.Located;
 import bricks.var.Source;
 
 public interface MouseObserver {
     enum HasMouse {DIRECT, INDIRECT, NO}
-    HasMouse acceptMouse(Coordinated mousePosition);
+    HasMouse acceptMouse(Located mousePosition);
     void resetMouse();
     Source<HasMouse> hasMouse();
     default boolean mouseIn() {

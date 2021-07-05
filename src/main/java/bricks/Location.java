@@ -3,16 +3,16 @@ package bricks;
 import bricks.var.Vars;
 import bricks.var.special.Num;
 
-public interface Coordinate extends Coordinated {
+public interface Location extends Located {
     Num x();
     Num y();
 
-    default void aim(Coordinated c) {
+    default void aim(Located c) {
         x().let(c.x());
         y().let(c.y());
     }
 
-    class Cartesian implements Coordinate {
+    class Cartesian implements Location {
         Num x;
         Num y;
 

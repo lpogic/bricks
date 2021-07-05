@@ -1,6 +1,6 @@
 package bricks.wall;
 
-import bricks.Coordinated;
+import bricks.Located;
 import bricks.trade.Host;
 import bricks.var.Source;
 import bricks.var.special.NumSource;
@@ -22,7 +22,7 @@ public class FantomBrick extends Brick<Host> {
     }
 
     @Override
-    public HasMouse acceptMouse(Coordinated crd) {
+    public HasMouse acceptMouse(Located crd) {
         HasMouse brickHasMouse = HasMouse.NO;
         for(var mo : $bricks.reverse().selectAs(MouseObserver.class)) {
             if(brickHasMouse != HasMouse.NO) mo.resetMouse();

@@ -1,7 +1,7 @@
 package bricks.wall;
 
 import bricks.Color;
-import bricks.Coordinate;
+import bricks.Location;
 import bricks.font.FontManager;
 import bricks.image.ImageManager;
 import bricks.input.*;
@@ -159,7 +159,7 @@ public abstract class Wall extends Brick<Host> {
         Color c = color.get();
         glClearColor(c.red(), c.green(), c.blue(), c.alpha());
         printer.preparePrinters();
-        var crd = new Coordinate.Cartesian();
+        var crd = new Location.Cartesian();
         crd.x().set(input.state.mouseCursorX());
         crd.y().set(input.state.mouseCursorY());
         mouseRoot.acceptMouse(crd);
@@ -307,9 +307,11 @@ public abstract class Wall extends Brick<Host> {
         $bricks.unset(brick);
     }
 
-    public Subject setBricks(Subject $bricks) {
-        var $old = this.$bricks;
+    public Subject getBricks() {
+        return $bricks;
+    }
+
+    public void setBricks(Subject $bricks) {
         this.$bricks = $bricks;
-        return $old;
     }
 }

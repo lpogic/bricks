@@ -9,7 +9,7 @@ public class ImageManager {
 
     Subject $images = set$();
 
-    public LoadedImage getImage(Image image) {
+    public LoadedImage getLoaded(Image image) {
         var $i = $images.in(image).set();
         if($i.absent()) {
             $i.set(new LoadedImage(image));

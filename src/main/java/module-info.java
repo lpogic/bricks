@@ -4,7 +4,7 @@ open module bricks {
     requires org.lwjgl.opengl;
     requires org.lwjgl.stb;
     requires brackettree;
-    requires suite.main;
+    requires suite;
 
     exports bricks;
     exports bricks.font;

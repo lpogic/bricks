@@ -37,16 +37,16 @@ public class WallPrinter extends Agent<Brick<?>> implements Printer {
     }
 
     public void print(Printable p) {
-        if(p instanceof ColorRectangle colorRectangle) {
-            colorRectanglePrinter.print(colorRectangle);
-        } else if(p instanceof ColorfulRectangle colorfulRectangle) {
-            colorfulRectanglePrinter.print(colorfulRectangle);
-        } else if(p instanceof ColorText colorText) {
-            colorTextPrinter.print(colorText, getHost().height().getFloat());
-        } else if(p instanceof ColorLine colorLine) {
-            colorLinePrinter.print(colorLine);
-        } else if(p instanceof ImageRectangle imageRectangle) {
-            imageRectanglePrinter.print(imageRectangle);
+        if(p instanceof RectangleBrick rectangleBrick) {
+            colorRectanglePrinter.print(rectangleBrick);
+        } else if(p instanceof GradientBrick gradientBrick) {
+            colorfulRectanglePrinter.print(gradientBrick);
+        } else if(p instanceof TextBrick textBrick) {
+            colorTextPrinter.print(textBrick, getHost().height().getFloat());
+        } else if(p instanceof LineBrick lineBrick) {
+            colorLinePrinter.print(lineBrick);
+        } else if(p instanceof ImageBrick imageBrick) {
+            imageRectanglePrinter.print(imageBrick);
         }
     }
 }

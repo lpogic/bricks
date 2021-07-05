@@ -1,7 +1,6 @@
 package bricks.wall;
 
-import bricks.Color;
-import bricks.Coordinated;
+import bricks.Located;
 import bricks.graphic.*;
 import bricks.input.*;
 import bricks.monitor.Monitor;
@@ -144,32 +143,6 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         return order(Wall.class);
     }
 
-    protected ColorRectangle rect() {
-        return new ColorRectangle(this);
-    }
-
-    protected ColorRectangle rect(Color color) {
-        var cr = new ColorRectangle(this);
-        cr.color().set(color);
-        return cr;
-    }
-
-    protected ColorLine line() {
-        return new ColorLine(this);
-    }
-
-    protected ColorText text() {
-        return new ColorText(this);
-    }
-
-    protected ImageRectangle image() {
-        return new ImageRectangle(this);
-    }
-
-    protected ColorfulRectangle gradient() {
-        return new ColorfulRectangle(this);
-    }
-
     public MonitorDeclaration when(Impulse impulse) {
         return new MonitorDeclaration(impulse);
     }
@@ -239,7 +212,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
 
     protected final Var<HasMouse> hasMouse;
     @Override
-    public HasMouse acceptMouse(Coordinated crd) {
+    public HasMouse acceptMouse(Located crd) {
         HasMouse brickHasMouse = HasMouse.NO;
         for(var mo : $bricks.reverse().selectAs(MouseObserver.class)) {
             if(brickHasMouse != HasMouse.NO) mo.resetMouse();
@@ -277,10 +250,6 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
     @Override
     public Source<HasMouse> hasMouse() {
         return hasMouse;
-    }
-
-    protected void suppressEvent(InputEvent event) {
-        if(event.suppress());
     }
 
 }

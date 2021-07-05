@@ -1,6 +1,6 @@
 package bricks.graphic;
 
-import bricks.Coordinated;
+import bricks.Located;
 import bricks.Sized;
 import bricks.var.Vars;
 import bricks.var.special.Num;
@@ -18,7 +18,7 @@ public interface Rectangle extends Rectangular {
     Num x();
     Num y();
 
-    default void aim(Coordinated p) {
+    default void aim(Located p) {
         x().let(p.x());
         y().let(p.y());
     }

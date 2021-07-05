@@ -2,12 +2,12 @@ package bricks;
 
 import bricks.var.special.NumSource;
 
-public interface Coordinated {
+public interface Located {
     NumSource x();
     NumSource y();
 
-    static Coordinated of(double x, double y) {
-        return new Coordinated() {
+    static Located of(double x, double y) {
+        return new Located() {
             @Override
             public NumSource x() {
                 return () -> x;

@@ -13,6 +13,7 @@ out VS_OUT {
     float width;
     float height;
     vec4 color;
+    float sm;
 } vs_out;
 
 void main()
@@ -28,6 +29,7 @@ void main()
     vs_out.width = (length + thick) / wallSize.x;
     vs_out.height = thick / wallSize.y;
     vs_out.color = col;
+    vs_out.sm = 2 / wallSize.y;
 }
 
 "GLSL ]
@@ -44,17 +46,28 @@ in VS_OUT {
     float width;
     float height;
     vec4 color;
+    float sm;
 } gs_in[];
 
 out vec4 c;
 
 void rect(vec4 position)
 {
-    c = gs_in[0].color;
+    c = vec4(gs_in[0].color.rgb, 0);
     gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width, -gs_in[0].height), 0 ,0);
     EmitVertex();
     gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width, -gs_in[0].height), 0 ,0);
     EmitVertex();
+    c = gs_in[0].color;
+    gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width, -gs_in[0].height + gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width, -gs_in[0].height + gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width,  gs_in[0].height - gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width,  gs_in[0].height - gs_in[0].sm), 0 ,0);
+    EmitVertex();
+    c = vec4(gs_in[0].color.rgb, 0);
     gl_Position = position + vec4(gs_in[0].rot * vec2(-gs_in[0].width,  gs_in[0].height), 0 ,0);
     EmitVertex();
     gl_Position = position + vec4(gs_in[0].rot * vec2( gs_in[0].width,  gs_in[0].height), 0 ,0);

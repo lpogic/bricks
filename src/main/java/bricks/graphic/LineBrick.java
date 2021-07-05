@@ -1,27 +1,27 @@
 package bricks.graphic;
 
 import bricks.Color;
-import bricks.Coordinate;
+import bricks.Location;
 import bricks.trade.Guest;
 import bricks.trade.Host;
 import bricks.var.Var;
 import bricks.var.Vars;
 import bricks.var.special.Num;
 
-public class ColorLine extends Guest<Host> implements Printable {
+public class LineBrick extends Guest<Host> implements Printable {
 
-    Num thick;
-    Coordinate beginPosition;
-    Coordinate endPosition;
-    Var<Color> color;
+    final Num thick;
+    final Location beginPosition;
+    final Location endPosition;
+    final Var<Color> color;
 
-    public ColorLine(Host host) {
+    public LineBrick(Host host) {
         super(host);
         thick = Vars.num(10);
-        beginPosition = new Coordinate.Cartesian();
+        beginPosition = new Location.Cartesian();
         beginPosition.x().set(100);
         beginPosition.y().set(100);
-        endPosition = new Coordinate.Cartesian();
+        endPosition = new Location.Cartesian();
         endPosition.x().set(200);
         endPosition.y().set(500);
         color = Vars.set(Color.PURE_GREEN);
@@ -31,11 +31,11 @@ public class ColorLine extends Guest<Host> implements Printable {
         return thick;
     }
 
-    public Coordinate begin() {
+    public Location begin() {
         return beginPosition;
     }
 
-    public Coordinate end() {
+    public Location end() {
         return endPosition;
     }
 

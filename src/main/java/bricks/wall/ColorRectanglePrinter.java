@@ -2,7 +2,7 @@ package bricks.wall;
 
 import brackettree.reader.BracketTree;
 import bricks.Color;
-import bricks.graphic.ColorRectangle;
+import bricks.graphic.RectangleBrick;
 import bricks.graphic.Shader;
 
 import static org.lwjgl.opengl.GL30.*;
@@ -43,7 +43,7 @@ public class ColorRectanglePrinter {
         shader.set("wallSize", width, height);
     }
 
-    public void print(ColorRectangle rectangle) {
+    public void print(RectangleBrick rectangle) {
         shader.use();
 
         float width = rectangle.width().getFloat();

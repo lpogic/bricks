@@ -7,7 +7,7 @@ import bricks.var.Var;
 import bricks.var.Vars;
 import bricks.var.special.Num;
 
-public class ColorfulRectangle extends Guest<Host> implements Rectangle, Printable {
+public class GradientBrick extends Guest<Host> implements WithRectangleBody, Printable {
 
     final Centroid body;
     final Var<Color> colorLeftTop;
@@ -15,7 +15,7 @@ public class ColorfulRectangle extends Guest<Host> implements Rectangle, Printab
     final Var<Color> colorRightTop;
     final Var<Color> colorRightBottom;
 
-    public ColorfulRectangle(Host host) {
+    public GradientBrick(Host host) {
         super(host);
         body = new Centroid();
         colorLeftTop = Vars.set(Color.PURE_GREEN);
@@ -25,43 +25,8 @@ public class ColorfulRectangle extends Guest<Host> implements Rectangle, Printab
     }
 
     @Override
-    public Num width() {
-        return body.width();
-    }
-
-    @Override
-    public Num height() {
-        return body.height();
-    }
-
-    @Override
-    public Num left() {
-        return body.left();
-    }
-
-    @Override
-    public Num right() {
-        return body.right();
-    }
-
-    @Override
-    public Num top() {
-        return body.top();
-    }
-
-    @Override
-    public Num bottom() {
-        return body.bottom();
-    }
-
-    @Override
-    public Num x() {
-        return body.x();
-    }
-
-    @Override
-    public Num y() {
-        return body.y();
+    public Rectangle getBody() {
+        return body;
     }
 
     public Var<Color> colorLeftTop() {

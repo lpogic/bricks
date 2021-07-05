@@ -42,7 +42,11 @@ public interface Num extends NumSource, Var<Number> {
         return max;
     }
 
-    static NumSource add(Source<Number> n1, Source<Number> n2) {
+    static NumSource sum(Source<Number> n1, Source<Number> n2) {
         return () -> n1.get().floatValue() + n2.get().floatValue();
+    }
+
+    static NumSource sum(Source<Number> n1, Number n2) {
+        return () -> n1.get().floatValue() + n2.floatValue();
     }
 }

@@ -2,7 +2,7 @@ package bricks.wall;
 
 import brackettree.reader.BracketTree;
 import bricks.Color;
-import bricks.graphic.ColorLine;
+import bricks.graphic.LineBrick;
 import bricks.graphic.Shader;
 
 import static org.lwjgl.opengl.GL30.*;
@@ -46,7 +46,7 @@ public class ColorLinePrinter {
         shader.set("wallSize", width, height);
     }
 
-    public void print(ColorLine line) {
+    public void print(LineBrick line) {
         shader.use();
 
         float thick = line.thick().getFloat();

@@ -12,18 +12,18 @@ import bricks.var.special.NumSource;
 
 import java.util.function.Supplier;
 
-public class ColorText extends Guest<Host> implements Rectangular, Printable {
+public class TextBrick extends Guest<Host> implements Rectangular, Printable {
 
-    Var<String> string;
-    Var<Color> color;
-    Var<Font> font;
+    final Var<String> string;
+    final Var<Color> color;
+    final Var<Font> font;
 
-    Num height;
-    NumSource width;
-    Num left;
-    Num bottom;
+    final Num height;
+    final NumSource width;
+    final Num left;
+    final Num bottom;
 
-    public ColorText(Host host) {
+    public TextBrick(Host host) {
         super(host);
         string = Vars.set("");
         color = Vars.set(Color.mix(1,1,1));
@@ -122,7 +122,7 @@ public class ColorText extends Guest<Host> implements Rectangular, Printable {
         return font;
     }
 
-    public void aim(Coordinated p) {
+    public void aim(Located p) {
         x().let(p.x());
         y().let(p.y());
     }

@@ -5,7 +5,7 @@ import bricks.Color;
 import bricks.font.BackedFont;
 import bricks.font.CharacterTexture;
 import bricks.font.FontManager;
-import bricks.graphic.ColorText;
+import bricks.graphic.TextBrick;
 import bricks.graphic.Shader;
 import bricks.trade.Guest;
 import bricks.trade.Host;
@@ -56,7 +56,7 @@ public class ColorTextPrinter extends Guest<Host> {
         shader.set("wallSize", width, height);
     }
 
-    public void print(ColorText text, float wallHeight) {
+    public void print(TextBrick text, float wallHeight) {
 
         BackedFont font = order(FontManager.class).getFont(text.font().get(), text.height().getFloat());
 
@@ -118,7 +118,7 @@ public class ColorTextPrinter extends Guest<Host> {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    public int getIndex(ColorText text, float testX) {
+    public int getIndex(TextBrick text, float testX) {
 
         BackedFont font = order(FontManager.class).getFont(text.font().get(), text.height().getFloat());
 

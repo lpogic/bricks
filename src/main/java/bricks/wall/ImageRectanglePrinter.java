@@ -1,7 +1,7 @@
 package bricks.wall;
 
 import brackettree.reader.BracketTree;
-import bricks.graphic.ImageRectangle;
+import bricks.graphic.ImageBrick;
 import bricks.graphic.Shader;
 import bricks.image.ImageManager;
 import bricks.image.LoadedImage;
@@ -44,7 +44,7 @@ public class ImageRectanglePrinter extends Guest<Host> {
         shader.set("wallSize", width, height);
     }
 
-    public void print(ImageRectangle rectangle) {
+    public void print(ImageBrick rectangle) {
         shader.use();
 
         float width = rectangle.width().getFloat();
@@ -52,7 +52,7 @@ public class ImageRectanglePrinter extends Guest<Host> {
         float x = rectangle.x().getFloat();
         float y = rectangle.y().getFloat();
 
-        LoadedImage image = order(ImageManager.class).getImage(rectangle.getImage());
+        LoadedImage image = order(ImageManager.class).getLoaded(rectangle.image().get());
         int texGlid = image.getGlid();
 
         float[] vertex = new float[]{
