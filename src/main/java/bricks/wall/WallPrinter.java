@@ -4,49 +4,49 @@ import bricks.graphic.*;
 import bricks.trade.Agent;
 import suite.suite.Subject;
 
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class WallPrinter extends Agent<Brick<?>> implements Printer {
 
-    ColorRectanglePrinter colorRectanglePrinter;
-    ColorLinePrinter colorLinePrinter;
-    ColorTextPrinter colorTextPrinter;
-    ImageRectanglePrinter imageRectanglePrinter;
-    ColorfulRectanglePrinter colorfulRectanglePrinter;
+    RectanglePrinter rectanglePrinter;
+    LinePrinter linePrinter;
+    TextPrinter textPrinter;
+    ImagePrinter imagePrinter;
+    GradientPrinter gradientPrinter;
     Subject $drawables;
 
     public WallPrinter(Brick<?> host) {
         super(host);
-        this.colorRectanglePrinter = new ColorRectanglePrinter(null);
-        this.colorLinePrinter = new ColorLinePrinter(null);
-        this.colorTextPrinter = new ColorTextPrinter(this, null);
-        this.imageRectanglePrinter = new ImageRectanglePrinter(this, null);
-        this.colorfulRectanglePrinter = new ColorfulRectanglePrinter(null);
-        this.$drawables = set$();
+        this.rectanglePrinter = new RectanglePrinter(null);
+        this.linePrinter = new LinePrinter(null);
+        this.textPrinter = new TextPrinter(this, null);
+        this.imagePrinter = new ImagePrinter(this, null);
+        this.gradientPrinter = new GradientPrinter(null);
+        this.$drawables = $();
     }
 
     public void preparePrinters() {
         var host = getHost();
         var width = host.width().getFloat();
         var height = host.height().getFloat();
-        colorRectanglePrinter.setWallSize(width, height);
-        colorLinePrinter.setWallSize(width, height);
-        colorTextPrinter.setWallSize(width, height);
-        imageRectanglePrinter.setWallSize(width, height);
-        colorfulRectanglePrinter.setWallSize(width, height);
+        rectanglePrinter.setWallSize(width, height);
+        linePrinter.setWallSize(width, height);
+        textPrinter.setWallSize(width, height);
+        imagePrinter.setWallSize(width, height);
+        gradientPrinter.setWallSize(width, height);
     }
 
     public void print(Printable p) {
         if(p instanceof RectangleBrick rectangleBrick) {
-            colorRectanglePrinter.print(rectangleBrick);
+            rectanglePrinter.print(rectangleBrick);
         } else if(p instanceof GradientBrick gradientBrick) {
-            colorfulRectanglePrinter.print(gradientBrick);
+            gradientPrinter.print(gradientBrick);
         } else if(p instanceof TextBrick textBrick) {
-            colorTextPrinter.print(textBrick, getHost().height().getFloat());
+            textPrinter.print(textBrick, getHost().height().getFloat());
         } else if(p instanceof LineBrick lineBrick) {
-            colorLinePrinter.print(lineBrick);
+            linePrinter.print(lineBrick);
         } else if(p instanceof ImageBrick imageBrick) {
-            imageRectanglePrinter.print(imageBrick);
+            imagePrinter.print(imageBrick);
         }
     }
 }

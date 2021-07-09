@@ -7,14 +7,14 @@ import bricks.graphic.Shader;
 
 import static org.lwjgl.opengl.GL30.*;
 
-public class ColorfulRectanglePrinter {
+public class GradientPrinter {
 
     int glid;
     Shader shader;
 
     private final int vertexGlid;
 
-    public ColorfulRectanglePrinter(Shader shader) {
+    public GradientPrinter(Shader shader) {
         glid = glGenVertexArrays();
 
         this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().

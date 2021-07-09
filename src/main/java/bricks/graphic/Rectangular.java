@@ -27,22 +27,22 @@ public interface Rectangular extends Sized, Located {
         return new Rectangular() {
             @Override
             public NumSource left() {
-                return Num.sum(rect.left(), widthOffset / -2);
+                return rect.left().plus(widthOffset / -2);
             }
 
             @Override
             public NumSource right() {
-                return Num.sum(rect.right(), widthOffset / 2);
+                return rect.right().plus(widthOffset / 2);
             }
 
             @Override
             public NumSource top() {
-                return Num.sum(rect.top(), heightOffset / -2);
+                return rect.top().plus(heightOffset / -2);
             }
 
             @Override
             public NumSource bottom() {
-                return Num.sum(rect.bottom(), heightOffset / 2);
+                return Num.sum(heightOffset / 2, rect.bottom());
             }
 
             @Override
@@ -57,12 +57,12 @@ public interface Rectangular extends Sized, Located {
 
             @Override
             public NumSource width() {
-                return Num.sum(rect.width(), widthOffset);
+                return Num.sum(widthOffset, rect.width());
             }
 
             @Override
             public NumSource height() {
-                return Num.sum(rect.height(), heightOffset);
+                return Num.sum(heightOffset, rect.height());
             }
         };
     }

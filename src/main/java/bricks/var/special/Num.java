@@ -1,8 +1,6 @@
 package bricks.var.special;
 
 import bricks.var.Preserve;
-import bricks.var.Source;
-import bricks.var.Target;
 import bricks.var.Var;
 import suite.suite.Subject;
 import suite.suite.Suite;
@@ -34,19 +32,49 @@ public interface Num extends NumSource, Var<Number> {
         return value > min ? value < max ? value: max : min;
     }
 
-    static float max(float f0, float ... f){
-        float max = f0;
-        for(int i = f.length - 1;i >= 0;--i) {
-            if(f[i] > max) max = f[i];
-        }
-        return max;
+    @SafeVarargs
+    static NumSource max(Number n0, Supplier<Number> ... n){
+        return () -> {
+            float max = n0.floatValue();
+            for(var ni : n) {
+                float f = ni.get().floatValue();
+                if(f > max) max = f;
+            }
+            return max;
+        };
     }
 
-    static NumSource sum(Source<Number> n1, Source<Number> n2) {
-        return () -> n1.get().floatValue() + n2.get().floatValue();
+    @SafeVarargs
+    static NumSource max(Supplier<Number> n0, Supplier<Number> ... n){
+        return () -> {
+            float max = n0.get().floatValue();
+            for(var ni : n) {
+                float f = ni.get().floatValue();
+                if(f > max) max = f;
+            }
+            return max;
+        };
     }
 
-    static NumSource sum(Source<Number> n1, Number n2) {
-        return () -> n1.get().floatValue() + n2.floatValue();
+    @SafeVarargs
+    static NumSource sum(Number n0, Supplier<Number> ... n){
+        return () -> {
+            float sum = n0.floatValue();
+            for(var ni : n) {
+                sum += ni.get().floatValue();
+            }
+            return sum;
+        };
+    }
+
+    @SafeVarargs
+    static NumSource sum(Supplier<Number> n0, Supplier<Number> ... n){
+        return () -> {
+            float sum = n0.get().floatValue();
+            for(var ni : n) {
+                sum += ni.get().floatValue();
+            }
+            return sum;
+        };
     }
 }

@@ -3,11 +3,11 @@ package bricks.image;
 
 import suite.suite.Subject;
 
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class ImageManager {
 
-    Subject $images = set$();
+    Subject $images = $();
 
     public LoadedImage getLoaded(Image image) {
         var $i = $images.in(image).set();

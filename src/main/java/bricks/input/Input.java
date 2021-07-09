@@ -6,12 +6,12 @@ import suite.suite.util.Sequence;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class Input implements Updatable {
 
     public InputState state = new InputState(new int[5], 0.0, 0.0);
-    Subject $events = set$();
+    Subject $events = $();
 
     @Override
     public void update() {

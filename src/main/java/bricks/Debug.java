@@ -4,10 +4,10 @@ import suite.suite.Subject;
 
 import java.util.Arrays;
 
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class Debug {
-    static final Subject $threads = set$();
+    static final Subject $threads = $();
 
     public static void log(Object threadId, String str, long sleep) {
         var $thread = $threads.in(threadId).set();

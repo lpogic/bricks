@@ -7,7 +7,7 @@ import org.joml.Matrix4f;
 import suite.suite.Subject;
 
 import static org.lwjgl.opengl.GL45.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class Shader implements Interpreted {
 
@@ -15,11 +15,11 @@ public class Shader implements Interpreted {
         String vertex = $.in("vertex").asString();
         String fragment = $.in("fragment").asString();
         if($.absent("geometry")) {
-            return set$(new Shader(vertex, fragment));
+            return $(new Shader(vertex, fragment));
         }
         String geometry = $.in("geometry").asString();
 
-        return set$(new Shader(vertex, geometry, fragment));
+        return $(new Shader(vertex, geometry, fragment));
     }
 
     int glid;

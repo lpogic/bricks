@@ -1,17 +1,11 @@
 package bricks.var.special;
 
 import bricks.var.Source;
-import bricks.var.impulse.DifferentialImpulse;
-import bricks.var.impulse.Impulse;
-
-import java.util.Objects;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 @FunctionalInterface
 public interface NumSource extends Source<Number> {
+
     default float getFloat() {
         return get().floatValue();
     }
@@ -33,5 +27,13 @@ public interface NumSource extends Source<Number> {
 
     default NumSource perFloat(Function<Float, Number> per) {
         return () -> per.apply(getFloat());
+    }
+
+    default NumSource scale(Number scale) {
+        return () -> getFloat() * scale.floatValue();
+    }
+
+    default NumSource plus(Number add) {
+        return () -> getFloat() + add.floatValue();
     }
 }

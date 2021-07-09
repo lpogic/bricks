@@ -10,12 +10,12 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.stb.STBTruetype.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class BackedFont {
 
     private final LoadedFont loadedFont;
-    private final Subject $chars = set$();
+    private final Subject $chars = $();
     private final int size;
     private final float scaledAscend;
     private final float scaledDescent;

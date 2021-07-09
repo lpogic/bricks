@@ -22,12 +22,11 @@ import suite.suite.Suite;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
-import static suite.suite.$uite.$;
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.*;
 
 public abstract class Wall extends Brick<Host> {
 
-    static Subject $walls = set$();
+    static Subject $walls = $();
 
     public static void play(Subject $sub) {
         glfwSetErrorCallback(GLFWErrorCallback.createPrint(System.err));
@@ -176,14 +175,17 @@ public abstract class Wall extends Brick<Host> {
 
     protected abstract void setup();
 
-    protected final Subject $resources = set$();
+    protected final Subject $resources = $(
+            Location.OFFSET_X, $(0),
+            Location.OFFSET_Y, $(0)
+    );
 
     @Override
     public Subject order(Subject trade) {
         if(trade.is(Class.class) || trade.is(Contract.class)) {
             return $resources.in(trade.raw()).get();
         }
-        return set$();
+        return $();
     }
 
     public Var<Color> color() {

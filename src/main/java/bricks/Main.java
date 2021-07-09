@@ -1,13 +1,15 @@
 package bricks;
 
 import bricks.wall.Wall;
+import suite.suite.$uite;
 
+import static suite.suite.$uite.$;
 import static suite.suite.$uite.$;
 
 public class Main extends Wall {
 
     public static void main(String[] args) {
-        Wall.play($(Wall.class, Main.class));
+        Wall.play($uite.$(Wall.class, $(Main.class)));
     }
 
     public void setup() {

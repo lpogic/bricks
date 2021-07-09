@@ -5,7 +5,7 @@ import bricks.var.SupVar;
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class Key extends SupVar<Key.Event> {
 
@@ -133,7 +133,7 @@ public class Key extends SupVar<Key.Event> {
         LAST(MENU),
         UNKNOWN(-1, 120);
 
-        static Subject $scan = set$();
+        static Subject $scan = $();
         static {
             for(var c : Code.values()) {
                 if($scan.absent(c.value)) $scan.put(c.value, c);

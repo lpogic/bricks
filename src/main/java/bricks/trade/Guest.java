@@ -4,7 +4,7 @@ package bricks.trade;
 import suite.suite.Subject;
 import suite.suite.action.Impression;
 
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public abstract class Guest<H extends Host> {
 
@@ -15,11 +15,11 @@ public abstract class Guest<H extends Host> {
     }
 
     protected<T> T order(Class<T> trade) {
-        return order(set$(trade)).as(trade);
+        return order($(trade)).as(trade);
     }
 
     protected<T> T order(Contract<T> trade) {
-        return order(set$(trade)).asExpected();
+        return order($(trade)).asExpected();
     }
 
     protected Subject order(Subject trade) {

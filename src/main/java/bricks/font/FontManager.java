@@ -3,11 +3,11 @@ package bricks.font;
 
 import suite.suite.Subject;
 
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class FontManager {
 
-    Subject $fonts = set$();
+    Subject $fonts = $();
 
     public LoadedFont getFont(Font font) {
         var $f = $fonts.in(font).set();

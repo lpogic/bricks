@@ -10,14 +10,14 @@ import bricks.trade.Host;
 
 import static org.lwjgl.opengl.GL30.*;
 
-public class ImageRectanglePrinter extends Guest<Host> {
+public class ImagePrinter extends Guest<Host> {
 
     int glid;
     Shader shader;
 
     private final int vertexGlid;
 
-    public ImageRectanglePrinter(Host host, Shader shader) {
+    public ImagePrinter(Host host, Shader shader) {
         super(host);
         glid = glGenVertexArrays();
 

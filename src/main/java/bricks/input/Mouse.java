@@ -3,7 +3,7 @@ package bricks.input;
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.$;
 
 public class Mouse {
 
@@ -92,7 +92,7 @@ public class Mouse {
             BUTTON8(GLFW_MOUSE_BUTTON_8, 132),
             ;
 
-            static Subject $scan = set$();
+            static Subject $scan = $();
             static {
                 for(var c : Code.values()) {
                     if($scan.absent(c.value)) $scan.put(c.value, c);

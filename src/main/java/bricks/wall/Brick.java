@@ -21,8 +21,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static suite.suite.$uite.$;
-import static suite.suite.$uite.set$;
+import static suite.suite.$uite.*;
 
 
 public abstract class Brick<W extends Host> extends Agent<W> implements
@@ -33,7 +32,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         if(trade.is(Class.class)) {
             Class<?> type = trade.asExpected();
             if(Director.class.equals(type)) {
-                return set$(new Director() {
+                return $(new Director() {
                     @Override
                     public void moveTop(Object o) {
                         var $ = $bricks.take(o);
@@ -116,7 +115,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         }
     }
 
-    protected Subject $bricks = set$();
+    protected Subject $bricks = $();
 
     public Brick(W host) {
         super(host);
@@ -152,15 +151,15 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
     }
 
     public Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
-        return set$(
-                $("rising", when(bool.willBe(Edge::rising)).then(rising)),
-                $("falling", when(bool.willBe(Edge::falling)).then(falling)));
+        return $(
+                "rising", $(when(bool.willBe(Edge::rising)).then(rising)),
+                "falling", $(when(bool.willBe(Edge::falling)).then(falling)));
     }
 
     public Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
-        return set$(
-                $("rising", when(bool.willBe(Edge::rising)).then(rising, useRising)),
-                $("falling", when(bool.willBe(Edge::falling)).then(falling, useFalling)));
+        return $(
+                "rising", $(when(bool.willBe(Edge::rising)).then(rising, useRising)),
+                "falling", $(when(bool.willBe(Edge::falling)).then(falling, useFalling)));
     }
 
     public Monitor when(Source<Boolean> bool, Statement rising) {
@@ -193,15 +192,19 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
     final public void update() {
         frontUpdate();
         Printer printer = null;
+        var $processed = $();
         for(var $ : $bricks) {
-            if($.is(Printable.class)) {
-                Printable printable = $.asExpected();
-                if(printer == null) printer = printer();
-                printer.print(printable);
-            }
-            if($.is(Updatable.class)) {
-                Updatable updatable = $.asExpected();
-                updatable.update();
+            if($processed.absent($.raw())) {
+                $processed.set($.raw());
+                if ($.is(Printable.class)) {
+                    Printable printable = $.asExpected();
+                    if (printer == null) printer = printer();
+                    printer.print(printable);
+                }
+                if ($.is(Updatable.class)) {
+                    Updatable updatable = $.asExpected();
+                    updatable.update();
+                }
             }
         }
         frontUpdateAfter();
