@@ -85,7 +85,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
 
     public class BrickMonitor implements Monitor, Updatable {
         private final Impulse[] impulses;
-        private Action action;
+        private final Action action;
 
         BrickMonitor(Impulse[] impulses, Action action) {
             this.impulses = impulses;
@@ -112,6 +112,11 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
                 if(i.occur()) detection = true;
             }
             if(detection) action.play();
+        }
+
+        public void play() {
+            for (var i : impulses) i.occur();
+            action.play();
         }
     }
 

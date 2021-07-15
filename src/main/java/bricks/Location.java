@@ -6,9 +6,6 @@ import bricks.var.special.Num;
 
 public interface Location extends Located {
 
-    Contract<Number> OFFSET_X = new Contract<>();
-    Contract<Number> OFFSET_Y = new Contract<>();
-
     Num x();
     Num y();
 

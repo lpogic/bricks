@@ -176,8 +176,6 @@ public abstract class Wall extends Brick<Host> {
     protected abstract void setup();
 
     protected final Subject $resources = $(
-            Location.OFFSET_X, $(0),
-            Location.OFFSET_Y, $(0)
     );
 
     @Override

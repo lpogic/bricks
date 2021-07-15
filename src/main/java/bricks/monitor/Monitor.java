@@ -3,6 +3,7 @@ package bricks.monitor;
 public interface Monitor {
     boolean use();
     void cancel();
+    void play();
 
     static void use(Monitor ... m) {
         for(var monitor : m) monitor.use();
