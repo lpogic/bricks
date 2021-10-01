@@ -32,13 +32,27 @@ public interface Num extends NumSource, Var<Number> {
         return value > min ? value < max ? value: max : min;
     }
 
+    static NumSource trim(Number value, Supplier<Number> min, Supplier<Number> max) {
+        return () -> {
+            var v = value.doubleValue();
+            var mn = min.get().doubleValue();
+            if(v > mn) {
+                return Math.min(v, max.get().doubleValue());
+            } else return mn;
+        };
+    }
+
+    static NumSource trim(Supplier<Number> value, Supplier<Number> min, Supplier<Number> max) {
+        return () -> trim(value.get(), min, max).get();
+    }
+
     @SafeVarargs
     static NumSource max(Number n0, Supplier<Number> ... n){
         return () -> {
-            float max = n0.floatValue();
+            double max = n0.doubleValue();
             for(var ni : n) {
-                float f = ni.get().floatValue();
-                if(f > max) max = f;
+                double d = ni.get().doubleValue();
+                if(d > max) max = d;
             }
             return max;
         };
@@ -46,14 +60,7 @@ public interface Num extends NumSource, Var<Number> {
 
     @SafeVarargs
     static NumSource max(Supplier<Number> n0, Supplier<Number> ... n){
-        return () -> {
-            float max = n0.get().floatValue();
-            for(var ni : n) {
-                float f = ni.get().floatValue();
-                if(f > max) max = f;
-            }
-            return max;
-        };
+        return () -> max(n0.get(), n).get();
     }
 
     @SafeVarargs
@@ -69,12 +76,6 @@ public interface Num extends NumSource, Var<Number> {
 
     @SafeVarargs
     static NumSource sum(Supplier<Number> n0, Supplier<Number> ... n){
-        return () -> {
-            float sum = n0.get().floatValue();
-            for(var ni : n) {
-                sum += ni.get().floatValue();
-            }
-            return sum;
-        };
+        return () -> sum(n0.get(), n).get();
     }
 }

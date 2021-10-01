@@ -260,4 +260,15 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         return hasMouse;
     }
 
+    public final Shape Shapes = new Shape();
+
+    public class Shape {
+        public RectangleBrick rectangle(Subject sketch) {
+            var brick = new RectangleBrick(Brick.this);
+            var aim = sketch.in("aim").get();
+            if(aim.is(Located.class)) brick.aim(aim.asExpected());
+            return brick;
+        }
+    }
+
 }

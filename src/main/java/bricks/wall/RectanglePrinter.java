@@ -5,6 +5,8 @@ import bricks.Color;
 import bricks.graphic.RectangleBrick;
 import bricks.graphic.Shader;
 
+import java.nio.file.Path;
+
 import static org.lwjgl.opengl.GL30.*;
 
 public class RectanglePrinter {
@@ -17,8 +19,8 @@ public class RectanglePrinter {
     public RectanglePrinter(Shader shader) {
         glid = glGenVertexArrays();
 
-        this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().
-                getResourceAsStream("forest/colorRectangleShader.tree")).as(Shader.class);
+        this.shader = shader != null ? shader :
+                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "colorRectangleShader.tree").toFile()).as(Shader.class);
 
         vertexGlid = glGenBuffers();
         glBindVertexArray(glid);

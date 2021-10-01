@@ -9,7 +9,7 @@ import static suite.suite.$uite.$;
 public class Main extends Wall {
 
     public static void main(String[] args) {
-        Wall.play($uite.$(Wall.class, $(Main.class)));
+        Wall.play($uite.$(Wall.class, $(new Main())));
     }
 
     public void setup() {

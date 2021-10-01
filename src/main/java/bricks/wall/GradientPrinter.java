@@ -5,6 +5,8 @@ import bricks.Color;
 import bricks.graphic.GradientBrick;
 import bricks.graphic.Shader;
 
+import java.nio.file.Path;
+
 import static org.lwjgl.opengl.GL30.*;
 
 public class GradientPrinter {
@@ -17,8 +19,8 @@ public class GradientPrinter {
     public GradientPrinter(Shader shader) {
         glid = glGenVertexArrays();
 
-        this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().
-                getResourceAsStream("forest/colorfulRectangleShader.tree")).as(Shader.class);
+        this.shader = shader != null ? shader :
+                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "colorfulRectangleShader.tree").toFile()).as(Shader.class);
 
         vertexGlid = glGenBuffers();
         glBindVertexArray(glid);

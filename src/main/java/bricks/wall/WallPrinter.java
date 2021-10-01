@@ -13,6 +13,7 @@ public class WallPrinter extends Agent<Brick<?>> implements Printer {
     TextPrinter textPrinter;
     ImagePrinter imagePrinter;
     GradientPrinter gradientPrinter;
+    CirclePrinter circlePrinter;
     Subject $drawables;
 
     public WallPrinter(Brick<?> host) {
@@ -22,6 +23,7 @@ public class WallPrinter extends Agent<Brick<?>> implements Printer {
         this.textPrinter = new TextPrinter(this, null);
         this.imagePrinter = new ImagePrinter(this, null);
         this.gradientPrinter = new GradientPrinter(null);
+        this.circlePrinter = new CirclePrinter(null);
         this.$drawables = $();
     }
 
@@ -34,6 +36,7 @@ public class WallPrinter extends Agent<Brick<?>> implements Printer {
         textPrinter.setWallSize(width, height);
         imagePrinter.setWallSize(width, height);
         gradientPrinter.setWallSize(width, height);
+        circlePrinter.setWallSize(width, height);
     }
 
     public void print(Printable p) {
@@ -47,6 +50,8 @@ public class WallPrinter extends Agent<Brick<?>> implements Printer {
             linePrinter.print(lineBrick);
         } else if(p instanceof ImageBrick imageBrick) {
             imagePrinter.print(imageBrick);
+        } else if(p instanceof CircleBrick circleBrick) {
+            circlePrinter.print(circleBrick);
         }
     }
 }

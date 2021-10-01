@@ -8,6 +8,8 @@ import bricks.image.LoadedImage;
 import bricks.trade.Guest;
 import bricks.trade.Host;
 
+import java.nio.file.Path;
+
 import static org.lwjgl.opengl.GL30.*;
 
 public class ImagePrinter extends Guest<Host> {
@@ -21,8 +23,8 @@ public class ImagePrinter extends Guest<Host> {
         super(host);
         glid = glGenVertexArrays();
 
-        this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().
-                getResourceAsStream("forest/textureShader.tree")).as(Shader.class);
+        this.shader = shader != null ? shader :
+                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "textureShader.tree").toFile()).as(Shader.class);
 
         vertexGlid = glGenBuffers();
         glBindVertexArray(glid);

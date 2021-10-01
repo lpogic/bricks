@@ -2,6 +2,7 @@ package bricks.graphic;
 
 import org.lwjgl.BufferUtils;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -47,7 +48,7 @@ public final class IOUtil {
             }
         } else {
             try (
-                    InputStream source = IOUtil.class.getClassLoader().getResourceAsStream(resource);
+                    InputStream source = new FileInputStream(resource);
                     ReadableByteChannel rbc = Channels.newChannel(source)
             ) {
                 buffer = createByteBuffer(bufferSize);

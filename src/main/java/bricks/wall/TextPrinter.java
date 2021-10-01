@@ -12,6 +12,8 @@ import bricks.trade.Host;
 import org.lwjgl.stb.STBTTAlignedQuad;
 import suite.suite.util.Cascade;
 
+import java.nio.file.Path;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
@@ -29,8 +31,8 @@ public class TextPrinter extends Guest<Host> {
     public TextPrinter(Host host, Shader shader) {
         super(host);
 
-        this.shader = shader != null ? shader : BracketTree.read(Shader.class.getClassLoader().
-                getResourceAsStream("forest/textShader.tree")).as(Shader.class);
+        this.shader = shader != null ? shader :
+                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "textShader.tree").toFile()).as(Shader.class);
 
         vbo = glGenBuffers();
         vao = glGenVertexArrays();
