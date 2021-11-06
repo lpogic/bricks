@@ -8,7 +8,7 @@ open module bricks {
 
     exports bricks;
     exports bricks.font;
-    exports bricks.graphic;
+    exports bricks.slab;
     exports bricks.image;
     exports bricks.input;
     exports bricks.trade;
@@ -17,4 +17,5 @@ open module bricks {
     exports bricks.wall;
     exports bricks.monitor;
     exports bricks.var.special;
+    exports bricks.slab.printer;
 }

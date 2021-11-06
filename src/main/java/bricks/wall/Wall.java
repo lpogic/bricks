@@ -1,30 +1,30 @@
 package bricks.wall;
 
 import bricks.Color;
-import bricks.Location;
 import bricks.font.FontManager;
 import bricks.image.ImageManager;
 import bricks.input.*;
+import bricks.slab.Shape;
+import bricks.slab.printer.Printer;
+import bricks.slab.printer.SlabPrinter;
 import bricks.trade.Contract;
 import bricks.trade.Host;
+import bricks.var.Pull;
 import bricks.var.Var;
-import bricks.var.Vars;
-import bricks.var.impulse.State;
-import bricks.var.special.Num;
+import bricks.var.special.NumPull;
 import bricks.var.special.NumSource;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 
 import suite.suite.Subject;
-import suite.suite.Suite;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static suite.suite.$uite.*;
 
-public abstract class Wall extends Brick<Host> {
+public abstract class Wall extends Brick<Host> implements Shape {
 
     static Subject $walls = $();
 
@@ -91,20 +91,18 @@ public abstract class Wall extends Brick<Host> {
 
     long glid;
 
-    protected WallPrinter printer;
+    protected SlabPrinter printer;
     protected Input input;
-    Num width;
-    Num height;
-    Var<Color> color;
-    State<String> title;
-    Brick<?> mouseRoot;
+    NumPull width;
+    NumPull height;
+    Pull<Color> color;
+    String title;
 
     protected void setup0(int width, int height, Color color, String title) {
-        this.width = Vars.num(width);
-        this.height = Vars.num(height);
-        this.color = Vars.set(color);
-        this.title = state(title, this::setTitle);
-        this.mouseRoot = this;
+        this.width = Var.num(width);
+        this.height = Var.num(height);
+        this.color = Var.pull(color);
+        this.title = title;
         glid = glfwCreateWindow(width, height, title, NULL, NULL);
         if (glid == NULL) throw new RuntimeException("Window based failed");
 
@@ -139,7 +137,7 @@ public abstract class Wall extends Brick<Host> {
                 .put(Story.class, new Story(20))
                 .put(FontManager.class, new FontManager())
                 .put(ImageManager.class, new ImageManager())
-                .put(Printer.class, printer = new WallPrinter(this))
+                .put(Printer.class, printer = new SlabPrinter(this))
         ;
     }
 
@@ -150,24 +148,23 @@ public abstract class Wall extends Brick<Host> {
         glfwSetKeyCallback(glid, input::reportKeyEvent);
         glfwSetCharModsCallback(glid, input::reportCharEvent);
         glfwSetWindowCloseCallback(glid, glid -> close());
-
-        when(title).then(() -> setTitle(title.get()));
     }
 
     protected void update_() {
         Color c = color.get();
         glClearColor(c.red(), c.green(), c.blue(), c.alpha());
-        printer.preparePrinters();
-        var crd = new Location.Cartesian();
-        crd.x().set(input.state.mouseCursorX());
-        crd.y().set(input.state.mouseCursorY());
-        mouseRoot.acceptMouse(crd);
+        printer.update();
+        update__();
         update();
         input.update();
     }
 
+    protected void update__() {}
+
     @Override
-    protected void frontUpdateAfter() {
+    public void update() {
+        super.update();
+
         if(input.getEvents(Key.Code.ESCAPE).anyTrue(Keyboard.KeyEvent::isRelease)) {
             close();
         }
@@ -186,7 +183,7 @@ public abstract class Wall extends Brick<Host> {
         return $();
     }
 
-    public Var<Color> color() {
+    public Pull<Color> color() {
         return color;
     }
 
@@ -231,13 +228,13 @@ public abstract class Wall extends Brick<Host> {
     }
 
     public void setTitle(String t) {
-        if(!t.equals(title.getState())) {
+        if(!t.equals(title)) {
             glfwSetWindowTitle(glid, t);
-            title.setState(t);
+            title = t;
         }
     }
 
-    public Var<String> title() {
+    public String getTitle() {
         return title;
     }
 
@@ -248,18 +245,6 @@ public abstract class Wall extends Brick<Host> {
     @Override
     protected Printer printer() {
         return printer;
-    }
-
-    public void trapMouse(Brick<?> brick) {
-        mouseRoot = brick;
-    }
-
-    public void freeMouse() {
-        mouseRoot = this;
-    }
-
-    public boolean mouseTrappedBy(Brick<?> brick) {
-        return mouseRoot == brick;
     }
 
     public void setCursor(Cursor.Face face) {
@@ -297,14 +282,6 @@ public abstract class Wall extends Brick<Host> {
 
     public String getClipboardString() {
         return glfwGetClipboardString(glid);
-    }
-
-    public void push(Brick<?> brick) {
-        $bricks.aimedSet(new Suite.Auto(), brick);
-    }
-
-    public void pop(Brick<?> brick) {
-        $bricks.unset(brick);
     }
 
     public Subject getBricks() {

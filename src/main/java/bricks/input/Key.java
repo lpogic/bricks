@@ -1,13 +1,13 @@
 package bricks.input;
 
-import bricks.var.SupVar;
+import bricks.var.SupplierPull;
 
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static suite.suite.$uite.$;
 
-public class Key extends SupVar<Key.Event> {
+public class Key extends SupplierPull<Key.Event> {
 
     public enum Code {
         SPACE(32, 0),

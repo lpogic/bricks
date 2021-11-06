@@ -38,8 +38,4 @@ public class Main extends Wall {
 //      when mouse left button willBe give button pressing, then system out print "Click!"
     }
 
-    @Override
-    public void frontUpdate() {
-
-    }
 }

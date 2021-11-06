@@ -2,14 +2,15 @@ package bricks.wall;
 
 import bricks.Located;
 import bricks.trade.Host;
-import bricks.var.Source;
-import bricks.var.special.NumSource;
 import suite.suite.Subject;
 
-public class FantomBrick extends Brick<Host> {
+public class FantomBrick extends Brick<Host> implements MouseClient {
+
+    protected CursorOver cursorOver;
 
     public FantomBrick(Host host) {
         super(host);
+        cursorOver = CursorOver.NO;
     }
 
     public Subject bricks() {
@@ -17,79 +18,25 @@ public class FantomBrick extends Brick<Host> {
     }
 
     @Override
-    protected void frontUpdate() {
-
-    }
-
-    @Override
-    public HasMouse acceptMouse(Located crd) {
-        HasMouse brickHasMouse = HasMouse.NO;
-        for(var mo : $bricks.reverse().selectAs(MouseObserver.class)) {
-            if(brickHasMouse != HasMouse.NO) mo.resetMouse();
-            else brickHasMouse = mo.acceptMouse(crd);
+    public CursorOver acceptCursor(Located crd) {
+        CursorOver brickCursorOver = CursorOver.NO;
+        for (var mo : $bricks.reverse().list().selectAs(MouseClient.class)) {
+            if (brickCursorOver != CursorOver.NO) mo.depriveCursor();
+            else brickCursorOver = mo.acceptCursor(crd);
         }
-        switch (brickHasMouse) {
-            case NO -> {
-                hasMouse.set(HasMouse.NO);
-                return HasMouse.NO;
-            }
-            default -> {
-                hasMouse.set(HasMouse.INDIRECT);
-                return HasMouse.INDIRECT;
-            }
+        return cursorOver = brickCursorOver == CursorOver.NO ? CursorOver.NO : CursorOver.INDIRECT;
+    }
+
+    @Override
+    public void depriveCursor() {
+        for(var mc : $bricks.list().selectAs(MouseClient.class)) {
+            mc.depriveCursor();
         }
+        cursorOver = CursorOver.NO;
     }
 
     @Override
-    public void resetMouse() {
-        for(var mo : $bricks.selectAs(MouseObserver.class)) {
-            mo.resetMouse();
-        }
-        hasMouse.set(HasMouse.NO);
-    }
-
-    @Override
-    public Source<HasMouse> hasMouse() {
-        return hasMouse;
-    }
-
-    @Override
-    public NumSource x() {
-        throw new RuntimeException("This is FantomBrick");
-    }
-
-    @Override
-    public NumSource y() {
-        throw new RuntimeException("This is FantomBrick");
-    }
-
-    @Override
-    public NumSource width() {
-        throw new RuntimeException("This is FantomBrick");
-    }
-
-    @Override
-    public NumSource height() {
-        throw new RuntimeException("This is FantomBrick");
-    }
-
-    @Override
-    public NumSource left() {
-        throw new RuntimeException("This is FantomBrick");
-    }
-
-    @Override
-    public NumSource right() {
-        throw new RuntimeException("This is FantomBrick");
-    }
-
-    @Override
-    public NumSource top() {
-        throw new RuntimeException("This is FantomBrick");
-    }
-
-    @Override
-    public NumSource bottom() {
-        throw new RuntimeException("This is FantomBrick");
+    public CursorOver cursorOver() {
+        return cursorOver;
     }
 }

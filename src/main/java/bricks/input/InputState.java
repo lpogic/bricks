@@ -1,5 +1,8 @@
 package bricks.input;
 
+import bricks.Located;
+import bricks.Location;
+
 import java.util.Arrays;
 
 public class InputState {
@@ -30,6 +33,10 @@ public class InputState {
 
     public double mouseCursorY() {
         return mouseCursorY;
+    }
+
+    public Located mouseCursor() {
+        return new Location.Cartesian(mouseCursorX, mouseCursorY);
     }
 
     public static InputState setKey(InputState state, Key.Code code, boolean newKeyState) {

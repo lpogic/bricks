@@ -1,6 +1,6 @@
 package bricks.font;
 
-import bricks.graphic.IOUtil;
+import bricks.slab.IOUtil;
 import org.lwjgl.stb.STBTTFontinfo;
 import suite.suite.util.Cascade;
 

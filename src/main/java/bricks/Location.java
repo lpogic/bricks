@@ -1,13 +1,12 @@
 package bricks;
 
-import bricks.trade.Contract;
-import bricks.var.Vars;
-import bricks.var.special.Num;
+import bricks.var.Var;
+import bricks.var.special.NumPull;
 
 public interface Location extends Located {
 
-    Num x();
-    Num y();
+    NumPull x();
+    NumPull y();
 
     default void aim(Located c) {
         x().let(c.x());
@@ -15,26 +14,26 @@ public interface Location extends Located {
     }
 
     class Cartesian implements Location {
-        Num x;
-        Num y;
+        NumPull x;
+        NumPull y;
 
         public Cartesian() {
-            x = Vars.num();
-            y = Vars.num();
+            x = Var.num();
+            y = Var.num();
         }
 
         public Cartesian(Number x, Number y) {
-            this.x = Vars.num(x);
-            this.y = Vars.num(y);
+            this.x = Var.num(x);
+            this.y = Var.num(y);
         }
 
         @Override
-        public Num x() {
+        public NumPull x() {
             return x;
         }
 
         @Override
-        public Num y() {
+        public NumPull y() {
             return y;
         }
 

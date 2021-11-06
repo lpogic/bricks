@@ -1,50 +1,28 @@
 package bricks.wall;
 
-import bricks.Located;
-import bricks.graphic.*;
+import bricks.slab.*;
 import bricks.input.*;
 import bricks.monitor.Monitor;
+import bricks.slab.printer.Printer;
 import bricks.trade.Agent;
 import bricks.trade.Host;
 import bricks.var.Source;
-import bricks.var.Var;
-import bricks.var.Vars;
 import bricks.var.impulse.Edge;
 import bricks.var.impulse.Impulse;
 import bricks.var.impulse.InequalityImpulse;
-import bricks.var.impulse.State;
 import suite.suite.Subject;
 import suite.suite.action.Action;
 import suite.suite.action.Statement;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 import static suite.suite.$uite.*;
 
 
-public abstract class Brick<W extends Host> extends Agent<W> implements
-        Updatable, MouseObserver, Rectangular {
-
-    @Override
-    public Subject order(Subject trade) {
-        if(trade.is(Class.class)) {
-            Class<?> type = trade.asExpected();
-            if(Director.class.equals(type)) {
-                return $(new Director() {
-                    @Override
-                    public void moveTop(Object o) {
-                        var $ = $bricks.take(o);
-                        if($.present()) {
-                            $bricks.alter($);
-                        }
-                    }
-                });
-            }
-        }
-        return getHost().order(trade);
-    }
+public abstract class Brick<W extends Host> extends Agent<W> implements Updatable {
 
     public class MonitorDeclaration {
         private final Impulse[] impulses;
@@ -122,9 +100,36 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
 
     protected Subject $bricks = $();
 
+
     public Brick(W host) {
         super(host);
-        hasMouse = Vars.set(HasMouse.NO);
+    }
+
+    public void lay(Object ... l) {
+        $bricks.setEntire(List.of(l));
+    }
+
+    public void drop(Object ... d) {
+        $bricks.unset(d);
+    }
+
+    @Override
+    public Subject order(Subject trade) {
+        if(trade.is(Class.class)) {
+            Class<?> type = trade.asExpected();
+            if(Director.class.equals(type)) {
+                return $(new Director() {
+                    @Override
+                    public void moveTop(Object o) {
+                        var $ = $bricks.take(o);
+                        if($.present()) {
+                            $bricks.alter($);
+                        }
+                    }
+                });
+            }
+        }
+        return getHost().order(trade);
     }
 
     protected Printer printer() {
@@ -155,20 +160,17 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         return new MonitorDeclaration(new InequalityImpulse<>(sup, sup.get()));
     }
 
-    public Subject when(Source<Boolean> bool, Statement rising, Statement falling) {
-        return $(
-                "rising", $(when(bool.willBe(Edge::rising)).then(rising)),
-                "falling", $(when(bool.willBe(Edge::falling)).then(falling)));
+    public <S> Monitor when(Supplier<S> sup, BiPredicate<S, S> constraint, Statement then) {
+        return when(Source.wrap(sup).willBe(constraint), then);
     }
 
-    public Subject when(Source<Boolean> bool, Statement rising, boolean useRising, Statement falling, boolean useFalling) {
-        return $(
-                "rising", $(when(bool.willBe(Edge::rising)).then(rising, useRising)),
-                "falling", $(when(bool.willBe(Edge::falling)).then(falling, useFalling)));
+    public void when(Source<Boolean> bool, Statement goesTrue, Statement goesFalse) {
+        when(bool.willBe(Edge::rising)).then(goesTrue);
+        when(bool.willBe(Edge::falling)).then(goesFalse);
     }
 
-    public Monitor when(Source<Boolean> bool, Statement rising) {
-        return when(bool.willBe(Edge::rising)).then(rising);
+    public Monitor when(Source<Boolean> bool, Statement goesTrue) {
+        return when(bool.willBe(Edge::rising)).then(goesTrue);
     }
 
     public Monitor when(Impulse impulse, Statement then) {
@@ -187,15 +189,8 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
         return when(sup).then(then, use);
     }
 
-    protected<T> State<T> state(T init, Consumer<T> manual) {
-        State<T> state = new State<>(init);
-        when(state.signal(), () -> manual.accept(state.getInput()));
-        return state;
-    }
-
     @Override
-    final public void update() {
-        frontUpdate();
+    public void update() {
         Printer printer = null;
         var $processed = $();
         for(var $ : $bricks.list()) {
@@ -212,52 +207,5 @@ public abstract class Brick<W extends Host> extends Agent<W> implements
                 }
             }
         }
-        frontUpdateAfter();
     }
-
-    protected abstract void frontUpdate();
-    protected void frontUpdateAfter() {}
-
-    protected final Var<HasMouse> hasMouse;
-    @Override
-    public HasMouse acceptMouse(Located crd) {
-        HasMouse brickHasMouse = HasMouse.NO;
-        for(var mo : $bricks.reverse().selectAs(MouseObserver.class)) {
-            if(brickHasMouse != HasMouse.NO) mo.resetMouse();
-            else brickHasMouse = mo.acceptMouse(crd);
-        }
-        switch (brickHasMouse) {
-            case NO -> {
-                if(contains(crd)) {
-                    hasMouse.set(HasMouse.DIRECT);
-                    return HasMouse.DIRECT;
-                } else {
-                    hasMouse.set(HasMouse.NO);
-                    return HasMouse.NO;
-                }
-            }
-            default -> {
-                hasMouse.set(HasMouse.INDIRECT);
-                return HasMouse.INDIRECT;
-            }
-            // case DIRECT / INDIRECT but contains() == false ?
-        }
-    }
-
-    @Override
-    public void resetMouse() {
-        for(var $ : $bricks) {
-            if($.is(MouseObserver.class)) {
-                MouseObserver mouseObserver = $.asExpected();
-                mouseObserver.resetMouse();
-            }
-        }
-        hasMouse.set(HasMouse.NO);
-    }
-
-    @Override
-    public Source<HasMouse> hasMouse() {
-        return hasMouse;
-    }
-
 }
