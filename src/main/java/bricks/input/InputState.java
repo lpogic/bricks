@@ -2,6 +2,8 @@ package bricks.input;
 
 import bricks.Located;
 import bricks.Location;
+import bricks.input.keyboard.Key;
+import bricks.input.mouse.MouseButton;
 
 import java.util.Arrays;
 
@@ -22,7 +24,7 @@ public class InputState {
         return (keybits[offset / 32] & (1 << (offset % 32))) != 0;
     }
 
-    public boolean isPressed(Mouse.Button.Code code) {
+    public boolean isPressed(MouseButton.Code code) {
         var offset = code.getKeybit();
         return (keybits[offset / 32] & (1 << (offset % 32))) != 0;
     }
@@ -43,7 +45,7 @@ public class InputState {
         return setKeybit(state, code.getKeybit(), newKeyState);
     }
 
-    public static InputState setButton(InputState state, Mouse.Button.Code code, boolean newButtonState) {
+    public static InputState setButton(InputState state, MouseButton.Code code, boolean newButtonState) {
         return setKeybit(state, code.getKeybit(), newButtonState);
     }
 

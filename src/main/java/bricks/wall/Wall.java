@@ -4,6 +4,9 @@ import bricks.Color;
 import bricks.font.FontManager;
 import bricks.image.ImageManager;
 import bricks.input.*;
+import bricks.input.keyboard.Key;
+import bricks.input.keyboard.Keyboard;
+import bricks.input.mouse.Cursor;
 import bricks.slab.Shape;
 import bricks.slab.printer.Printer;
 import bricks.slab.printer.SlabPrinter;
@@ -156,6 +159,7 @@ public abstract class Wall extends Brick<Host> implements Shape {
         printer.update();
         update__();
         update();
+        print();
         input.update();
     }
 

@@ -1,4 +1,7 @@
-package bricks.input;
+package bricks.input.keyboard;
+
+import bricks.input.InputEvent;
+import bricks.input.InputState;
 
 import static org.lwjgl.glfw.GLFW.*;
 

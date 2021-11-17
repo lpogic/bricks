@@ -1,4 +1,4 @@
-package bricks.input;
+package bricks.input.mouse;
 
 import static org.lwjgl.glfw.GLFW.*;
 

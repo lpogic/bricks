@@ -18,4 +18,6 @@ open module bricks {
     exports bricks.monitor;
     exports bricks.var.special;
     exports bricks.slab.printer;
+    exports bricks.input.mouse;
+    exports bricks.input.keyboard;
 }

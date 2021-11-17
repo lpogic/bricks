@@ -13,6 +13,10 @@ import java.util.function.Supplier;
 
 public interface Var<V> extends Source<V>, Target<V>{
 
+    static<T> Pull<T> pull() {
+        return new SupplierPull<>();
+    }
+
     static<T> Pull<T> pull(T t) {
         return new SupplierPull<>(t);
     }

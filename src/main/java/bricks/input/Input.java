@@ -1,5 +1,9 @@
 package bricks.input;
 
+import bricks.input.keyboard.Key;
+import bricks.input.keyboard.Keyboard;
+import bricks.input.mouse.MouseButton;
+import bricks.input.mouse.Mouse;
 import bricks.wall.Updatable;
 import suite.suite.Subject;
 import suite.suite.util.Sequence;
@@ -28,8 +32,8 @@ public class Input implements Updatable {
     }
 
     public void reportMouseButtonEvent(long glid, int button, int action, int modifiers) {
-        Mouse.Button.Event event = new Mouse.Button.Event(action, modifiers);
-        Mouse.Button.Code code = Mouse.Button.Code.valueOf(button);
+        MouseButton.Event event = new MouseButton.Event(action, modifiers);
+        MouseButton.Code code = MouseButton.Code.valueOf(button);
         $events.set(new Mouse.ButtonEvent(code, event, state));
         if(action == GLFW_PRESS) {
             state = InputState.setButton(state, code, true);
@@ -75,7 +79,7 @@ public class Input implements Updatable {
         return getEvents().select(Keyboard.KeyEvent.class, e -> e.key == code);
     }
 
-    public Sequence<Mouse.ButtonEvent> getEvents(Mouse.Button.Code code) {
+    public Sequence<Mouse.ButtonEvent> getEvents(MouseButton.Code code) {
         return getEvents().select(Mouse.ButtonEvent.class, e -> e.button == code);
     }
 }

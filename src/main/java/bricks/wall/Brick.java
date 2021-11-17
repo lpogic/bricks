@@ -15,7 +15,6 @@ import suite.suite.action.Action;
 import suite.suite.action.Statement;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
@@ -105,12 +104,28 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
         super(host);
     }
 
+    public void lay(Object l) {
+        $bricks.set(l);
+    }
+
     public void lay(Object ... l) {
-        $bricks.setEntire(List.of(l));
+        for(var o : l) lay(o);
+    }
+
+    public void drop(Object d) {
+        $bricks.unset(d);
     }
 
     public void drop(Object ... d) {
-        $bricks.unset(d);
+        for(var o : d) drop(o);
+    }
+
+    public void dropAll() {
+        $bricks.unset();
+    }
+
+    public Subject bricks() {
+        return $bricks;
     }
 
     @Override
@@ -191,21 +206,23 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
 
     @Override
     public void update() {
-        Printer printer = null;
         var $processed = $();
-        for(var $ : $bricks.list()) {
-            if($processed.absent($.raw())) {
-                $processed.set($.raw());
-                if ($.is(Printable.class)) {
-                    Printable printable = $.asExpected();
-                    if (printer == null) printer = printer();
-                    printer.print(printable);
-                }
-                if ($.is(Updatable.class)) {
-                    Updatable updatable = $.asExpected();
-                    updatable.update();
-                }
+        for(var b : $bricks.reverse().each()) {
+            if($processed.absent(b)) {
+                $processed.set(b);
+                if(b instanceof Updatable updatable) updatable.update();
             }
+        }
+    }
+
+    public void print() {
+        Printer printer = null;
+        for(var b : $bricks.each()) {
+            if(b instanceof Printable printable) {
+                if (printer == null) printer = printer();
+                printer.print(printable);
+            }
+            if(b instanceof Brick brick) brick.print();
         }
     }
 }

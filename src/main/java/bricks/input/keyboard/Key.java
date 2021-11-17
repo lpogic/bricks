@@ -1,4 +1,4 @@
-package bricks.input;
+package bricks.input.keyboard;
 
 import bricks.var.SupplierPull;
 
