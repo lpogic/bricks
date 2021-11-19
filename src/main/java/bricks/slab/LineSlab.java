@@ -6,7 +6,7 @@ import bricks.trade.Guest;
 import bricks.trade.Host;
 import bricks.var.Pull;
 import bricks.var.Var;
-import bricks.var.special.NumPull;
+import bricks.var.num.NumPull;
 
 public class LineSlab extends Guest<Host> implements Printable {
 

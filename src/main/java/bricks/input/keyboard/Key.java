@@ -1,13 +1,13 @@
 package bricks.input.keyboard;
 
-import bricks.var.SupplierPull;
+import bricks.var.SupplierBasedPull;
 
 import suite.suite.Subject;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static suite.suite.$uite.$;
 
-public class Key extends SupplierPull<Key.Event> {
+public class Key extends SupplierBasedPull<Key.Event> {
 
     public enum Code {
         SPACE(32, 0),

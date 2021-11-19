@@ -2,8 +2,8 @@ package bricks.slab;
 
 import bricks.Located;
 import bricks.Sized;
-import bricks.var.special.NumPull;
-import bricks.var.special.NumSource;
+import bricks.var.num.NumPull;
+import bricks.var.num.NumSource;
 
 public interface Shape extends Sized, Located {
 

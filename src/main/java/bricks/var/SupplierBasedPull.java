@@ -2,19 +2,19 @@ package bricks.var;
 
 import java.util.function.Supplier;
 
-public class SupplierPull<T> implements Pull<T> {
+public class SupplierBasedPull<T> implements Pull<T> {
 
     Supplier<T> supplier;
 
-    public SupplierPull() {
+    public SupplierBasedPull() {
         set(null);
     }
 
-    public SupplierPull(T value) {
+    public SupplierBasedPull(T value) {
         set(value);
     }
 
-    public SupplierPull(Supplier<T> supplier) {
+    public SupplierBasedPull(Supplier<T> supplier) {
         this.supplier = supplier;
     }
 

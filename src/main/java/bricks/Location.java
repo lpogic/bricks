@@ -1,7 +1,7 @@
 package bricks;
 
 import bricks.var.Var;
-import bricks.var.special.NumPull;
+import bricks.var.num.NumPull;
 
 public interface Location extends Located {
 

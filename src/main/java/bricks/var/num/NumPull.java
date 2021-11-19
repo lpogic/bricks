@@ -1,4 +1,4 @@
-package bricks.var.special;
+package bricks.var.num;
 
 import bricks.var.ReactivePull;
 import bricks.var.Pull;

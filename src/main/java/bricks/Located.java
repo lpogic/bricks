@@ -1,6 +1,6 @@
 package bricks;
 
-import bricks.var.special.NumSource;
+import bricks.var.num.NumSource;
 
 public interface Located {
     NumSource x();

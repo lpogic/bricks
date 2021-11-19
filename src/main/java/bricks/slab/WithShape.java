@@ -1,7 +1,7 @@
 package bricks.slab;
 
 import bricks.Located;
-import bricks.var.special.NumSource;
+import bricks.var.num.NumSource;
 
 public interface WithShape extends Shape {
     Shape getShape();

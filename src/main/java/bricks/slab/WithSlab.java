@@ -1,6 +1,6 @@
 package bricks.slab;
 
-import bricks.var.special.NumPull;
+import bricks.var.num.NumPull;
 
 public interface WithSlab extends Slab, WithShape {
     Slab getShape();

@@ -1,6 +1,6 @@
 package bricks;
 
-import bricks.var.special.NumSource;
+import bricks.var.num.NumSource;
 
 import java.util.function.Supplier;
 

@@ -1,4 +1,4 @@
-package bricks.var.special;
+package bricks.var.num;
 
 import java.util.function.Supplier;
 

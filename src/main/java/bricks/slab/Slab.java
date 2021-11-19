@@ -3,7 +3,7 @@ package bricks.slab;
 import bricks.Located;
 import bricks.Sized;
 import bricks.var.Var;
-import bricks.var.special.NumPull;
+import bricks.var.num.NumPull;
 
 import java.util.function.Supplier;
 

@@ -1,32 +1,29 @@
 package bricks.var;
 
-import bricks.var.special.NumPull;
-import bricks.var.special.NumReactivePull;
-import bricks.var.special.SupplierNumPull;
+import bricks.var.num.NumPull;
+import bricks.var.num.NumReactivePull;
+import bricks.var.num.SupplierNumPull;
 import suite.suite.Subject;
 import suite.suite.Suite;
-import suite.suite.action.Statement;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface Var<V> extends Source<V>, Target<V>{
 
     static<T> Pull<T> pull() {
-        return new SupplierPull<>();
+        return new SupplierBasedPull<>();
     }
 
     static<T> Pull<T> pull(T t) {
-        return new SupplierPull<>(t);
+        return new SupplierBasedPull<>(t);
     }
 
     static<T> Pull<T> let() {
-        return new SupplierPull<>();
+        return new SupplierBasedPull<>();
     }
 
     static<T> Pull<T> let(Supplier<T> supplier) {
-        var v = new SupplierPull<T>();
+        var v = new SupplierBasedPull<T>();
         v.let(supplier);
         return v;
     }
@@ -40,11 +37,11 @@ public interface Var<V> extends Source<V>, Target<V>{
     }
 
     static<T> Push<T> push() {
-        return new SubjectPush<>();
+        return new SubjectBasedPush<>(null);
     }
 
     static<T> Push<T> push(T t) {
-        return new SubjectPush<>(t);
+        return new SubjectBasedPush<>(t);
     }
 
     static NumPull num() {
