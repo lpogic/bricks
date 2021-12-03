@@ -144,6 +144,10 @@ public abstract class Wall extends Brick<Host> implements Shape {
         ;
     }
 
+    protected void resources(Subject res) {
+        $resources.alter(res);
+    }
+
     protected void setup1() {
         glfwSetCursorPosCallback(glid, input::reportMousePositionEvent);
         glfwSetMouseButtonCallback(glid, input::reportMouseButtonEvent);
