@@ -14,6 +14,7 @@ open module bricks {
     exports bricks.trade;
     exports bricks.var;
     exports bricks.var.impulse;
+    exports bricks.var.subject;
     exports bricks.wall;
     exports bricks.monitor;
     exports bricks.var.num;

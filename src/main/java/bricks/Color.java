@@ -68,7 +68,7 @@ public record Color(float red, float green, float blue, float alpha) {
 
     @Override
     public String toString() {
-        return String.format("@[Color]red[%s]green[%s]blue[%s]", red, green,blue);
+        return String.format("@Color[red[%s]green[%s]blue[%s]alpha[%s]]", red, green,blue, alpha);
     }
 
 }
