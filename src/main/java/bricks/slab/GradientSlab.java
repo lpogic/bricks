@@ -6,6 +6,8 @@ import bricks.trade.Host;
 import bricks.var.Pull;
 import bricks.var.Var;
 
+import java.util.function.Supplier;
+
 public class GradientSlab extends Guest<Host> implements WithSlab, Printable {
 
     final Centroid body;
@@ -42,5 +44,65 @@ public class GradientSlab extends Guest<Host> implements WithSlab, Printable {
 
     public Pull<Color> colorRightBottom() {
         return colorRightBottom;
+    }
+
+    public Pull<Color> colorTop() {
+        return new Pull<>() {
+            @Override
+            public void let(Supplier<Color> s) {
+                colorLeftTop.let(s);
+                colorRightTop.let(s);
+            }
+
+            @Override
+            public Color get() {
+                return colorLeftTop.get();
+            }
+        };
+    }
+
+    public Pull<Color> colorBottom() {
+        return new Pull<>() {
+            @Override
+            public void let(Supplier<Color> s) {
+                colorLeftBottom.let(s);
+                colorRightBottom.let(s);
+            }
+
+            @Override
+            public Color get() {
+                return colorLeftBottom.get();
+            }
+        };
+    }
+
+    public Pull<Color> colorLeft() {
+        return new Pull<>() {
+            @Override
+            public void let(Supplier<Color> s) {
+                colorLeftTop.let(s);
+                colorLeftBottom.let(s);
+            }
+
+            @Override
+            public Color get() {
+                return colorLeftTop.get();
+            }
+        };
+    }
+
+    public Pull<Color> colorRight() {
+        return new Pull<>() {
+            @Override
+            public void let(Supplier<Color> s) {
+                colorRightTop.let(s);
+                colorRightBottom.let(s);
+            }
+
+            @Override
+            public Color get() {
+                return colorRightTop.get();
+            }
+        };
     }
 }

@@ -207,7 +207,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
     @Override
     public void update() {
         var $processed = $();
-        for(var b : $bricks.reverse().each()) {
+        for(var b : bricks().reverse().each()) {
             if($processed.absent(b)) {
                 $processed.set(b);
                 if(b instanceof Updatable updatable) updatable.update();
@@ -217,7 +217,7 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
 
     public void print() {
         Printer printer = null;
-        for(var b : $bricks.each()) {
+        for(var b : bricks().each()) {
             if(b instanceof Printable printable) {
                 if (printer == null) printer = printer();
                 printer.print(printable);

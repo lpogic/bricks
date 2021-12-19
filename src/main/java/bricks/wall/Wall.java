@@ -169,12 +169,26 @@ public abstract class Wall extends Brick<Host> implements Shape {
 
     protected void update__() {}
 
+    boolean escapeDown = false;
+
     @Override
     public void update() {
         super.update();
 
-        if(input.getEvents(Key.Code.ESCAPE).anyTrue(Keyboard.KeyEvent::isRelease)) {
-            close();
+        if(escapeDown) {
+            for(var e : input.getEvents(true)) {
+                if(e instanceof Keyboard.KeyEvent ke && ke.key == Key.Code.ESCAPE) {
+                    if(ke.isRelease() && !e.suppressed()) {
+                        close();
+                    } else {
+                        escapeDown = false;
+                    }
+                }
+            }
+        } else {
+            if(input.getEvents(Key.Code.ESCAPE).anyTrue(Keyboard.KeyEvent::isPress)) {
+                escapeDown = true;
+            }
         }
     }
 

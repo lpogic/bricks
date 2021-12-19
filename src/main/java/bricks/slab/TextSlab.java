@@ -22,6 +22,7 @@ public class TextSlab extends Guest<Host> implements Shape, Printable {
     final NumSource width;
     final NumPull left;
     final NumPull bottom;
+    boolean hideEol;
 
     public TextSlab(Host host) {
         super(host);
@@ -31,11 +32,12 @@ public class TextSlab extends Guest<Host> implements Shape, Printable {
 
         height = Var.num(20);
         width = Var.num(() -> order(FontManager.class).getFont(font.get())
-                        .getStringWidth(text.get(), height.get().floatValue()),
+                        .getStringWidth(text.get(), height.get().floatValue(), hideEol),
                 text, height, font);
 
         left = Var.num(400);
         bottom = Var.num(300);
+        hideEol = true;
     }
 
     public NumPull height() {
@@ -91,7 +93,7 @@ public class TextSlab extends Guest<Host> implements Shape, Printable {
 
             @Override
             public Number get() {
-                return left.getFloat() + width.getFloat();
+                return left.getFloat() + width.getFloat() / 2;
             }
         };
     }
@@ -125,5 +127,13 @@ public class TextSlab extends Guest<Host> implements Shape, Printable {
     public void aim(Located p) {
         x().let(p.x());
         y().let(p.y());
+    }
+
+    public boolean isHideEol() {
+        return hideEol;
+    }
+
+    public void setHideEol(boolean hideEol) {
+        this.hideEol = hideEol;
     }
 }

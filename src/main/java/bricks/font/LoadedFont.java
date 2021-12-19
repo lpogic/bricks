@@ -70,13 +70,14 @@ public class LoadedFont {
         return trueType;
     }
 
-    public float getStringWidth(String text, float fontHeight) {
+    public float getStringWidth(String text, float fontHeight, boolean skipEol) {
         int width = 0;
 //        int lastCp = 0;
         int[] advancedWidth = new int[1];
         int[] leftSideBearing = new int[1];
         Cascade<Integer> ci = new Cascade<>(text.chars().iterator());
         for(int cp : ci) {
+            if(cp == '\n' && skipEol) continue;
             stbtt_GetCodepointHMetrics(fontInfo, cp, advancedWidth, leftSideBearing);
             width += advancedWidth[0];
 //            if(isKerningEnabled()) {
@@ -90,7 +91,7 @@ public class LoadedFont {
         return width * stbtt_ScaleForPixelHeight(fontInfo, fontHeight);
     }
 
-    public int getCursorPosition(String text, float fontHeight, float textX, float testX) {
+    public int getCursorPosition(String text, float fontHeight, float textX, float testX, boolean skipEol) {
         int[] advancedWidth = new int[1];
         int[] leftSideBearing = new int[1];
         Cascade<Integer> ci = new Cascade<>(text.chars().iterator());
@@ -100,6 +101,7 @@ public class LoadedFont {
         int position = 0;
 
         for(int cp : ci) {
+            if(cp == '\n' && skipEol) continue;
             stbtt_GetCodepointHMetrics(fontInfo, cp, advancedWidth, leftSideBearing);
             if(tX + advancedWidth[0] / 2f > x) return position;
             tX += advancedWidth[0];

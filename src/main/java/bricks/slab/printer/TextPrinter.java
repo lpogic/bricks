@@ -13,6 +13,7 @@ import org.lwjgl.stb.STBTTAlignedQuad;
 import suite.suite.util.Cascade;
 
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -92,6 +93,7 @@ public class TextPrinter extends Guest<Host> {
         Cascade<Integer> codePoints = new Cascade<>(txt.codePoints().iterator());
 
         for(int codePoint : codePoints) {
+            if(codePoint == '\n' && text.isHideEol()) continue;
             CharacterTexture charTex = font.getCharacterTexture(codePoint);
             float xRef = X[0];
             float yRef = Y[0];
@@ -144,6 +146,7 @@ public class TextPrinter extends Guest<Host> {
 
         int resultIndex = 0;
         for(int codePoint : codePoints) {
+            if(codePoint == '\n' && text.isHideEol()) continue;
             CharacterTexture charTex = font.getCharacterTexture(codePoint);
             float xRef = X[0];
 
