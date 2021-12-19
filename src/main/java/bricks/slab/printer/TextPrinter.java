@@ -5,6 +5,7 @@ import bricks.Color;
 import bricks.font.BackedFont;
 import bricks.font.CharacterTexture;
 import bricks.font.FontManager;
+import bricks.slab.TextRectSlab;
 import bricks.slab.TextSlab;
 import bricks.slab.Shader;
 import bricks.trade.Guest;
@@ -86,6 +87,11 @@ public class TextPrinter extends Guest<Host> {
         X[0] = left;
         Y[0] = bottom;
 
+//        float rectRight = -1;
+//        if(text instanceof TextRectSlab trs) {
+//            rectRight = trs.right().getFloat();
+//        }
+
         glBindVertexArray(vao);
 
         STBTTAlignedQuad quad = STBTTAlignedQuad.create();
@@ -107,16 +113,18 @@ public class TextPrinter extends Guest<Host> {
             float y1 = wallHeight - scale(quad.y1(), yRef, scale);
             X[0] = scale(X[0], xRef, scale);
 
-            float[] vertices = new float[] {
-                    x0, y0, x1, y1,
-                    quad.s0(), quad.t0(), quad.s1(), quad.t1(),
-            };
+//            if(rectRight >= 0 && x1 <= rectRight) {
+                float[] vertices = new float[]{
+                        x0, y0, x1, y1,
+                        quad.s0(), quad.t0(), quad.s1(), quad.t1(),
+                };
 
-            glBindTexture(GL_TEXTURE_2D, charTex.getTextureGlid());
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
-            glDrawArrays(GL_POINTS, 0, 1);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+                glBindTexture(GL_TEXTURE_2D, charTex.getTextureGlid());
+                glBindBuffer(GL_ARRAY_BUFFER, vbo);
+                glBufferSubData(GL_ARRAY_BUFFER, 0, vertices);
+                glDrawArrays(GL_POINTS, 0, 1);
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
+//            } else break;
         }
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);
