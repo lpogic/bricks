@@ -1,6 +1,6 @@
-package bricks.var.impulse;
+package bricks.trait.sensor;
 
-public class Constant implements Impulse {
+public class Constant implements Sensor {
 
     private static final Constant instance = new Constant();
 
@@ -9,7 +9,7 @@ public class Constant implements Impulse {
     }
 
     @Override
-    public boolean occur() {
+    public boolean check() {
         return false;
     }
 }

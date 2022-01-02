@@ -1,4 +1,4 @@
-package bricks.var.subject;
+package bricks.trait.subject;
 
 import suite.suite.Subject;
 

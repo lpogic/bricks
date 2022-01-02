@@ -1,15 +1,15 @@
-package bricks.var.impulse;
+package bricks.trait.sensor;
 
 import java.util.function.Supplier;
 
-public class DiversityImpulse<C> extends DifferentialImpulse<C> {
+public class DiversitySensor<C> extends DifferentialSensor<C> {
 
-    public DiversityImpulse(Supplier<C> supplier, C cache) {
+    public DiversitySensor(Supplier<C> supplier, C cache) {
         super(supplier, cache);
     }
 
     @Override
-    public boolean occur() {
+    public boolean check() {
         C o = supplier.get();
         if(o == cache) {
             return false;

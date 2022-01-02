@@ -1,4 +1,4 @@
-package bricks.var;
+package bricks.trait;
 
 import java.util.function.Consumer;
 

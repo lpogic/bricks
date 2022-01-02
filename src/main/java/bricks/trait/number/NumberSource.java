@@ -1,10 +1,10 @@
-package bricks.var.num;
+package bricks.trait.number;
 
-import bricks.var.Source;
+import bricks.trait.Source;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface NumSource extends Source<Number> {
+public interface NumberSource extends Source<Number> {
 
     default float getFloat() {
         return get().floatValue();
@@ -25,15 +25,15 @@ public interface NumSource extends Source<Number> {
         return get().shortValue();
     }
 
-    default NumSource perFloat(Function<Float, Number> per) {
+    default NumberSource perFloat(Function<Float, Number> per) {
         return () -> per.apply(getFloat());
     }
 
-    default NumSource scale(Number scale) {
+    default NumberSource scale(Number scale) {
         return () -> getFloat() * scale.floatValue();
     }
 
-    default NumSource plus(Number add) {
+    default NumberSource plus(Number add) {
         return () -> getFloat() + add.floatValue();
     }
 }

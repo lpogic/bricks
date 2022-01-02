@@ -12,10 +12,10 @@ import bricks.slab.printer.Printer;
 import bricks.slab.printer.SlabPrinter;
 import bricks.trade.Contract;
 import bricks.trade.Host;
-import bricks.var.Pull;
-import bricks.var.Var;
-import bricks.var.num.NumPull;
-import bricks.var.num.NumSource;
+import bricks.trait.Trait;
+import bricks.trait.Traits;
+import bricks.trait.number.NumberTrait;
+import bricks.trait.number.NumberSource;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
@@ -96,15 +96,15 @@ public abstract class Wall extends Brick<Host> implements Shape {
 
     protected SlabPrinter printer;
     protected Input input;
-    NumPull width;
-    NumPull height;
-    Pull<Color> color;
+    NumberTrait width;
+    NumberTrait height;
+    Trait<Color> color;
     String title;
 
     protected void setup0(int width, int height, Color color, String title) {
-        this.width = Var.num(width);
-        this.height = Var.num(height);
-        this.color = Var.pull(color);
+        this.width = Traits.num(width);
+        this.height = Traits.num(height);
+        this.color = Traits.set(color);
         this.title = title;
         glid = glfwCreateWindow(width, height, title, NULL, NULL);
         if (glid == NULL) throw new RuntimeException("Window based failed");
@@ -205,47 +205,47 @@ public abstract class Wall extends Brick<Host> implements Shape {
         return $();
     }
 
-    public Pull<Color> color() {
+    public Trait<Color> color() {
         return color;
     }
 
     @Override
-    public NumSource width() {
+    public NumberSource width() {
         return width;
     }
 
     @Override
-    public NumSource height() {
+    public NumberSource height() {
         return height;
     }
 
     @Override
-    public NumSource x() {
+    public NumberSource x() {
         return () -> width.getFloat() / 2;
     }
 
     @Override
-    public NumSource y() {
+    public NumberSource y() {
         return () -> height.getFloat() / 2;
     }
 
     @Override
-    public NumSource left() {
+    public NumberSource left() {
         return () -> 0;
     }
 
     @Override
-    public NumSource right() {
+    public NumberSource right() {
         return width;
     }
 
     @Override
-    public NumSource top() {
+    public NumberSource top() {
         return () -> 0;
     }
 
     @Override
-    public NumSource bottom() {
+    public NumberSource bottom() {
         return height;
     }
 

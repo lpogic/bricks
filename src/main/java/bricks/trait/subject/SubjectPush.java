@@ -1,24 +1,25 @@
-package bricks.var.subject;
+package bricks.trait.subject;
 
-import bricks.var.Push;
-import bricks.var.Var;
+import bricks.trait.Push;
+import bricks.trait.Trait;
+import bricks.trait.Traits;
 import suite.suite.SolidSubject;
 import suite.suite.Subject;
 
 public class SubjectPush extends SolidSubject {
 
     private int openedActions;
-    private final Push<Long> pusher;
+    private final Trait<Long> pusher;
 
     public SubjectPush() {
         super();
-        pusher = Var.push();
+        pusher = Traits.set();
         openedActions = 0;
     }
 
     public SubjectPush(Subject subject) {
         super(subject);
-        pusher = Var.push();
+        pusher = Traits.set();
         openedActions = 0;
     }
 

@@ -3,26 +3,29 @@ package bricks.slab;
 import bricks.Color;
 import bricks.trade.Guest;
 import bricks.trade.Host;
-import bricks.var.Pull;
-import bricks.var.Var;
+import bricks.trait.Pull;
+import bricks.trait.PullVar;
+import bricks.trait.Trait;
+import bricks.trait.Traits;
+import suite.suite.action.Statement;
 
 import java.util.function.Supplier;
 
 public class GradientSlab extends Guest<Host> implements WithSlab, Printable {
 
     final Centroid body;
-    final Pull<Color> colorLeftTop;
-    final Pull<Color> colorLeftBottom;
-    final Pull<Color> colorRightTop;
-    final Pull<Color> colorRightBottom;
+    final Trait<Color> colorLeftTop;
+    final Trait<Color> colorLeftBottom;
+    final Trait<Color> colorRightTop;
+    final Trait<Color> colorRightBottom;
 
     public GradientSlab(Host host) {
         super(host);
         body = new Centroid();
-        colorLeftTop = Var.pull(Color.PURE_GREEN);
-        colorLeftBottom = Var.pull(Color.PURE_GREEN);
-        colorRightTop = Var.pull(Color.PURE_GREEN);
-        colorRightBottom = Var.pull(Color.PURE_GREEN);
+        colorLeftTop = Traits.set(Color.PURE_GREEN);
+        colorLeftBottom = Traits.set(Color.PURE_GREEN);
+        colorRightTop = Traits.set(Color.PURE_GREEN);
+        colorRightBottom = Traits.set(Color.PURE_GREEN);
     }
 
     @Override
@@ -30,24 +33,24 @@ public class GradientSlab extends Guest<Host> implements WithSlab, Printable {
         return body;
     }
 
-    public Pull<Color> colorLeftTop() {
+    public Trait<Color> colorLeftTop() {
         return colorLeftTop;
     }
 
-    public Pull<Color> colorLeftBottom() {
+    public Trait<Color> colorLeftBottom() {
         return colorLeftBottom;
     }
 
-    public Pull<Color> colorRightTop() {
+    public Trait<Color> colorRightTop() {
         return colorRightTop;
     }
 
-    public Pull<Color> colorRightBottom() {
+    public Trait<Color> colorRightBottom() {
         return colorRightBottom;
     }
 
-    public Pull<Color> colorTop() {
-        return new Pull<>() {
+    public PullVar<Color> colorTop() {
+        return new PullVar<>() {
             @Override
             public void let(Supplier<Color> s) {
                 colorLeftTop.let(s);
@@ -61,8 +64,8 @@ public class GradientSlab extends Guest<Host> implements WithSlab, Printable {
         };
     }
 
-    public Pull<Color> colorBottom() {
-        return new Pull<>() {
+    public PullVar<Color> colorBottom() {
+        return new PullVar<>() {
             @Override
             public void let(Supplier<Color> s) {
                 colorLeftBottom.let(s);
@@ -76,8 +79,8 @@ public class GradientSlab extends Guest<Host> implements WithSlab, Printable {
         };
     }
 
-    public Pull<Color> colorLeft() {
-        return new Pull<>() {
+    public PullVar<Color> colorLeft() {
+        return new PullVar<>() {
             @Override
             public void let(Supplier<Color> s) {
                 colorLeftTop.let(s);
@@ -91,8 +94,8 @@ public class GradientSlab extends Guest<Host> implements WithSlab, Printable {
         };
     }
 
-    public Pull<Color> colorRight() {
-        return new Pull<>() {
+    public PullVar<Color> colorRight() {
+        return new PullVar<>() {
             @Override
             public void let(Supplier<Color> s) {
                 colorRightTop.let(s);

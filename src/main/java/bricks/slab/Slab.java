@@ -2,21 +2,21 @@ package bricks.slab;
 
 import bricks.Located;
 import bricks.Sized;
-import bricks.var.Var;
-import bricks.var.num.NumPull;
+import bricks.trait.Traits;
+import bricks.trait.number.NumberTrait;
 
 import java.util.function.Supplier;
 
 public interface Slab extends Shape {
 
-    NumPull width();
-    NumPull height();
-    NumPull left();
-    NumPull right();
-    NumPull top();
-    NumPull bottom();
-    NumPull x();
-    NumPull y();
+    NumberTrait width();
+    NumberTrait height();
+    NumberTrait left();
+    NumberTrait right();
+    NumberTrait top();
+    NumberTrait bottom();
+    NumberTrait x();
+    NumberTrait y();
 
     default void aim(Located p) {
         x().let(p.x());
@@ -34,28 +34,28 @@ public interface Slab extends Shape {
     }
 
     class Centroid implements Slab {
-        final NumPull x;
-        final NumPull y;
-        final NumPull width;
-        final NumPull height;
+        final NumberTrait x;
+        final NumberTrait y;
+        final NumberTrait width;
+        final NumberTrait height;
 
         public Centroid() {
-            x = Var.num(400);
-            y = Var.num(300);
-            width = Var.num(100);
-            height = Var.num(100);
+            x = Traits.num(400);
+            y = Traits.num(300);
+            width = Traits.num(100);
+            height = Traits.num(100);
         }
 
-        public NumPull width() {
+        public NumberTrait width() {
             return width;
         }
 
-        public NumPull height() {
+        public NumberTrait height() {
             return height;
         }
 
-        public NumPull left() {
-            return new NumPull() {
+        public NumberTrait left() {
+            return new NumberTrait() {
                 @Override
                 public void let(Supplier<Number> s) {
                     x.let(() -> s.get().floatValue() + width.getFloat() / 2);
@@ -68,8 +68,8 @@ public interface Slab extends Shape {
             };
         }
 
-        public NumPull right() {
-            return new NumPull() {
+        public NumberTrait right() {
+            return new NumberTrait() {
                 @Override
                 public void let(Supplier<Number> s) {
                     x.let(() -> s.get().floatValue() - width.getFloat() / 2);
@@ -82,8 +82,8 @@ public interface Slab extends Shape {
             };
         }
 
-        public NumPull top() {
-            return new NumPull() {
+        public NumberTrait top() {
+            return new NumberTrait() {
                 @Override
                 public void let(Supplier<Number> s) {
                     y.let(() -> s.get().floatValue() + height.getFloat() / 2);
@@ -96,8 +96,8 @@ public interface Slab extends Shape {
             };
         }
 
-        public NumPull bottom() {
-            return new NumPull() {
+        public NumberTrait bottom() {
+            return new NumberTrait() {
                 @Override
                 public void let(Supplier<Number> s) {
                     y.let(() -> s.get().floatValue() - height.getFloat() / 2);
@@ -110,11 +110,11 @@ public interface Slab extends Shape {
             };
         }
 
-        public NumPull x() {
+        public NumberTrait x() {
             return x;
         }
 
-        public NumPull y() {
+        public NumberTrait y() {
             return y;
         }
     }

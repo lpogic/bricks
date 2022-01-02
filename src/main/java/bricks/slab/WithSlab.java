@@ -1,40 +1,40 @@
 package bricks.slab;
 
-import bricks.var.num.NumPull;
+import bricks.trait.number.NumberTrait;
 
 public interface WithSlab extends Slab, WithShape {
     Slab getShape();
 
     @Override
-    default NumPull width() {
+    default NumberTrait width() {
         return getShape().width();
     }
     @Override
-    default NumPull height() {
+    default NumberTrait height() {
         return getShape().height();
     }
     @Override
-    default NumPull left() {
+    default NumberTrait left() {
         return getShape().left();
     }
     @Override
-    default NumPull right() {
+    default NumberTrait right() {
         return getShape().right();
     }
     @Override
-    default NumPull top() {
+    default NumberTrait top() {
         return getShape().top();
     }
     @Override
-    default NumPull bottom() {
+    default NumberTrait bottom() {
         return getShape().bottom();
     }
     @Override
-    default NumPull x() {
+    default NumberTrait x() {
         return getShape().x();
     }
     @Override
-    default NumPull y() {
+    default NumberTrait y() {
         return getShape().y();
     }
 }

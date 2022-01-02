@@ -2,15 +2,16 @@ package bricks.slab;
 
 import bricks.Located;
 import bricks.Sized;
-import bricks.var.num.NumPull;
-import bricks.var.num.NumSource;
+import bricks.trait.Traits;
+import bricks.trait.number.NumberTrait;
+import bricks.trait.number.NumberSource;
 
 public interface Shape extends Sized, Located {
 
-    NumSource left();
-    NumSource right();
-    NumSource top();
-    NumSource bottom();
+    NumberSource left();
+    NumberSource right();
+    NumberSource top();
+    NumberSource bottom();
 
     default boolean contains(Located p) {
         Number x = p.x().get();
@@ -26,43 +27,43 @@ public interface Shape extends Sized, Located {
     static Shape relative(Shape rect, float widthOffset, float heightOffset) {
         return new Shape() {
             @Override
-            public NumSource left() {
+            public NumberSource left() {
                 return rect.left().plus(widthOffset / -2);
             }
 
             @Override
-            public NumSource right() {
+            public NumberSource right() {
                 return rect.right().plus(widthOffset / 2);
             }
 
             @Override
-            public NumSource top() {
+            public NumberSource top() {
                 return rect.top().plus(heightOffset / -2);
             }
 
             @Override
-            public NumSource bottom() {
-                return NumPull.sum(heightOffset / 2, rect.bottom());
+            public NumberSource bottom() {
+                return Traits.sum(heightOffset / 2, rect.bottom());
             }
 
             @Override
-            public NumSource x() {
+            public NumberSource x() {
                 return rect.x();
             }
 
             @Override
-            public NumSource y() {
+            public NumberSource y() {
                 return rect.y();
             }
 
             @Override
-            public NumSource width() {
-                return NumPull.sum(widthOffset, rect.width());
+            public NumberSource width() {
+                return Traits.sum(widthOffset, rect.width());
             }
 
             @Override
-            public NumSource height() {
-                return NumPull.sum(heightOffset, rect.height());
+            public NumberSource height() {
+                return Traits.sum(heightOffset, rect.height());
             }
         };
     }

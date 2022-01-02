@@ -1,41 +1,41 @@
 package bricks.slab;
 
 import bricks.Located;
-import bricks.var.num.NumSource;
+import bricks.trait.number.NumberSource;
 
 public interface WithShape extends Shape {
     Shape getShape();
 
     @Override
-    default NumSource width() {
+    default NumberSource width() {
         return getShape().width();
     }
     @Override
-    default NumSource height() {
+    default NumberSource height() {
         return getShape().height();
     }
     @Override
-    default NumSource left() {
+    default NumberSource left() {
         return getShape().left();
     }
     @Override
-    default NumSource right() {
+    default NumberSource right() {
         return getShape().right();
     }
     @Override
-    default NumSource top() {
+    default NumberSource top() {
         return getShape().top();
     }
     @Override
-    default NumSource bottom() {
+    default NumberSource bottom() {
         return getShape().bottom();
     }
     @Override
-    default NumSource x() {
+    default NumberSource x() {
         return getShape().x();
     }
     @Override
-    default NumSource y() {
+    default NumberSource y() {
         return getShape().y();
     }
 

@@ -1,39 +1,38 @@
-package bricks.var;
+package bricks.trait;
 
-import bricks.var.impulse.Impulse;
-import bricks.var.impulse.InequalityImpulse;
+import bricks.trait.sensor.Sensor;
+import bricks.trait.sensor.InequalitySensor;
 import suite.suite.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ReactivePull<T> implements Source<T> {
+public class ComplexTrait<T> extends Trait<T> {
 
     protected T cache;
-    protected Supplier<T> supplier;
-    protected final Impulse[] impulses;
+    protected final Sensor[] sensors;
     protected boolean cached;
 
-    public ReactivePull(Supplier<T> supplier, Subject $roots) {
+    public ComplexTrait(Supplier<T> supplier, Subject $roots) {
         this.supplier = supplier;
         this.cached = false;
-        List<Impulse> impulses = new ArrayList<>();
+        List<Sensor> sensors = new ArrayList<>();
         for (var $r : $roots) {
-            if($r.is(Impulse.class)) {
-                impulses.add($r.asExpected());
+            if($r.is(Sensor.class)) {
+                sensors.add($r.asExpected());
             } else if($r.is(Supplier.class)) {
                 Supplier<Object> s = $r.asExpected();
-                impulses.add(new InequalityImpulse<>(s, s.get()));
+                sensors.add(new InequalitySensor<>(s, s.get()));
             }
         }
-        this.impulses = impulses.toArray(new Impulse[0]);
+        this.sensors = sensors.toArray(new Sensor[0]);
     }
 
     protected void update() {
         if(cached) {
-            for (var i : impulses) {
-                if(i.occur()) cached = false;
+            for (var i : sensors) {
+                if(i.check()) cached = false;
             }
         }
     }

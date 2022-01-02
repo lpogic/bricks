@@ -1,17 +1,17 @@
 package bricks.slab;
 
 import bricks.trade.Host;
-import bricks.var.num.NumPull;
+import bricks.trait.number.NumberTrait;
 
 public class TextRectSlab extends TextSlab implements Slab {
-    NumPull width;
+    NumberTrait width;
 
     public TextRectSlab(Host host) {
         super(host);
     }
 
     @Override
-    public NumPull width() {
+    public NumberTrait width() {
         return width;
     }
 }

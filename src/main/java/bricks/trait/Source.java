@@ -1,8 +1,8 @@
-package bricks.var;
+package bricks.trait;
 
-import bricks.var.impulse.DifferentialImpulse;
-import bricks.var.impulse.Impulse;
-import bricks.var.impulse.InequalityImpulse;
+import bricks.trait.sensor.DifferentialSensor;
+import bricks.trait.sensor.Sensor;
+import bricks.trait.sensor.InequalitySensor;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -30,14 +30,14 @@ public interface Source<T> extends Supplier<T> {
         return () -> fun.apply(get()).get();
     }
 
-    default Impulse willChange() {
-        return new InequalityImpulse<>(this, get());
+    default Sensor willChange() {
+        return new InequalitySensor<>(this, get());
     }
 
-    default Impulse willBe(BiPredicate<T, T> will) {
-        return new DifferentialImpulse<>(this, get()) {
+    default Sensor willBe(BiPredicate<T, T> will) {
+        return new DifferentialSensor<>(this, get()) {
             @Override
-            public boolean occur() {
+            public boolean check() {
                 T o = supplier.get();
                 boolean testResult = will.test(cache, o);
                 cache = o;
@@ -46,10 +46,10 @@ public interface Source<T> extends Supplier<T> {
         };
     }
 
-    default Impulse wontBe(BiPredicate<T, T> be) {
-        return new DifferentialImpulse<>(this, get()) {
+    default Sensor wontBe(BiPredicate<T, T> be) {
+        return new DifferentialSensor<>(this, get()) {
             @Override
-            public boolean occur() {
+            public boolean check() {
                 T o = supplier.get();
                 boolean testResult = be.test(cache, o);
                 cache = o;
@@ -58,10 +58,10 @@ public interface Source<T> extends Supplier<T> {
         };
     }
 
-    default Impulse willBe(Predicate<T> be) {
-        return new DifferentialImpulse<>(this, null) {
+    default Sensor willBe(Predicate<T> be) {
+        return new DifferentialSensor<>(this, null) {
             @Override
-            public boolean occur() {
+            public boolean check() {
                 T o = supplier.get();
                 boolean equals = Objects.equals(o, cache);
                 cache = o;
@@ -70,10 +70,10 @@ public interface Source<T> extends Supplier<T> {
         };
     }
 
-    default Impulse wontBe(Predicate<T> be) {
-        return new DifferentialImpulse<>(this, null) {
+    default Sensor wontBe(Predicate<T> be) {
+        return new DifferentialSensor<>(this, null) {
             @Override
-            public boolean occur() {
+            public boolean check() {
                 T o = supplier.get();
                 boolean equals = Objects.equals(o, cache);
                 cache = o;
@@ -82,10 +82,10 @@ public interface Source<T> extends Supplier<T> {
         };
     }
 
-    default Impulse willGive(T sth) {
-        return new DifferentialImpulse<>(this, null) {
+    default Sensor willGive(T sth) {
+        return new DifferentialSensor<>(this, null) {
             @Override
-            public boolean occur() {
+            public boolean check() {
                 T o = supplier.get();
                 boolean equals = Objects.equals(o, cache);
                 cache = o;
@@ -94,10 +94,10 @@ public interface Source<T> extends Supplier<T> {
         };
     }
 
-    default Impulse wontGive(T sth) {
-        return new DifferentialImpulse<>(this, null) {
+    default Sensor wontGive(T sth) {
+        return new DifferentialSensor<>(this, null) {
             @Override
-            public boolean occur() {
+            public boolean check() {
                 T o = supplier.get();
                 boolean equals = Objects.equals(o, cache);
                 cache = o;
@@ -110,4 +110,7 @@ public interface Source<T> extends Supplier<T> {
         return supplier::get;
     }
 
+    static<T> T returnNull() {
+        return null;
+    }
 }

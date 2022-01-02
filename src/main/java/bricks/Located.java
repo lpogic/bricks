@@ -1,20 +1,20 @@
 package bricks;
 
-import bricks.var.num.NumSource;
+import bricks.trait.number.NumberSource;
 
 public interface Located {
-    NumSource x();
-    NumSource y();
+    NumberSource x();
+    NumberSource y();
 
     static Located of(double x, double y) {
         return new Located() {
             @Override
-            public NumSource x() {
+            public NumberSource x() {
                 return () -> x;
             }
 
             @Override
-            public NumSource y() {
+            public NumberSource y() {
                 return () -> y;
             }
         };

@@ -4,36 +4,36 @@ import bricks.Color;
 import bricks.Location;
 import bricks.trade.Guest;
 import bricks.trade.Host;
-import bricks.var.Pull;
-import bricks.var.Var;
-import bricks.var.num.NumPull;
+import bricks.trait.Trait;
+import bricks.trait.Traits;
+import bricks.trait.number.NumberTrait;
 
 public class BluntLineSlab extends Guest<Host> implements Printable {
 
-    final NumPull thick;
-    final NumPull radius;
+    final NumberTrait thick;
+    final NumberTrait radius;
     final Location beginPosition;
     final Location endPosition;
-    final Pull<Color> color;
+    final Trait<Color> color;
 
     public BluntLineSlab(Host host) {
         super(host);
-        thick = Var.num(10);
-        radius = Var.num(0);
+        thick = Traits.num(10);
+        radius = Traits.num(0);
         beginPosition = new Location.Cartesian();
         beginPosition.x().set(100);
         beginPosition.y().set(100);
         endPosition = new Location.Cartesian();
         endPosition.x().set(200);
         endPosition.y().set(500);
-        color = Var.pull(Color.PURE_GREEN);
+        color = Traits.set(Color.PURE_GREEN);
     }
 
-    public NumPull thick() {
+    public NumberTrait thick() {
         return thick;
     }
 
-    public NumPull radius() {
+    public NumberTrait radius() {
         return radius;
     }
 
@@ -45,7 +45,7 @@ public class BluntLineSlab extends Guest<Host> implements Printable {
         return endPosition;
     }
 
-    public Pull<Color> color() {
+    public Trait<Color> color() {
         return color;
     }
 }

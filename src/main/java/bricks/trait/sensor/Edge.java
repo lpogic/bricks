@@ -1,4 +1,4 @@
-package bricks.var.impulse;
+package bricks.trait.sensor;
 
 public class Edge {
 

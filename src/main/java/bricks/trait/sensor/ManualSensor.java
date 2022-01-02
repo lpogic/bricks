@@ -1,14 +1,14 @@
-package bricks.var.impulse;
+package bricks.trait.sensor;
 
-public class ManualImpulse implements Impulse {
+public class ManualSensor implements Sensor {
     private boolean called;
 
-    public ManualImpulse() {
+    public ManualSensor() {
         called = false;
     }
 
     @Override
-    public boolean occur() {
+    public boolean check() {
         var c = called;
         called = false;
         return c;

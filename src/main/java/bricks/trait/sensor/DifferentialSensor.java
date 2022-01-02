@@ -1,13 +1,13 @@
-package bricks.var.impulse;
+package bricks.trait.sensor;
 
 import java.util.function.Supplier;
 
-public abstract class DifferentialImpulse<C> implements Impulse {
+public abstract class DifferentialSensor<C> implements Sensor {
 
     protected Supplier<C> supplier;
     protected C cache;
 
-    public DifferentialImpulse(Supplier<C> supplier, C cache) {
+    public DifferentialSensor(Supplier<C> supplier, C cache) {
         this.supplier = supplier;
         this.cache = cache;
     }

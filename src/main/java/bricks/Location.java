@@ -1,12 +1,12 @@
 package bricks;
 
-import bricks.var.Var;
-import bricks.var.num.NumPull;
+import bricks.trait.Traits;
+import bricks.trait.number.NumberTrait;
 
 public interface Location extends Located {
 
-    NumPull x();
-    NumPull y();
+    NumberTrait x();
+    NumberTrait y();
 
     default void aim(Located c) {
         x().let(c.x());
@@ -14,26 +14,26 @@ public interface Location extends Located {
     }
 
     class Cartesian implements Location {
-        NumPull x;
-        NumPull y;
+        NumberTrait x;
+        NumberTrait y;
 
         public Cartesian() {
-            x = Var.num();
-            y = Var.num();
+            x = Traits.num();
+            y = Traits.num();
         }
 
         public Cartesian(Number x, Number y) {
-            this.x = Var.num(x);
-            this.y = Var.num(y);
+            this.x = Traits.num(x);
+            this.y = Traits.num(y);
         }
 
         @Override
-        public NumPull x() {
+        public NumberTrait x() {
             return x;
         }
 
         @Override
-        public NumPull y() {
+        public NumberTrait y() {
             return y;
         }
 

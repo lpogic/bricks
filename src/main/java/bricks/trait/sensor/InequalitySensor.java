@@ -1,16 +1,16 @@
-package bricks.var.impulse;
+package bricks.trait.sensor;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class InequalityImpulse<C> extends DifferentialImpulse<C> {
+public class InequalitySensor<C> extends DifferentialSensor<C> {
 
-    public InequalityImpulse(Supplier<C> supplier, C cache) {
+    public InequalitySensor(Supplier<C> supplier, C cache) {
         super(supplier, cache);
     }
 
     @Override
-    public boolean occur() {
+    public boolean check() {
         C o = supplier.get();
         boolean equals = Objects.equals(o, cache);
         cache = o;

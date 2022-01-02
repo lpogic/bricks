@@ -1,22 +1,22 @@
 package bricks;
 
-import bricks.var.num.NumSource;
+import bricks.trait.number.NumberSource;
 
 import java.util.function.Supplier;
 
 public interface Sized {
-    NumSource width();
-    NumSource height();
+    NumberSource width();
+    NumberSource height();
 
     static Sized relative(Sized sized, float offset) {
         return new Sized() {
             @Override
-            public NumSource width() {
+            public NumberSource width() {
                 return sized.width().perFloat(w -> w + offset);
             }
 
             @Override
-            public NumSource height() {
+            public NumberSource height() {
                 return sized.height().perFloat(h -> h + offset);
             }
         };
@@ -25,12 +25,12 @@ public interface Sized {
     static Sized relative(Sized sized, Supplier<Number> offset) {
         return new Sized() {
             @Override
-            public NumSource width() {
+            public NumberSource width() {
                 return () -> sized.width().getFloat() + offset.get().floatValue();
             }
 
             @Override
-            public NumSource height() {
+            public NumberSource height() {
                 return () -> sized.height().getFloat() + offset.get().floatValue();
             }
         };
@@ -39,12 +39,12 @@ public interface Sized {
     static Sized relative(Sized sized, float widthOffset, float heightOffset) {
         return new Sized() {
             @Override
-            public NumSource width() {
+            public NumberSource width() {
                 return sized.width().perFloat(w -> w + widthOffset);
             }
 
             @Override
-            public NumSource height() {
+            public NumberSource height() {
                 return sized.height().perFloat(h -> h + heightOffset);
             }
         };
@@ -53,12 +53,12 @@ public interface Sized {
     static Sized relative(Sized sized, Supplier<Number> widthOffset, Supplier<Number> heightOffset) {
         return new Sized() {
             @Override
-            public NumSource width() {
+            public NumberSource width() {
                 return () -> sized.width().getFloat() + widthOffset.get().floatValue();
             }
 
             @Override
-            public NumSource height() {
+            public NumberSource height() {
                 return () -> sized.height().getFloat() + heightOffset.get().floatValue();
             }
         };

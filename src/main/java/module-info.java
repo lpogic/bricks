@@ -12,12 +12,12 @@ open module bricks {
     exports bricks.image;
     exports bricks.input;
     exports bricks.trade;
-    exports bricks.var;
-    exports bricks.var.impulse;
-    exports bricks.var.subject;
+    exports bricks.trait;
+    exports bricks.trait.sensor;
+    exports bricks.trait.subject;
     exports bricks.wall;
     exports bricks.monitor;
-    exports bricks.var.num;
+    exports bricks.trait.number;
     exports bricks.slab.printer;
     exports bricks.input.mouse;
     exports bricks.input.keyboard;

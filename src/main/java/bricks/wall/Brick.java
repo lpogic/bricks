@@ -6,10 +6,10 @@ import bricks.monitor.Monitor;
 import bricks.slab.printer.Printer;
 import bricks.trade.Agent;
 import bricks.trade.Host;
-import bricks.var.Source;
-import bricks.var.impulse.Edge;
-import bricks.var.impulse.Impulse;
-import bricks.var.impulse.InequalityImpulse;
+import bricks.trait.Source;
+import bricks.trait.sensor.Edge;
+import bricks.trait.sensor.Sensor;
+import bricks.trait.sensor.InequalitySensor;
 import suite.suite.Subject;
 import suite.suite.action.Action;
 import suite.suite.action.Statement;
@@ -24,19 +24,19 @@ import static suite.suite.$uite.*;
 public abstract class Brick<W extends Host> extends Agent<W> implements Updatable {
 
     public class MonitorDeclaration {
-        private final Impulse[] impulses;
+        private final Sensor[] sensors;
 
-        MonitorDeclaration(Impulse impulse) {
-            impulses = new Impulse[]{impulse};
+        MonitorDeclaration(Sensor sensor) {
+            sensors = new Sensor[]{sensor};
         }
 
-        MonitorDeclaration(Impulse impulse, Impulse ... impulses) {
-            this.impulses = Arrays.copyOf(impulses, impulses.length + 1);
-            this.impulses[impulses.length] = impulse;
+        MonitorDeclaration(Sensor sensor, Sensor... sensors) {
+            this.sensors = Arrays.copyOf(sensors, sensors.length + 1);
+            this.sensors[sensors.length] = sensor;
         }
 
-        public MonitorDeclaration or(Impulse impulse) {
-            return new MonitorDeclaration(impulse, impulses);
+        public MonitorDeclaration or(Sensor sensor) {
+            return new MonitorDeclaration(sensor, sensors);
         }
 
         public BrickMonitor then(Statement statement) {
@@ -48,32 +48,32 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
         }
 
         public BrickMonitor then(Statement statement, boolean use) {
-            BrickMonitor monitor = new BrickMonitor(impulses, statement);
+            BrickMonitor monitor = new BrickMonitor(sensors, statement);
             if(use) monitor.use();
             return monitor;
         }
 
         public BrickMonitor then(Action action, boolean use) {
-            BrickMonitor monitor = new BrickMonitor(impulses, action);
+            BrickMonitor monitor = new BrickMonitor(sensors, action);
             if(use) monitor.use();
             return monitor;
         }
     }
 
     public class BrickMonitor implements Monitor, Updatable {
-        private final Impulse[] impulses;
+        private final Sensor[] sensors;
         private final Action action;
 
-        BrickMonitor(Impulse[] impulses, Action action) {
-            this.impulses = impulses;
+        BrickMonitor(Sensor[] sensors, Action action) {
+            this.sensors = sensors;
             this.action = action;
         }
 
         public boolean use() {
             $bricks.set(this);
             boolean detection = false;
-            for (var i : impulses) {
-                if(i.occur()) detection = true;
+            for (var i : sensors) {
+                if(i.check()) detection = true;
             }
             return detection;
         }
@@ -85,14 +85,14 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
         @Override
         public void update() {
             boolean detection = false;
-            for (var i : impulses) {
-                if(i.occur()) detection = true;
+            for (var i : sensors) {
+                if(i.check()) detection = true;
             }
             if(detection) action.play();
         }
 
         public void play() {
-            for (var i : impulses) i.occur();
+            for (var i : sensors) i.check();
             action.play();
         }
     }
@@ -167,12 +167,12 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
         return order(Wall.class);
     }
 
-    public MonitorDeclaration when(Impulse impulse) {
-        return new MonitorDeclaration(impulse);
+    public MonitorDeclaration when(Sensor sensor) {
+        return new MonitorDeclaration(sensor);
     }
 
     public<S> MonitorDeclaration when(Supplier<S> sup) {
-        return new MonitorDeclaration(new InequalityImpulse<>(sup, sup.get()));
+        return new MonitorDeclaration(new InequalitySensor<>(sup, sup.get()));
     }
 
     public <S> Monitor when(Supplier<S> sup, BiPredicate<S, S> constraint, Statement then) {
@@ -188,12 +188,12 @@ public abstract class Brick<W extends Host> extends Agent<W> implements Updatabl
         return when(bool.willBe(Edge::rising)).then(goesTrue);
     }
 
-    public Monitor when(Impulse impulse, Statement then) {
-        return when(impulse).then(then);
+    public Monitor when(Sensor sensor, Statement then) {
+        return when(sensor).then(then);
     }
 
-    public Monitor when(Impulse impulse, Statement then, boolean use) {
-        return when(impulse).then(then, use);
+    public Monitor when(Sensor sensor, Statement then, boolean use) {
+        return when(sensor).then(then, use);
     }
 
     public Monitor when(Supplier<?> sup, Statement then) {
