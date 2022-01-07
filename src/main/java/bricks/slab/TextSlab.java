@@ -28,7 +28,7 @@ public class TextSlab extends Guest<Host> implements Shape, Printable {
         super(host);
         text = Traits.set("");
         color = Traits.set(Color.mix(1,1,1));
-        font = Traits.set(Font.TREBUC);
+        font = Traits.set(Font.JETBRAINS_MONO_REGULAR);
 
         height = Traits.num(20);
         width = Traits.num(() -> order(FontManager.class).getFont(font.get())
