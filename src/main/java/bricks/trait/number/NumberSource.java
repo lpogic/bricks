@@ -36,4 +36,25 @@ public interface NumberSource extends Source<Number> {
     default NumberSource plus(Number add) {
         return () -> getFloat() + add.floatValue();
     }
+
+    // |" !_! $ `/
+
+    default float floatValue() {
+        return get().floatValue();
+    }
+    default int intValue() {
+        return get().intValue();
+    }
+    default double doubleValue() {
+        return get().doubleValue();
+    }
+    default byte byteValue() {
+        return get().byteValue();
+    }
+    default long longValue() {
+        return get().longValue();
+    }
+    default short shortValue() {
+        return get().shortValue();
+    }
 }
