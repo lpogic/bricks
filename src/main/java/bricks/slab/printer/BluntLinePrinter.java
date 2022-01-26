@@ -1,6 +1,6 @@
 package bricks.slab.printer;
 
-import brackettree.reader.BracketTree;
+import brackettree.BracketTree;
 import bricks.Color;
 import bricks.slab.BluntLineSlab;
 import bricks.slab.Shader;

@@ -1,11 +1,10 @@
 package bricks.slab.printer;
 
-import brackettree.reader.BracketTree;
+import brackettree.BracketTree;
 import bricks.Color;
 import bricks.font.BackedFont;
 import bricks.font.CharacterTexture;
 import bricks.font.FontManager;
-import bricks.slab.TextRectSlab;
 import bricks.slab.TextSlab;
 import bricks.slab.Shader;
 import bricks.trade.Guest;
@@ -14,7 +13,6 @@ import org.lwjgl.stb.STBTTAlignedQuad;
 import suite.suite.util.Cascade;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
