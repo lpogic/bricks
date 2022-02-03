@@ -37,6 +37,14 @@ public interface NumberSource extends Source<Number> {
         return () -> getFloat() + add.floatValue();
     }
 
+    default NumberSource min(Number min) {
+        return () -> Math.max(getFloat(), min.floatValue());
+    }
+
+    default NumberSource max(Number max) {
+        return () -> Math.min(getFloat(), max.floatValue());
+    }
+
     // |" !_! $ `/
 
     default float floatValue() {
