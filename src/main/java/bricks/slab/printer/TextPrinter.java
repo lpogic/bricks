@@ -32,7 +32,7 @@ public class TextPrinter extends Guest<Host> {
         super(host);
 
         this.shader = shader != null ? shader :
-                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "textShader.tree").toFile()).as(Shader.class);
+                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "textShader.tree").toFile(), Shader.class);
 
         vbo = glGenBuffers();
         vao = glGenVertexArrays();

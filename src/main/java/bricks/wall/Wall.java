@@ -260,6 +260,14 @@ public abstract class Wall extends Brick<Host> implements Shape {
         return title;
     }
 
+    public void setSize(int width, int height) {
+        glfwSetWindowSize(glid, width, height);
+    }
+
+    public void setPosition(int x, int y) {
+        glfwSetWindowPos(glid, x - width.getInt() / 2, y - height.getInt() / 2);
+    }
+
     public long getGlid() {
         return glid;
     }

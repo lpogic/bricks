@@ -20,7 +20,7 @@ public class RectanglePrinter {
         glid = glGenVertexArrays();
 
         this.shader = shader != null ? shader :
-                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "colorRectangleShader.tree").toFile()).as(Shader.class);
+                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "colorRectangleShader.tree").toFile(), Shader.class);
 
         vertexGlid = glGenBuffers();
         glBindVertexArray(glid);

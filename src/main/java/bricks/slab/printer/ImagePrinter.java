@@ -24,7 +24,7 @@ public class ImagePrinter extends Guest<Host> {
         glid = glGenVertexArrays();
 
         this.shader = shader != null ? shader :
-                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "textureShader.tree").toFile()).as(Shader.class);
+                BracketTree.read(Path.of(System.getProperty("java.home"), "rsc", "forest", "textureShader.tree").toFile(), Shader.class);
 
         vertexGlid = glGenBuffers();
         glBindVertexArray(glid);
